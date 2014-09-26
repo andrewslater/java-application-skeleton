@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+    <property name="LOG_PATH" value="${user.home}/java-application-skeleton-gui.log" />
+
+    <define name="LOG_FILE_EXISTS" class="ch.qos.logback.core.property.FileExistsPropertyDefiner">
+        <path>${LOG_PATH}</path>
+    </define>
+
+    <if condition='property("LOG_FILE_EXISTS").equals("true")'>
+        <then>
+            <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+                <encoder>
+                    <pattern>%d{"HH:mm:ss,SSS"} - [%t] %-5p %c{0} - %m%n</pattern>
+                </encoder>
+            </appender>
+            <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+                <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+                    <evaluator>
+                        <expression>return formattedMessage.contains("password")</expression>
+                    </evaluator>
+                    <OnMatch>DENY</OnMatch>
+                    <OnMismatch>NEUTRAL</OnMismatch>
+                </filter>
+                <encoder>
+                    <pattern>%d{"HH:mm:ss,SSS"} - [%t] %-5p %c{0} - %m%n</pattern>
+                </encoder>
+                <file>${LOG_PATH}</file>
+                <append>true</append>
+            </appender>
+        </then>
+        <else>
+            <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+                <encoder>
+                    <pattern>%d{"HH:mm:ss,SSS"} - [%t] %-5p %c{0} - %m%n</pattern>
+                </encoder>
+            </appender>
+        </else>
+    </if>
+
+    <logger name="com.andrewslater" level="DEBUG"/>
+    <root>
+        <priority value="WARN"/>
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>
