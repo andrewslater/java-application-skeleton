@@ -23,7 +23,7 @@
                         <configuration>
                             <attachToBuild>true</attachToBuild>
                             <classifier>onejar</classifier>
-                            <mainClass>com.andrewslater.cli.CommandLineInterface</mainClass>
+                            <mainClass>com.andrewslater.skeleton.cli.CommandLineInterface</mainClass>
                         </configuration>
                         <goals>
                             <goal>one-jar</goal>

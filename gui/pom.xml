@@ -20,7 +20,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>2.0</version>
                 <configuration>
-                    <mainClass>com.andrewslater.gui.Main</mainClass>
+                    <mainClass>com.andrewslater.skeleton.gui.GUI</mainClass>
                     <css2bin>false</css2bin>
                     <needShortcut>true</needShortcut>
                     <nativeReleaseVersion>1.0</nativeReleaseVersion>
@@ -72,6 +72,10 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
         </dependency>
 
         <!-- Spring -->

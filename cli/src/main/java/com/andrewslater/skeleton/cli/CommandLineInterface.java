@@ -1,7 +1,6 @@
-package com.andrewslater.cli;
+package com.andrewslater.skeleton.cli;
 
 
-import io.airlift.command.Arguments;
 import io.airlift.command.Cli;
 import io.airlift.command.Command;
 import io.airlift.command.Help;
@@ -9,6 +8,7 @@ import io.airlift.command.Option;
 import io.airlift.command.OptionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 public class CommandLineInterface {
     private static final Logger LOG = LoggerFactory.getLogger(CommandLineInterface.class);
@@ -42,9 +42,12 @@ public class CommandLineInterface {
         @Option(type = OptionType.COMMAND, name = "-s", description = "Salutation (Hello, Goodbye)")
         public String salutation = "Hello";
 
+        @Option(type = OptionType.COMMAND, name = "-c", description = "Capitalize name")
+        public Boolean capitalizeName;
+
         @Override
         public void run() {
-            System.out.println(String.format("%s %s!", salutation, recipient));
+            System.out.println(String.format("%s %s!", salutation, capitalizeName ? StringUtils.capitalize(recipient) : recipient));
         }
     }
 
