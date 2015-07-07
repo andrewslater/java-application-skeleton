@@ -1,0 +1,11 @@
+logs/
+src/main/webapp/resources/css/compiled
+src/main/webapp/resources/js/compiled
+src/main/webapp/resources/minified
+src/main/resources/config/application-development.properties
+
+.sass-cache/
+
+node_modules/
+node/
+npm-debug.log

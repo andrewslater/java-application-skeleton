@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:include="fragments/email_layout :: page">
+<head>
+    <title></title>
+</head>
+<body>
+<table class="row" th:fragment="content">
+    <tr>
+        <td class="wrapper last">
+
+            <table class="twelve columns">
+                <tr>
+                    <td>
+                        <h1 th:utext="#{email.confirmation.heading(${user.getFullName()})}">Hi, Example User</h1>
+                        <p class="lead" th:utext="#{email.confirmation.welcome}">Phasellus dictum sapien a neque luctus cursus. Pellentesque sem dolor, fringilla et pharetra vitae.</p>
+                        <a th:href="@{/confirm}" th:text="#{confirm-account}">Confirm Account</a>
+                    </td>
+                    <td class="expander"></td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

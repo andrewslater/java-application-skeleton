@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:include="fragments/layout :: page">
+<head>
+    <title></title>
+</head>
+<body>
+<div th:fragment="content">
+    <h1 th:text="#{form.admin.create-user.heading}">Create Users</h1>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <form role="form" id="createUserForm" name="createUserForm" th:action="@{/admin/user/create}" method="post">
+                <div class="form-group">
+                    <label class="control-label" for="email" th:text="#{form.admin.create-user.email}"></label>
+                    <input class="form-control" type="email" name="email" id="email" th:placeholder="#{form.admin.create-user.email}" th:value="${form.email}" autofocus="autofocus" />
+                </div>
+                <div class="form-group">
+                    <label for="fullName" class="control-label" th:text="#{form.admin.create-user.full-name}"></label>
+                    <input class="form-control" name="fullName" id="fullName" th:placeholder="#{form.admin.create-user.full-name}" th:value="${form.fullName}"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="password">Password</label>
+                    <input class="form-control" type="password" th:placeholder="#{form.admin.create-user.password}" name="password" id="password" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="role" th:text="#{role}">Role</label>
+                    <select class="form-control" name="role" id="role" required="required">
+                        <option>USER</option>
+                        <option>ADMIN</option>
+                    </select>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" id="enabled" name="enabled" th:checked="${form.enabled}" />
+                    <label for="enabled" th:text="#{enabled}">Enabled</label>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" id="requireConfirmation" name="requireconfirmation" th:checked="${form.requireConfirmation}" />
+                    <label for="enabled" th:text="#{edit-system-settings.require-email-confirmation}">Require email confirmation</label>
+                </div>
+                <button class="btn btn-primary" type="submit" th:text="#{form.admin.create-user.create-user}">Create User</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#createUserForm')
+                    .formValidation({
+                        framework: 'bootstrap',
+                        icon: {
+                            valid: 'glyphicon glyphicon-ok',
+                            invalid: 'glyphicon glyphicon-remove',
+                            validating: 'glyphicon glyphicon-refresh'
+                        },
+                        fields: {
+                            email: {
+                                validators: {
+                                    notEmpty: {
+                                        message: $.i18n.prop('error.email-required')
+                                    },
+                                    emailAddress: {
+                                        message: $.i18n.prop('error.email-invalid')
+                                    }
+                                }
+                            },
+                            fullName: {
+                                validators: {
+                                    notEmpty: {
+                                        message: $.i18n.prop('error.full-name-required')
+                                    }
+                                }
+                            },
+                            password: {
+                                validators: {
+                                    notEmpty: {
+                                        message: $.i18n.prop('error.email-required')
+                                    }
+                                }
+                            }
+                        }
+                    });
+        });
+    </script>
+</div>
+</body>
+</html>
+
+
+

@@ -1,0 +1,17 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+        >
+<head>
+
+</head>
+<body>
+
+<p th:fragment="notice" id="notice-pending-email-confirmation" class="alert bg-info">
+    <i class="fa fa-envelope-o fa-2x"></i>
+    <span class="lead" th:text="#{notice.email-confirmation-pending}">Email confirmation pending</span>
+    <button type="button" class="btn btn-primary" th:text="#{button.resend-confirmation-email(${principal.emailPendingConfirmation})}">Resend confirmation email</button>
+    <button type="button" class="btn btn-default" th:text="#{button.cancel-email-confirmation}">Cancel email confirmation</button>
+</p>
+
+</body>
+</html>

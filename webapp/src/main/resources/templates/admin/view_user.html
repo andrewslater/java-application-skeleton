@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:include="fragments/layout :: page">
+<head>
+    <title></title>
+</head>
+<body>
+<div th:fragment="content">
+    <h1 th:text="${user.fullName}">John Doe</h1>
+</div>
+</body>
+</html>
+

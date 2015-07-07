@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{HH:mm:ss.SSS} %-5p [%t] %c{0} - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="logFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/java-application-skeleton.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>logs/java-application-skeleton.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%-5p %date{HH:mm:ss.SSS} [%t] %c{0} - %m%n</pattern>
+        </encoder>
+        <append>true</append>
+    </appender>
+
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.springframework.web.servlet.mvc" level="DEBUG" />
+    <logger name="com.andrewslater" level="DEBUG"/>
+
+    <root level="warn">
+        <appender-ref ref="consoleAppender"/>
+        <appender-ref ref="logFileAppender"/>
+    </root>
+
+</configuration>

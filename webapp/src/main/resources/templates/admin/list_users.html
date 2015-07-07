@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:include="fragments/layout :: page">
+<head>
+    <title></title>
+</head>
+<body>
+<div th:fragment="content">
+    <h1>
+        <i class="fa fa-user fa-lg"></i>
+        <span th:text="#{admin.headings.listUsers}">List Users</span>
+        <a class="btn btn-default btn-sm" th:href="@{/admin/user/create}" role="button" th:text="#{create-user}">Create User</a>
+    </h1>
+
+    <script type="application/javascript" th:src="@{/resources/js/compiled/jsx/list-users.js}"></script>
+    <script type="text/javascript">
+        //<![CDATA[
+        $(function () {
+//            renderListUsers();
+        });
+        //]]>
+    </script>
+    <div th:remove="tag" th:utext="${usersListHTML}" id="users-list"></div>
+
+</div>
+</body>
+</html>
+

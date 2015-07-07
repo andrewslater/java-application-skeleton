@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+        >
+<head>
+
+</head>
+<body>
+<nav class="navbar navbar-default" th:fragment="header" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-content">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <img alt="Brand" th:src="@{/resources/images/logo.jpg}" />
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="header-content">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Account<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a th:href="@{/resend-confirmation-email}" th:text="#{resend-confirmation-email}">Resend confirmation email</a></li>
+                        <li class="divider"></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post">
+                                <input type="submit" value="Logout" class="btn btn-link"/>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+</body>
+</html>

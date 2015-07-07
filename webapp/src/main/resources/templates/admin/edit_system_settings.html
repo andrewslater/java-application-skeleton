@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:include="fragments/layout :: page">
+<head>
+    <title></title>
+</head>
+<body>
+<div th:fragment="content">
+    <h1 th:text="#{edit-system-settings.heading}">System Settings</h1>
+    <div th:if="${param.success}" class="alert alert-success" role="alert">System settings saved</div>
+    <form role="form" name="systemSettingsForm" th:action="@{/admin/settings}" method="post">
+        <div class="checkbox">
+            <input type="checkbox" id="allowRegistration" name="allowRegistration" th:checked="${systemSettings.allowRegistration}"/>
+            <label for="allowRegistration" th:text="#{edit-system-settings.enable-open-registrations}">
+                Allow new users to sign up
+            </label>
+        </div>
+        <div class="checkbox">
+            <input type="checkbox" id="requireEmailConfirmation" name="requireEmailConfirmation" th:checked="${systemSettings.requireEmailConfirmation}" />
+            <label for="requireEmailConfirmation" th:text="#{edit-system-settings.require-email-confirmation}">
+                Require email confirmation
+            </label>
+        </div>
+        <div class="checkbox">
+            <input type="checkbox" id="restrictRegistrationDomains" name="restrictRegistrationDomains" th:checked="${systemSettings.restrictRegistrationDomains}" />
+            <label for="allowRegistration" th:text="#{edit-system-settings.restrict-registration-domains}">
+                Restrict new registrations by domain
+            </label>
+        </div>
+        <div class="form-group" th:each="domain : ${settings.allowedDomains}">
+            <input class="form-control" name="allowedDomains" th:value="${domain}" />
+        </div>
+        <button class="btn btn-primary" type="submit" th:text="#{edit-system-settings.save-settings}">Save Settings</button>
+    </form>
+</div>
+</body>
+</html>
+
+
+
