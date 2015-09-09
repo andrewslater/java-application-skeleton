@@ -1,10 +1,10 @@
 package com.andrewslater.example.models;
 
+import com.andrewslater.example.api.APIView;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.gson.Gson;
-import com.andrewslater.example.api.APIView;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.slf4j.Logger;
@@ -41,7 +41,6 @@ public class User implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private Long userId;
 
     @Column(nullable = false)

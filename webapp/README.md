@@ -17,6 +17,11 @@ This is a sample Spring Boot web application which provides basic functionality 
 -  Templated emails using http://zurb.com/ink/
 -  Application system settings persisted in the database 
 
+Configuration
+------------
+
+Create src/main/resources/config/application-development.properties config file with your 
+
 Building
 ------------
 

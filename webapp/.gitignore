@@ -1,4 +1,5 @@
 logs/
+src/main/resources/static/js/compiled
 src/main/webapp/resources/css/compiled
 src/main/webapp/resources/js/compiled
 src/main/webapp/resources/minified

@@ -1,50 +1,16 @@
 module.exports = function(grunt) {
 
+    var webpack = require("webpack");
+    var webpackConfig = require("./webpack-config.js");
+
     grunt.initConfig({
-
-        react: {
-            jsx: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: 'src/main/webapp/resources/js/',
-                        src: ['jsx/*.jsx'],
-                        dest: 'src/main/webapp/resources/js/compiled/',
-                        ext: '.js'
-                    }
-                ]
-            }
-        },
-
-        uglify: {
-            libraries: {
-                files: {
-                    'src/main/webapp/resources/minified/js/frontend-libraries.js': [
-                        'src/main/webapp/resources/js/libraries/jquery.js',
-                        'src/main/webapp/resources/js/libraries/jquery.i18n.properties.js',
-                        'src/main/webapp/resources/js/libraries/jquery.caret.min.js',
-                        'src/main/webapp/resources/js/libraries/bootstrap.js',
-                        'src/main/webapp/resources/js/libraries/formValidation.js',
-                        'src/main/webapp/resources/js/libraries/formValidation-bootstrap.js'
-
-                    ],
-                    'src/main/webapp/resources/minified/js/backend-libraries.js': [
-                        'src/main/webapp/resources/js/libraries/react-with-addons.js',
-                        'src/main/webapp/resources/js/hateoas.js'
-                    ],
-                    'src/main/webapp/resources/minified/js/application-core.js': [
-                        'src/main/webapp/resources/js/application-core.js'
-                    ]
-                }
-            }
-        },
 
         sass: {
             libraries: {
                 files: [{
                     expand: true,
                     cwd: 'src/main/resources/scss/',
-                    src: ["*scss"],
+                    src: ["application-core.scss", "spinkit/spinkit.scss"],
                     dest: "src/main/webapp/resources/css/compiled",
                     ext: ".css"
                 }]
@@ -59,10 +25,12 @@ module.exports = function(grunt) {
                         'src/main/webapp/resources/css/bootstrap-theme.css',
                         'src/main/webapp/resources/css/awesome-bootstrap-checkbox.css',
                         'src/main/webapp/resources/css/formValidation.css',
-                        'src/main/webapp/resources/css/font-awesome.css'
+                        'src/main/webapp/resources/css/font-awesome.css',
+                        'src/main/webapp/resources/css/spinkit.css',
+                        'src/main/webapp/resources/css/animate.css'
                     ],
                     'src/main/webapp/resources/minified/css/application-core.css': [
-                        'src/main/webapp/resources/css/compiled/application-core.css'
+                        'src/main/webapp/resources/css/compiled/**/*.css'
                     ]
                 }
             }
@@ -79,13 +47,56 @@ module.exports = function(grunt) {
                     }
                 ]
             }
+        },
+
+        webpack: {
+            options: webpackConfig,
+            build: {
+                plugins: webpackConfig.plugins.concat(
+                    new webpack.DefinePlugin({
+                        "process.env": {
+                            // This has effect on the react lib size
+                            "NODE_ENV": JSON.stringify("production")
+                        }
+                    }),
+                    new webpack.optimize.DedupePlugin(),
+                    new webpack.optimize.UglifyJsPlugin()
+                )
+            },
+            "build-dev": {
+                devtool: "sourcemap",
+                debug: true
+            }
+        },
+
+        "webpack-dev-server": {
+            options: {
+                webpack: webpackConfig,
+                publicPath: "http://localhost:9090/" + webpackConfig.output.publicPath,
+                port: 9090
+            },
+            start: {
+                keepAlive: true,
+                webpack: {
+                    devtool: "eval",
+                    debug: true
+                }
+            }
+        },
+
+        watch: {
+            app: {
+                files: ["app/**/*", "web_modules/**/*"],
+                tasks: ["webpack:build-dev"],
+                options: {
+                    spawn: false
+                }
+            }
         }
     });
 
-    grunt.loadNpmTasks('grunt-react');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.registerTask('default', ['react', 'uglify', 'sass', 'cssmin', 'copy']);
+    grunt.loadNpmTasks('grunt-webpack');
+    grunt.registerTask('default', ['webpack:build', 'copy']);
+    grunt.registerTask('watchjs', ["webpack-dev-server:start"]);
 };

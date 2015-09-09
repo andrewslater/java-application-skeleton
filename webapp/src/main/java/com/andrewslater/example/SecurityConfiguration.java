@@ -1,7 +1,7 @@
 package com.andrewslater.example;
 
-import com.andrewslater.example.repositories.SystemSettingsRepository;
 import com.andrewslater.example.models.SystemSettings;
+import com.andrewslater.example.repositories.SystemSettingsRepository;
 import com.andrewslater.example.security.ExampleAuthenticationSuccessHandler;
 import com.andrewslater.example.security.ExampleUserDetailsService;
 import com.andrewslater.example.security.UserConfirmationFilter;
@@ -44,6 +44,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/resources/**").permitAll()
+                .antMatchers("/js/**").permitAll()
+                .antMatchers("/i18n/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/logout").permitAll()
                 .antMatchers("/unconfirmed").permitAll()

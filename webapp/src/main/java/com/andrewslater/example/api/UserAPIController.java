@@ -1,11 +1,11 @@
 package com.andrewslater.example.api;
 
 import com.andrewslater.example.Mappings;
+import com.andrewslater.example.api.assemblers.UserResourceAssembler;
 import com.andrewslater.example.api.resources.UserResource;
 import com.andrewslater.example.models.User;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.andrewslater.example.api.assemblers.UserResourceAssembler;
 import com.andrewslater.example.repositories.UserRepository;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

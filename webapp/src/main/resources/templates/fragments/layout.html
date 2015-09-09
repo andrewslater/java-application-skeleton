@@ -13,36 +13,34 @@
     <link rel="icon" type="image/png" sizes="96x96" href="/resources/images/favicon-96x96.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/resources/images/favicon-16x16.png" />
 
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/minified/css/application-libraries.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/minified/css/application-core.css}" />
+    <script th:if="${webpackMode == 'DYNAMIC'}" src="http://localhost:9090//skeleton/js/compiled/basic.js"></script>
+    <script th:if="${webpackMode != 'DYNAMIC'}" th:src="@{/js/compiled/basic.js}"></script>
 
     <script th:inline="javascript">
         //<![CDATA[
-        var contextPath = [[${#httpServletRequest.getContextPath()}]];
-        //]]>
-    </script>
+        var contextPath = /*[[${#httpServletRequest.getContextPath()}]]*/ "";
 
-    <script type="application/javascript" th:src="@{/resources/minified/js/frontend-libraries.js}"></script>
-    <script type="application/javascript" th:src="@{/resources/minified/js/backend-libraries.js}"></script>
-    <script type="application/javascript" th:src="@{/resources/minified/js/application-core.js}"></script>
+        $.i18n.properties({
+            name:'messages',
+            path: contextPath + '/i18n/',
+            mode:'map',
+            language:'en_US',
+            callback: function() {
+                // I specified mode: 'map' because the 'vars' mode
+                // will add a lot of global JS vars to the page.
 
-    <script sec:authorize="hasRole('ROLE_USER')" th:inline="javascript">
-        //<![CDATA[
-        var apiToken = localStorage.getItem("apiToken");
-        if (!apiToken) {
-            $.get(contextPath + "/ajax/token", function(data) {
-                localStorage.setItem("apiToken", data.access_token);
-            });
-        }
+                // Accessing a simple value through the map
+                //$.i18n.prop('msg_hello');
 
-        client.get("/admin/users", {
-            success: function(data, status) {
-                console.log("Users: " + JSON.stringify(data));
+                // prints 'привет'
+                //alert($.i18n.prop('settings-saved'));
+
+                // Setup: msg_complex = доврое утро {0}!
+                //alert($.i18n.prop('msg_complex', 'John'));
             }
         });
         //]]>
     </script>
-
     <script sec:authorize="isAnonymous()" th:inline="javascript">
         //<![CDATA[
         localStorage.removeItem("apiToken");
@@ -77,8 +75,6 @@
 <div class="container" th:include="this :: content"/>
 
 <div th:replace="fragments/footer :: footer" />
-
-
 
 </body>
 </html>

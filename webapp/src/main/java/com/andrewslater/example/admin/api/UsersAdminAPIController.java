@@ -5,8 +5,8 @@ import com.andrewslater.example.api.APIView;
 import com.andrewslater.example.api.assemblers.AdminUserResourceAssembler;
 import com.andrewslater.example.api.resources.UserResource;
 import com.andrewslater.example.models.User;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.andrewslater.example.repositories.UserRepository;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,13 +53,14 @@ public class UsersAdminAPIController {
 
     @RequestMapping(value = Mappings.ADMIN_API_LIST_USERS, method = RequestMethod.GET)
     @JsonView(APIView.Internal.class)
-    public HttpEntity<Page<UserResource>> getUsers(@RequestParam(value = "page", required = false) Integer page,
-                                                   @RequestParam(value = "size", required = false) Integer size,
-                                                   @RequestParam(value = "sort", required = false) String sort) {
+    public HttpEntity<Page<UserResource>> getUsers(@RequestParam(value = "page", required = false)
+    Integer page,
+                                                   @RequestParam(value = "size", required = false)
+                                                   Integer size,
+                                                   @RequestParam(value = "sort", required = false)
+                                                   String sort) {
         PageRequest pageRequest = new PageRequest(page == null ? 0 : page,
                                                   size == null ? 10 : size);
-        List<UserResource> users = new ArrayList<>();
-
         Page<User> usersPage = userRepository.findAll(pageRequest);
         List<UserResource> resources = new ArrayList<>();
 
@@ -70,4 +72,11 @@ public class UsersAdminAPIController {
         return new ResponseEntity<>(resourcesPage, HttpStatus.OK);
     }
 
+    @RequestMapping(value = Mappings.ADMIN_API_USER_DETAILS, method = RequestMethod.PUT)
+    @JsonView(APIView.Internal.class)
+    public HttpEntity<UserResource> updateUser(@PathVariable("userId") Long userId, @RequestBody User proposedUser) {
+        User user = userRepository.findOne(userId);
+        LOG.debug("Requested update to user: {}", proposedUser);
+        return new ResponseEntity<>(userAssembler.toResource(user), HttpStatus.OK);
+    }
 }

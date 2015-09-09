@@ -1,11 +1,10 @@
 package com.andrewslater.example.services;
 
-import com.andrewslater.example.models.Role;
-import com.andrewslater.example.models.User;
 import com.andrewslater.example.admin.forms.CreateUserForm;
 import com.andrewslater.example.forms.RegistrationForm;
-import com.andrewslater.example.forms.settings.AccountSettingsForm;
+import com.andrewslater.example.models.Role;
 import com.andrewslater.example.models.SystemSettings;
+import com.andrewslater.example.models.User;
 import com.andrewslater.example.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,14 +36,14 @@ public class UserService {
 
     @Autowired
     public UserService(UserRepository repository,
-                    JavaMailSender mailSender,
-                    TemplateEngine templateEngine) {
+        JavaMailSender mailSender,
+        TemplateEngine templateEngine) {
         this.userRepository = repository;
         this.mailSender = mailSender;
         this.templateEngine = templateEngine;
     }
 
-    // TODO: Refactor these two create calls
+    // TODO: DRY up these two create calls?
     public User create(CreateUserForm form) {
         User user = new User();
         user.setEmail(form.getEmail());
@@ -91,7 +90,7 @@ public class UserService {
     }
 
     private void sendInitialEmail(User user) {
-        LOG.debug("About to spin off email thread");
+        LOG.debug("Sending initial email to {}", user.getEmail());
         if (user.requiresAccountConfirmation()) {
             sendConfirmationEmail(user);
         } else {
@@ -103,14 +102,16 @@ public class UserService {
     private void sendConfirmationEmail(User user) {
         LOG.debug("Sending confirmation email for user {}", user.getEmail());
 
+        // TODO: Correctly formulate confirmationLink
         final Context ctx = new Context(Locale.US);
         ctx.setVariable("user", user);
+        ctx.setVariable("confirmationLink", "http://localhost:8080/skeleton/confirm");
 
         final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
         final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
 
         try {
-            helper.setSubject("Welcome to Java Application Skeleton");
+            helper.setSubject("Welcome to the Java Skeleton Application Webapp");
             helper.setFrom("noreply@example.com");
             helper.setTo(user.getEmail());
 
@@ -146,21 +147,6 @@ public class UserService {
         user.setEmailPendingConfirmation(null);
         user.setConfirmationToken(null);
 
-
-        return userRepository.save(user);
-    }
-
-    public User updateUser(User user, AccountSettingsForm form) {
-        user.setFullName(form.getFullName());
-
-        if (systemSettings.isRequireEmailConfirmation()) {
-            if (!form.getEmail().equals(user.getEmail())) {
-                user.setEmailPendingConfirmation(form.getEmail());
-                user.setRequiresConfirmation(true);
-            }
-        } else {
-            user.setEmail(form.getEmail());
-        }
 
         return userRepository.save(user);
     }

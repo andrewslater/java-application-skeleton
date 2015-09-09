@@ -54,47 +54,38 @@ public class OAuthServerConfiguration {
 
         private TokenStore tokenStore = new InMemoryTokenStore();
 
-        @Autowired
-        @Qualifier("authenticationManagerBean")
-        private AuthenticationManager authenticationManager;
+        @Autowired @Qualifier("authenticationManagerBean") private AuthenticationManager
+            authenticationManager;
 
-        @Autowired
-        private ExampleUserDetailsService userDetailsService;
+        @Autowired private ExampleUserDetailsService userDetailsService;
 
-        @Value("${oauth2.clients.webapp.secret}")
-        private String webappClientSecret;
+        @Value("${oauth2.clients.webapp.secret}") private String webappClientSecret;
 
-        @Value("${oauth2.clients.webapp.name}")
-        private String webappClientName;
+        @Value("${oauth2.clients.webapp.name}") private String webappClientName;
 
         @Override public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-            endpoints
-                .tokenStore(tokenStore)
-                .authenticationManager(authenticationManager)
+            endpoints.tokenStore(tokenStore).authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService);
         }
 
         @Override public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
             if (StringUtils.isEmpty(webappClientName)) {
-                throw new Exception("You must specify the oauth client name property: oauth2.clients.webapp.name");
+                throw new Exception(
+                    "You must specify the oauth client name property: oauth2.clients.webapp.name");
             }
 
             if (StringUtils.isEmpty(webappClientSecret)) {
-                throw new Exception("You must specify the oauth client secret property: oauth2.clients.webapp.secret");
+                throw new Exception(
+                    "You must specify the oauth client secret property: oauth2.clients.webapp.secret");
             }
 
-            clients
-                .inMemory()
-                    .withClient(webappClientName)
-                        .authorizedGrantTypes("password", "refresh_token")
-                        .authorities("USER").scopes("read", "write")
-                        .resourceIds(RESTSERVICE_RESOURCE_ID)
-                        .secret(webappClientSecret);
+            clients.inMemory().withClient(webappClientName)
+                .authorizedGrantTypes("password", "refresh_token").authorities("USER")
+                .scopes("read", "write").resourceIds(RESTSERVICE_RESOURCE_ID)
+                .secret(webappClientSecret);
         }
 
-        @Bean
-        @Primary
-        public DefaultTokenServices tokenServices() {
+        @Bean @Primary public DefaultTokenServices tokenServices() {
             DefaultTokenServices tokenServices = new DefaultTokenServices();
             tokenServices.setSupportRefreshToken(false);
             tokenServices.setTokenStore(tokenStore);
