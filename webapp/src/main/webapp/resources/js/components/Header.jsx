@@ -23,22 +23,6 @@ module.exports = React.createClass({
                </div>
 
                <div className="collapse navbar-collapse" id="header-content">
-                   <ul className="nav navbar-nav">
-                       <li className="dropdown">
-                           <a href="#" className="dropdown-toggle" data-toggle="dropdown"
-                              role="button" aria-expanded="false">Projects<span
-                               className="caret"></span></a>
-                           <ul className="dropdown-menu" role="menu">
-                               <li><a href="#">Brickr</a></li>
-                               <li><a href="#">Another action</a></li>
-                               <li><a href="#">Something else here</a></li>
-                               <li className="divider"></li>
-                               <li><a href="#">Separated link</a></li>
-                               <li className="divider"></li>
-                               <li><a href="#">Create Project</a></li>
-                           </ul>
-                       </li>
-                   </ul>
                    <form className="navbar-form navbar-left" role="search">
                        <div className="form-group">
                            <input type="text" className="form-control" placeholder="Search"/>

@@ -13,7 +13,7 @@
     <link rel="icon" type="image/png" sizes="96x96" href="/resources/images/favicon-96x96.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/resources/images/favicon-16x16.png" />
 
-    <script th:if="${webpackMode == 'DYNAMIC'}" src="http://localhost:9090//skeleton/js/compiled/app.js"></script>
+    <script th:if="${webpackMode == 'DYNAMIC'}" th:src="'http://localhost:9090/' + ${#httpServletRequest.getContextPath()} + '/js/compiled/app.js'"></script>
     <script th:if="${webpackMode != 'DYNAMIC'}" th:src="@{/js/compiled/app.js}"></script>
 
     <script sec:authorize="isAnonymous()" th:inline="javascript">
