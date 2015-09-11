@@ -5,6 +5,7 @@ import com.andrewslater.example.security.SecurityUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -31,9 +32,12 @@ public class TokenController {
     @Autowired
     private AuthorizationServerTokenServices tokenServices;
 
+    @Value("${oauth2.clients.webapp.name}")
+    private String webappClientName;
+
     @RequestMapping(value = "/token", method = RequestMethod.GET)
     public OAuth2AccessToken getToken(@AuthenticationPrincipal SecurityUser securityUser) {
-        String clientId = "webapp";
+        String clientId = webappClientName;
         boolean approved = true;
         Set<String> scope = new HashSet<>(Arrays.asList("read", "write"));
         Set<String> resourceIds = new HashSet<>(Arrays.asList(OAuthServerConfiguration.RESTSERVICE_RESOURCE_ID));
