@@ -17,8 +17,7 @@ public class AdminUserResourceAssembler extends UserResourceAssembler {
     @Override
     public UserResource toResource(User user) {
         UserResource resource = super.toResource(user);
-        resource.add(linkTo(methodOn(UsersAdminAPIController.class).getUser(user.getUserId())).withRel("admin-self"));
-        resource.add(Mappings.getLink("/admin/users/" + user.getUserId(), "web-admin-self"));
+        resource.add(Mappings.getLink(Mappings.composePath(Mappings.ADMIN_API_USER_DETAILS, user.getUserId()), "admin-self"));
         return resource;
     }
 }

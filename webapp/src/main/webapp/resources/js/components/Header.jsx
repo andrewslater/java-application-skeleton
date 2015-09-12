@@ -1,12 +1,27 @@
 var React = require("react");
 var Router = require("router");
 var app = require("../app");
+var Fluxxor = require("fluxxor");
 
 var Link = Router.Link;
-var contextPath = "/skeleton";
+var FluxMixin = Fluxxor.FluxMixin(React),
+    StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 module.exports = React.createClass({
-   render: function () {
+    mixins: [FluxMixin, StoreWatchMixin("PrincipalUserStore")],
+
+    getStateFromFlux: function() {
+        var store = this.getFlux().store("PrincipalUserStore");
+        return {
+            loading: store.loading,
+            error: store.error,
+            principal: store.principal
+        };
+    },
+
+    render: function () {
+        principalName = this.state.principal ? this.state.principal.fullName : "";
+
        return (<nav className="navbar navbar-default">
            <div className="container-fluid">
                <div className="navbar-header">
@@ -37,21 +52,21 @@ module.exports = React.createClass({
                            <ul className="dropdown-menu" role="menu">
                                <li><Link to="admin-edit-settings">{$.i18n.prop('edit-settings')}</Link></li>
                                <li><Link to="admin-list-users">{$.i18n.prop('list-users')}</Link></li>
-                               <li><a href={contextPath + '/admin/users/create'}>Create User</a></li>
+                               <li><a href={app.contextPath + '/admin/users/create'}>Create User</a></li>
                            </ul>
                        </li>
                    </ul>
                    <ul className="nav navbar-nav navbar-right">
                        <li className="dropdown">
                            <a href="#" className="dropdown-toggle" data-toggle="dropdown"
-                              role="button" aria-expanded="false"><span>John Doe</span>&nbsp;
+                              role="button" aria-expanded="false"><span>{principalName}</span>&nbsp;
                                <span className="caret"></span></a>
                            <ul className="dropdown-menu" role="menu">
-                               <li><a href={contextPath + 'settings/account'}>Settings</a></li>
+                               <li><a href={app.contextPath + 'settings/account'}>Settings</a></li>
                                <li><a href="#">Preferences</a></li>
                                <li className="divider"></li>
                                <li>
-                                   <form action={contextPath + '/logout'} method="post">
+                                   <form action={app.contextPath + '/logout'} method="post">
                                        <input type="submit" value="Logout" className="btn btn-link"/>
                                        <input type="hidden" name="_csrf" value={app.csrf} />
                                    </form>

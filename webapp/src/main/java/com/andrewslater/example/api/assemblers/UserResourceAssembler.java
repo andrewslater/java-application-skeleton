@@ -1,5 +1,6 @@
 package com.andrewslater.example.api.assemblers;
 
+import com.andrewslater.example.Mappings;
 import com.andrewslater.example.api.UserAPIController;
 import com.andrewslater.example.api.resources.UserResource;
 import com.andrewslater.example.models.User;
@@ -17,7 +18,7 @@ public class UserResourceAssembler implements ResourceAssembler<User, UserResour
     @Override
     public UserResource toResource(User user) {
         UserResource resource = new UserResource(user);
-        resource.add(linkTo(methodOn(UserAPIController.class).getUser(user.getUserId())).withSelfRel());
+        resource.add(Mappings.getLink(Mappings.composePath(Mappings.API_USER_RESOURCE, user.getUserId()), "self"));
         return resource;
     }
 }

@@ -53,6 +53,8 @@ module.exports = {
 
         this.configureAutoTokenRefresh();
 
+        flux.actions.principal.loadUser();
+
         Router.run(routes, Router.HistoryLocation, function(Handler) {
             var handler = React.createElement(Handler, {flux: flux});
             React.render(handler, document.body);
