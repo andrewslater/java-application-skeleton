@@ -1,6 +1,5 @@
 package com.andrewslater.example.services;
 
-import com.andrewslater.example.admin.forms.CreateUserForm;
 import com.andrewslater.example.forms.RegistrationForm;
 import com.andrewslater.example.models.Role;
 import com.andrewslater.example.models.SystemSettings;
@@ -41,26 +40,6 @@ public class UserService {
         this.userRepository = repository;
         this.mailSender = mailSender;
         this.templateEngine = templateEngine;
-    }
-
-    // TODO: DRY up these two create calls?
-    public User create(CreateUserForm form) {
-        User user = new User();
-        user.setEmail(form.getEmail());
-        user.setFullName(form.getFullName());
-        user.setPassword(new BCryptPasswordEncoder().encode(form.getPassword()));
-        user.getRoles().clear();
-        user.getRoles().add(form.getRole());
-        user.setEnabled(form.getEnabled());
-        user.setRequiresConfirmation(form.getRequireConfirmation());
-
-        if (form.getRequireConfirmation()) {
-            user.setEmailPendingConfirmation(form.getEmail());
-        }
-
-        user = userRepository.save(user);
-        sendInitialEmail(user);
-        return user;
     }
 
     public User create(RegistrationForm form) {

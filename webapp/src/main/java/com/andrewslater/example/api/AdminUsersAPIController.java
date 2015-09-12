@@ -1,7 +1,6 @@
-package com.andrewslater.example.admin.api;
+package com.andrewslater.example.api;
 
 import com.andrewslater.example.Mappings;
-import com.andrewslater.example.api.APIView;
 import com.andrewslater.example.api.assemblers.AdminUserResourceAssembler;
 import com.andrewslater.example.api.resources.UserResource;
 import com.andrewslater.example.models.User;
@@ -28,9 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class UsersAdminAPIController {
+public class AdminUsersAPIController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(UsersAdminAPIController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AdminUsersAPIController.class);
 
     @Autowired
     private UserRepository userRepository;

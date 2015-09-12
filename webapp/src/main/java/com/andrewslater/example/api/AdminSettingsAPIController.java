@@ -1,7 +1,6 @@
-package com.andrewslater.example.admin.api;
+package com.andrewslater.example.api;
 
 import com.andrewslater.example.Mappings;
-import com.andrewslater.example.api.APIView;
 import com.andrewslater.example.models.SystemSettings;
 import com.andrewslater.example.repositories.SystemSettingsRepository;
 import com.fasterxml.jackson.annotation.JsonView;
