@@ -6,9 +6,9 @@ var APIClient = require("../APIClient");
 var Spinner = require("./Spinner");
 
 
-var FluxMixin = Fluxxor.FluxMixin(React),
-    StoreWatchMixin = Fluxxor.StoreWatchMixin,
-    Link = Router.Link;
+var FluxMixin = Fluxxor.FluxMixin(React);
+var StoreWatchMixin = Fluxxor.StoreWatchMixin;
+var Link = Router.Link;
 
 module.exports = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin("AdminUsersStore")],
