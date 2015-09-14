@@ -102,12 +102,6 @@ module.exports = React.createClass({
         }
 
         var page = this.state.page;
-        var previousClasses = classnames({
-            "disabled": page.first
-        });
-        var nextClasses = classnames({
-            "disabled": page.last
-        });
         var firstPageNum = Math.max(page.number - Math.floor(this.props.maxPaginationLinks / 2), 0);
         var lastPageNum = Math.min(firstPageNum + this.props.maxPaginationLinks - 1, page.totalPages - 1);
         var pageLinks = [];
@@ -124,24 +118,24 @@ module.exports = React.createClass({
         var nextLink = <a href="javascript:void(0)">&raquo;</a>;
 
         if (!page.first) {
-            prevLink = (<Link to="admin-list-users" query={{page: page.number}} aria-label="Previous">
+            prevLink = (<Link to="admin-list-users" query={{page: page.number}} aria-label={$.i18n.prop('previous')}>
                             <span aria-hidden="true">&laquo;</span>
                         </Link>);
         }
 
         if (!page.last) {
-            nextLink = (<Link to="admin-list-users" query={{page: page.number + 2}} aria-label="Next">
+            nextLink = (<Link to="admin-list-users" query={{page: page.number + 2}} aria-label={$.i18n.prop('next')}>
                             <span aria-hidden="true">&raquo;</span>
                         </Link>);
         }
 
         return <nav>
             <ul className="pagination">
-                <li className={previousClasses}>
+                <li className={page.first ? 'disabled' : ''}>
                     {prevLink}
                 </li>
                 {pageLinks}
-                <li className={nextClasses}>
+                <li className={page.last ? 'disabled' : ''}>
                     {nextLink}
                 </li>
             </ul>
