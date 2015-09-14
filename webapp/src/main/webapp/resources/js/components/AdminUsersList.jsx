@@ -2,6 +2,7 @@ var $ = require("jquery");
 var React = require("react");
 var Router = require("router");
 var Fluxxor = require("fluxxor");
+var classnames = require("classnames");
 var APIClient = require("../APIClient");
 var Spinner = require("./Spinner");
 
@@ -79,7 +80,53 @@ module.exports = React.createClass({
                     {tableContent}
                     </tbody>
                 </table>
+                {this.renderPagination()}
             </div>
         );
-    }
+    },
+
+    navigateToPage: function(pageNum) {
+        console.log("loading page: " + pageNum);
+    },
+
+    renderPagination: function() {
+        if (!this.state.page || this.state.page.totalPages == 1) {
+            return null;
+        }
+
+        var maxPageLinks = 5;
+        var page = this.state.page;
+        var previousClasses = classnames({
+            "disabled": page.first
+        });
+        var nextClasses = classnames({
+            "disabled": page.last
+        });
+        var firstPageNum = Math.max(page.number - 2, 0);
+        var lastPageNum = Math.min(firstPageNum + maxPageLinks - 1, page.totalPages);
+        var pageLinks = [];
+
+        for (var i = firstPageNum; i <= lastPageNum; i++) {
+            pageLinks.push(<li className={i == page.number ? "active" : ""} onclick={this.navigateToPage}><a href="#">{i+1}</a></li>);
+        }
+
+        return <nav>
+            <ul className="pagination">
+                <li className={previousClasses}>
+                    <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {pageLinks}
+                <li className={nextClasses}>
+                    <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>;
+    },
+
+
+
 });

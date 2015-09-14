@@ -6,8 +6,7 @@ This is a sample Spring Boot web application which provides basic functionality 
 -  Database migrations using flyway and a Maven plugin for generating new migrations
 -  ORM via Hibernate
 -  User registration and email confirmation
--  Client-side form validation using http://formvalidation.io
--  Isomorphic React component rendering (http://winterbe.com/posts/2015/02/16/isomorphic-react-webapps-on-the-jvm/)
+-  Client-side route driven application using React + Fluxxor
 -  JS / CSS minification
 -  SASS and JSX precompilation
 -  i18n
@@ -17,28 +16,54 @@ This is a sample Spring Boot web application which provides basic functionality 
 -  Templated emails using http://zurb.com/ink/
 -  Application system settings persisted in the database 
 
-Configuration
-------------
+# Prerequisites
 
-Create src/main/resources/config/application-development.properties config file with your 
+## Maven 3
+Maven (https://maven.apache.org/) is our build system. It allows us to easily build our application.
 
-Building
-------------
+## PostgreSQL
+PostgreSQL is used for the relation database. This is where all of our application data is stored. 
+ 
+# Configuration
+Start by cloning the repository and setting up a local development configuration file.
+
+Create src/main/resources/config/application-development.properties config and override the following properties:
+
+    oauth2.clients.webapp.secret=92bd0e2f-9048-489f-a414-f7770ba94647
+    spring.datasource.username=your_database_username
+    spring.datasource.password=your_database_user_password
+    
+    spring.mail.username=your_sendgrid_username
+    spring.mail.password=your_sendgrid_password
+
+* These properties will be unique to your system. 
+* The webapp client secret should be something hard to guess. 
+* In this case we're using a UUID which was generated for us by https://www.uuidgenerator.net/ 
+  * Use your own UUID! Don't just blindly copy this value into your app 
+* I recommend using https://sendgrid.com/ for sending emails from your application. 
+  * They offer a free plan which allows you to send 12k emails per month for free. 
+  * Simply sign up for an account and set your account username/password in application-development.properties.
+  * Using Sendgrid allows your application to send emails without requiring you to run your own mail server
+ 
+# Building
+
+From the main java-application-skeleton directory run:
 
     mvn clean package
 
-Running
-------------
+# Running
 
     java -jar -Dspring.profiles.active=development target/webapp-0.1-SNAPSHOT.jar
  
+ The first time you run the application the database schema will be created and some sample data will be inserted into it. 
  Two default users will be created:
  
  user@example.com / p4ssw0rd
  admin@example.com / p4ssw0rd
  
-Create a new database migration
-------------
+ Additionally 10k random users are also created. All users have use the password 'password'.
+ 
+# Create a new database migration
 
     mvn java-application-skeleton:new-migration -DmigrationName="add-features-table"    
 
@@ -46,8 +71,7 @@ creates a new database migration:
 
     src/main/resources/db/migrations/V1434629552__add-features-table.sql
     
-API Examples
-------------
+# API Examples
 
 ### Retrieve OAuth2 token
 
