@@ -5,7 +5,7 @@ var Fluxxor = require("fluxxor");
 var classnames = require("classnames");
 var APIClient = require("../APIClient");
 var Spinner = require("./Spinner");
-
+var util = require("util");
 
 var FluxMixin = Fluxxor.FluxMixin(React);
 var StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -18,8 +18,8 @@ module.exports = React.createClass({
         this.loadPage();
     },
 
-    loadPage: function() {
-        this.getFlux().actions.admin.users.loadUsers();
+    loadPage: function(pageNum) {
+        this.getFlux().actions.admin.users.loadUsers(pageNum);
     },
 
     getStateFromFlux: function() {
@@ -60,7 +60,7 @@ module.exports = React.createClass({
             });
         }
 
-        if (this.state.loading) {
+        if (this.state.page === undefined) {
             tableContent = <tr><td colSpan="5"><Spinner /></td></tr>
         }
 
@@ -85,10 +85,6 @@ module.exports = React.createClass({
         );
     },
 
-    navigateToPage: function(pageNum) {
-        console.log("loading page: " + pageNum);
-    },
-
     renderPagination: function() {
         if (!this.state.page || this.state.page.totalPages == 1) {
             return null;
@@ -107,7 +103,12 @@ module.exports = React.createClass({
         var pageLinks = [];
 
         for (var i = firstPageNum; i <= lastPageNum; i++) {
-            pageLinks.push(<li className={i == page.number ? "active" : ""} onclick={this.navigateToPage}><a href="#">{i+1}</a></li>);
+            pageLinks.push(
+                <li key={i}
+                    className={i == page.number ? "active" : ""}
+                    onClick={this.loadPage.bind(this, i)}>
+                    <a href="javascript:void(0);">{i+1}</a>
+                </li>);
         }
 
         return <nav>

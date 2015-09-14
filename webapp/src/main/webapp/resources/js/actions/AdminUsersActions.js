@@ -3,9 +3,12 @@ var app = require('../app');
 
 module.exports = {
 
-    loadUsers: function() {
+    loadUsers: function(pageNum) {
+        pageNum = pageNum ? pageNum : 0;
         this.dispatch(constants.ADMIN_LOAD_USERS);
         app.client.get("admin/users", {
+            data: {page: pageNum},
+
             success: function(data, status) {
                 this.dispatch(constants.ADMIN_LOAD_USERS_SUCCESS, {page: data});
             }.bind(this),
