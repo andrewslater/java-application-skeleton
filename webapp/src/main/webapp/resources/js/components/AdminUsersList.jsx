@@ -15,11 +15,22 @@ module.exports = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin("AdminUsersStore")],
 
     componentDidMount: function() {
-        this.loadPage();
+        this.loadPage(this.props.page - 1);
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        this.loadPage(nextProps.page - 1);
     },
 
     loadPage: function(pageNum) {
         this.getFlux().actions.admin.users.loadUsers(pageNum);
+    },
+
+    getDefaultProps: function() {
+        return {
+            page: 1,
+            maxPaginationLinks: 5
+        }
     },
 
     getStateFromFlux: function() {
@@ -90,7 +101,6 @@ module.exports = React.createClass({
             return null;
         }
 
-        var maxPageLinks = 5;
         var page = this.state.page;
         var previousClasses = classnames({
             "disabled": page.first
@@ -98,34 +108,41 @@ module.exports = React.createClass({
         var nextClasses = classnames({
             "disabled": page.last
         });
-        var firstPageNum = Math.max(page.number - 2, 0);
-        var lastPageNum = Math.min(firstPageNum + maxPageLinks - 1, page.totalPages);
+        var firstPageNum = Math.max(page.number - Math.floor(this.props.maxPaginationLinks / 2), 0);
+        var lastPageNum = Math.min(firstPageNum + this.props.maxPaginationLinks - 1, page.totalPages - 1);
         var pageLinks = [];
 
         for (var i = firstPageNum; i <= lastPageNum; i++) {
             pageLinks.push(
                 <li key={i}
-                    className={i == page.number ? "active" : ""}
-                    onClick={this.loadPage.bind(this, i)}>
-                    <a href="javascript:void(0)">{i+1}</a>
+                    className={i == page.number ? "active" : ""}>
+                    <Link to="admin-list-users" query={{page: i+1}}>{i+1}</Link>
                 </li>);
         }
 
-        var prevFunc = page.first ? void(0) : this.loadPage.bind(this, page.number - 1);
-        var nextFunc = page.last ? void(0) :this.loadPage.bind(this, page.number + 1);
+        var prevLink = <a href="javascript:void(0)">&laquo;</a>;
+        var nextLink = <a href="javascript:void(0)">&raquo;</a>;
+
+        if (!page.first) {
+            prevLink = (<Link to="admin-list-users" query={{page: page.number}} aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </Link>);
+        }
+
+        if (!page.last) {
+            nextLink = (<Link to="admin-list-users" query={{page: page.number + 2}} aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </Link>);
+        }
 
         return <nav>
             <ul className="pagination">
-                <li className={previousClasses} onClick={prevFunc}>
-                    <a href="javascript:void(0)" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
+                <li className={previousClasses}>
+                    {prevLink}
                 </li>
                 {pageLinks}
-                <li className={nextClasses} onClick={nextFunc}>
-                    <a href="javascript:void(0)" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
+                <li className={nextClasses}>
+                    {nextLink}
                 </li>
             </ul>
         </nav>;

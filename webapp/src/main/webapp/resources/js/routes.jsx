@@ -14,7 +14,7 @@ module.exports = function(contextPath) {
     return (
         <Route handler={Home} name="home" path={contextPath + '/?'}>
             <Route handler={AdminApp} name="adminHome" path="admin/?">
-                <Route handler={ListUsers} name="admin-list-users" path="users" />
+                <Route handler={ListUsers} name="admin-list-users" path="users/?" />
                 <Route handler={ViewUser} name="admin-view-user" path="users/:userId" />
                 <Route handler={SystemSettings} name="admin-edit-settings" path="settings/?" />
                 <DefaultRoute handler={AdminDashboard} />
