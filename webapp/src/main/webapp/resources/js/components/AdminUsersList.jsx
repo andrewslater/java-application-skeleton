@@ -107,27 +107,27 @@ module.exports = React.createClass({
                 <li key={i}
                     className={i == page.number ? "active" : ""}
                     onClick={this.loadPage.bind(this, i)}>
-                    <a href="javascript:void(0);">{i+1}</a>
+                    <a href="javascript:void(0)">{i+1}</a>
                 </li>);
         }
 
+        var prevFunc = page.first ? void(0) : this.loadPage.bind(this, page.number - 1);
+        var nextFunc = page.last ? void(0) :this.loadPage.bind(this, page.number + 1);
+
         return <nav>
             <ul className="pagination">
-                <li className={previousClasses}>
-                    <a href="#" aria-label="Previous">
+                <li className={previousClasses} onClick={prevFunc}>
+                    <a href="javascript:void(0)" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
                 {pageLinks}
-                <li className={nextClasses}>
-                    <a href="#" aria-label="Next">
+                <li className={nextClasses} onClick={nextFunc}>
+                    <a href="javascript:void(0)" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
             </ul>
         </nav>;
-    },
-
-
-
+    }
 });
