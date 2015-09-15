@@ -42,7 +42,6 @@ module.exports = React.createClass({
                        <div className="form-group">
                            <input type="text" className="form-control" placeholder="Search"/>
                        </div>
-                       <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
                    </form>
                    <ul className="nav navbar-nav navbar-left">
                        <li className="dropdown">
