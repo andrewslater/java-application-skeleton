@@ -44,16 +44,65 @@ module.exports = React.createClass({
         }
 
         return (
-            <table className="table table-hover">
-                <thead>
-                <tr>
-                    {this.props.columns.map(function(column) {
-                        return <th key={'column-heading-' + column.name}>{column.name}</th>
-                    })}
-                </tr>
-                {tableContent}
-                </thead>
-            </table>
+            <div>
+                <table className="table table-hover">
+                    <thead>
+                    <tr>
+                        {this.props.columns.map(function(column) {
+                            return <th key={'column-heading-' + column.name}>{column.name}</th>
+                        })}
+                    </tr>
+                    {tableContent}
+                    </thead>
+                </table>
+                {this.renderPagination()}
+            </div>
         )
+    },
+
+    renderPagination: function() {
+        if (!this.props.page || this.props.page.totalPages == 1) {
+            return null;
+        }
+
+        var page = this.props.page;
+        var firstPageNum = Math.max(page.number - Math.floor(this.props.maxPaginationLinks / 2), 0);
+        var lastPageNum = Math.min(firstPageNum + this.props.maxPaginationLinks - 1, page.totalPages - 1);
+        var pageLinks = [];
+
+        for (var i = firstPageNum; i <= lastPageNum; i++) {
+            pageLinks.push(
+                <li key={i}
+                    className={i == page.number ? "active" : ""}>
+                    <Link to={this.props.pageLinkName} query={{page: i+1}}>{i+1}</Link>
+                </li>);
+        }
+
+        var prevLink = <a href="javascript:void(0)">&laquo;</a>;
+        var nextLink = <a href="javascript:void(0)">&raquo;</a>;
+
+        if (!page.first) {
+            prevLink = (<Link to={this.props.pageLinkName} query={{page: page.number}} aria-label={$.i18n.prop('previous')}>
+                <span aria-hidden="true">&laquo;</span>
+            </Link>);
+        }
+
+        if (!page.last) {
+            nextLink = (<Link to={this.props.pageLinkName} query={{page: page.number + 2}} aria-label={$.i18n.prop('next')}>
+                <span aria-hidden="true">&raquo;</span>
+            </Link>);
+        }
+
+        return <nav>
+            <ul className="pagination">
+                <li className={page.first ? 'disabled' : ''}>
+                    {prevLink}
+                </li>
+                {pageLinks}
+                <li className={page.last ? 'disabled' : ''}>
+                    {nextLink}
+                </li>
+            </ul>
+        </nav>;
     }
 });

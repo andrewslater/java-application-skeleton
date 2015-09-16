@@ -85,7 +85,7 @@ module.exports = React.createClass({
         return (<ActiveTable page={this.state.page}
                              error={this.state.error}
                              loading={this.state.loading}
-                             pageLinkName="admin-view-user"
+                             pageLinkName="admin-list-users"
                              keyLinkName="admin-self"
                              columns={columns} />);
     }
