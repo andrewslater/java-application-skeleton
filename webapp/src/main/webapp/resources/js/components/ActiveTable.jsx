@@ -1,9 +1,6 @@
 var React = require("react");
-var Fluxxor = require("fluxxor");
 var Router = require("router");
 
-var FluxMixin = Fluxxor.FluxMixin(React);
-var StoreWatchMixin = Fluxxor.StoreWatchMixin;
 var Link = Router.Link;
 
 module.exports = React.createClass({
