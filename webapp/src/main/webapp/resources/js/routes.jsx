@@ -4,6 +4,7 @@ var ListUsers = require("./pages/admin/ListUsers");
 var ViewUser = require("./pages/admin/ViewUser");
 var AdminDashboard = require("./pages/admin/AdminDashboard");
 var SystemSettings = require("./pages/admin/SystemSettings");
+var ActiveListUsers = require("./pages/admin/ActiveListUsers");
 var AdminApp = require("./pages/admin/AdminApp");
 var Home = require("./pages/Home");
 
@@ -15,6 +16,7 @@ module.exports = function(contextPath) {
         <Route handler={Home} name="home" path={contextPath + '/?'}>
             <Route handler={AdminApp} name="adminHome" path="admin/?">
                 <Route handler={ListUsers} name="admin-list-users" path="users/?" />
+                <Route handler={ActiveListUsers} name="active-list-users" path="activeUsers/?" />
                 <Route handler={ViewUser} name="admin-view-user" path="users/:userId" />
                 <Route handler={SystemSettings} name="admin-edit-settings" path="settings/?" />
                 <DefaultRoute handler={AdminDashboard} />
