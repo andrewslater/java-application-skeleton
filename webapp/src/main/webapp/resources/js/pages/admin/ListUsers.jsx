@@ -9,8 +9,6 @@ module.exports = React.createClass({
     mixins: [FluxMixin],
 
     render: function() {
-        var query = this.props.query || {};
-        var page = query.page || this.props.page;
-        return (<AdminUsersList page={page} />);
+        return (<AdminUsersList query={this.props.query} />);
     }
 });

@@ -2,10 +2,7 @@ var $ = require("jquery");
 var React = require("react");
 var Router = require("router");
 var Fluxxor = require("fluxxor");
-var classnames = require("classnames");
-var APIClient = require("../APIClient");
-var Spinner = require("./Spinner");
-var util = require("util");
+var ActiveTable = require("./ActiveTable");
 
 var FluxMixin = Fluxxor.FluxMixin(React);
 var StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -13,25 +10,6 @@ var Link = Router.Link;
 
 module.exports = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin("AdminUsersStore")],
-
-    componentDidMount: function() {
-        this.loadPage(this.props.page - 1);
-    },
-
-    componentWillReceiveProps: function(nextProps) {
-        this.loadPage(nextProps.page - 1);
-    },
-
-    loadPage: function(pageNum) {
-        this.getFlux().actions.admin.users.loadUsers(pageNum);
-    },
-
-    getDefaultProps: function() {
-        return {
-            page: 1,
-            maxPaginationLinks: 5
-        }
-    },
 
     getStateFromFlux: function() {
         var store = this.getFlux().store("AdminUsersStore");
@@ -42,103 +20,73 @@ module.exports = React.createClass({
         };
     },
 
-    render: function () {
-        var tableContent = null;
-
-        if (this.state.error) {
-            tableContent = <tr><td colSpan="5" className="text-center">
-                <div className="alert alert-warning" role="alert">
-                    <span className="glyphicon glyphicon-exclamation-sign gi-3x" aria-hidden="true"></span>
-                    {this.state.error.message}
-                    <a href="#" onClick={this.loadPage} className="alert-link">{$.i18n.prop('retry')}</a>
-                </div>
-            </td></tr>;
-        } else if (this.state.page) {
-            tableContent = this.state.page.content.map(function(user) {
-                return <tr key={APIClient.getLink(user, 'admin-self')}>
-                    <td>
-                        <Link to="admin-view-user" params={{userId: user.userId}}>{user.fullName}</Link>
-                    </td>
-                    <td>
-                        <Link to="admin-view-user" params={{userId: user.userId}}>{user.email}</Link>
-                    </td>
-                    <td>{user.createdAt}</td>
-                    <td>{user.lastLogin}</td>
-                    <td>
-                        <a>Edit</a>
-                    </td>
-                </tr>;
-            });
-        }
-
-        if (this.state.page === undefined) {
-            tableContent = <tr><td colSpan="5"><Spinner /></td></tr>
-        }
-
-        return (
-            <div>
-                <table className="table table-hover">
-                    <thead>
-                    <tr>
-                        <th>{$.i18n.prop('name')}</th>
-                        <th>{$.i18n.prop('email')}</th>
-                        <th>{$.i18n.prop('created-at')}</th>
-                        <th>{$.i18n.prop('last-login')}</th>
-                        <th>{$.i18n.prop('actions')}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {tableContent}
-                    </tbody>
-                </table>
-                {this.renderPagination()}
-            </div>
-        );
+    loadPage: function(pageNum) {
+        this.getFlux().actions.admin.users.loadUsers(pageNum);
     },
 
-    renderPagination: function() {
-        if (!this.state.page || this.state.page.totalPages == 1) {
-            return null;
+    componentDidMount: function() {
+        this.loadPage(this.props.query.page);
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        this.loadPage(nextProps.query.page);
+    },
+
+    getDefaultProps: function() {
+        return {
+            query: {page: 1}
         }
+    },
 
-        var page = this.state.page;
-        var firstPageNum = Math.max(page.number - Math.floor(this.props.maxPaginationLinks / 2), 0);
-        var lastPageNum = Math.min(firstPageNum + this.props.maxPaginationLinks - 1, page.totalPages - 1);
-        var pageLinks = [];
+    render: function() {
+        var query = this.props.query || {};
+        var page = query.page || this.props.page;
 
-        for (var i = firstPageNum; i <= lastPageNum; i++) {
-            pageLinks.push(
-                <li key={i}
-                    className={i == page.number ? "active" : ""}>
-                    <Link to="admin-list-users" query={{page: i+1}}>{i+1}</Link>
-                </li>);
-        }
+        var NameColumn = React.createClass({
+            render: function() {
+                var user = this.props.rowData;
+                return (<Link to="admin-view-user" params={{userId: user.userId}}>{user.fullName}</Link>)
+            }
+        });
 
-        var prevLink = <a href="javascript:void(0)">&laquo;</a>;
-        var nextLink = <a href="javascript:void(0)">&raquo;</a>;
+        var EmailColumn = React.createClass({
+            render: function() {
+                var user = this.props.rowData;
+                return (<Link to="admin-view-user" params={{userId: user.userId}}>{user.email}</Link>)
+            }
+        });
 
-        if (!page.first) {
-            prevLink = (<Link to="admin-list-users" query={{page: page.number}} aria-label={$.i18n.prop('previous')}>
-                            <span aria-hidden="true">&laquo;</span>
-                        </Link>);
-        }
+        var CreatedAtColumn = React.createClass({
+            render: function() {
+                return (<span>{this.props.rowData.createdAt}</span>)
+            }
+        });
 
-        if (!page.last) {
-            nextLink = (<Link to="admin-list-users" query={{page: page.number + 2}} aria-label={$.i18n.prop('next')}>
-                            <span aria-hidden="true">&raquo;</span>
-                        </Link>);
-        }
+        var LastLoginColumn = React.createClass({
+            render: function() {
+                return (<span>{this.props.rowData.lastLogin}</span>)
+            }
+        });
 
-        return <nav>
-            <ul className="pagination">
-                <li className={page.first ? 'disabled' : ''}>
-                    {prevLink}
-                </li>
-                {pageLinks}
-                <li className={page.last ? 'disabled' : ''}>
-                    {nextLink}
-                </li>
-            </ul>
-        </nav>;
+        var ActionsColumn = React.createClass({
+            render: function() {
+                return (<span><a>Edit</a></span>)
+            }
+        });
+
+        var columns = [
+            {name: $.i18n.prop('name'), component: NameColumn, sortable: true},
+            {name: $.i18n.prop('email'), component: EmailColumn, sortable: true},
+            {name: $.i18n.prop('created-at'), component: CreatedAtColumn, sortable: true},
+            {name: $.i18n.prop('last-login'), component: LastLoginColumn, sortable: true},
+            {name: $.i18n.prop('actions'), component: ActionsColumn, sortable: false}
+        ];
+
+        return (<ActiveTable page={this.state.page}
+                             error={this.state.error}
+                             loading={this.state.loading}
+                             pageLinkName="admin-list-users"
+                             keyLinkName="admin-self"
+                             columns={columns} />);
     }
 });
