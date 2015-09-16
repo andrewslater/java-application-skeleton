@@ -3,6 +3,7 @@ var React = require("react");
 var Router = require("router");
 var Fluxxor = require("fluxxor");
 var ActiveTable = require("./ActiveTable");
+var APIClient = require("../APIClient");
 
 var FluxMixin = Fluxxor.FluxMixin(React);
 var StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -82,11 +83,15 @@ module.exports = React.createClass({
             {name: $.i18n.prop('actions'), component: ActionsColumn, sortable: false}
         ];
 
+        var keyFunction = function(rowData) {
+            return APIClient.getLink(rowData, "admin-self")
+        };
+
         return (<ActiveTable page={this.state.page}
                              error={this.state.error}
                              loading={this.state.loading}
                              pageLinkName="admin-list-users"
-                             keyLinkName="admin-self"
+                             keyFunction={keyFunction}
                              columns={columns} />);
     }
 });

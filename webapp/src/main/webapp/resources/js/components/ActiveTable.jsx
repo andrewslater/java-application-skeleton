@@ -1,7 +1,6 @@
 var React = require("react");
 var Fluxxor = require("fluxxor");
 var Router = require("router");
-var APIClient = require("../APIClient");
 
 var FluxMixin = Fluxxor.FluxMixin(React);
 var StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -30,7 +29,7 @@ module.exports = React.createClass({
             </td></tr>;
         } else if (this.props.page) {
             tableContent = this.props.page.content.map(function(rowData) {
-                return <tr key={APIClient.getLink(rowData, this.props.keyLinkName)}>
+                return <tr key={this.props.keyFunction(rowData)}>
                     {this.props.columns.map(function(column) {
                         var contents = React.createElement(column.component, {rowData: rowData});
                         return <td key={'column-contents-' + column.name}>{contents}</td>
