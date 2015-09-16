@@ -9,7 +9,34 @@ var StoreWatchMixin = Fluxxor.StoreWatchMixin;
 var Link = Router.Link;
 
 module.exports = React.createClass({
-    mixins: [FluxMixin],
+    mixins: [FluxMixin, StoreWatchMixin("AdminUsersStore")],
+
+    getStateFromFlux: function() {
+        var store = this.getFlux().store("AdminUsersStore");
+        return {
+            loading: store.loading,
+            error: store.error,
+            page: store.page
+        };
+    },
+
+    loadPage: function(pageNum) {
+        this.getFlux().actions.admin.users.loadUsers(pageNum);
+    },
+
+    componentDidMount: function() {
+        this.loadPage(this.props.query.page - 1);
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        this.loadPage(nextProps.query.page - 1);
+    },
+
+    getDefaultProps: function() {
+        return {
+            query: {page: 1}
+        }
+    },
 
     render: function() {
         var query = this.props.query || {};
@@ -31,21 +58,18 @@ module.exports = React.createClass({
 
         var CreatedAtColumn = React.createClass({
             render: function() {
-                var user = this.props.rowData;
-                return (<span>{user.createdAt}</span>)
+                return (<span>{this.props.rowData.createdAt}</span>)
             }
         });
 
         var LastLoginColumn = React.createClass({
             render: function() {
-                var user = this.props.rowData;
-                return (<span>{user.lastLogin}</span>)
+                return (<span>{this.props.rowData.lastLogin}</span>)
             }
         });
 
         var ActionsColumn = React.createClass({
             render: function() {
-                var user = this.props.rowData;
                 return (<span><a>Edit</a></span>)
             }
         });
@@ -58,6 +82,11 @@ module.exports = React.createClass({
             {name: $.i18n.prop('actions'), component: ActionsColumn, sortable: false}
         ];
 
-        return (<ActiveTable pageLinkName="admin-view-user" keyLinkName="admin-self" columns={columns} />);
+        return (<ActiveTable page={this.state.page}
+                             error={this.state.error}
+                             loading={this.state.loading}
+                             pageLinkName="admin-view-user"
+                             keyLinkName="admin-self"
+                             columns={columns} />);
     }
 });
