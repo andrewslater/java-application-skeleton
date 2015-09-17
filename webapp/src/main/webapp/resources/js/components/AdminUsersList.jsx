@@ -10,9 +10,10 @@ var FluxMixin = Fluxxor.FluxMixin(React);
 var StoreWatchMixin = Fluxxor.StoreWatchMixin;
 var Link = ReactRouter.Link;
 var History = ReactRouter.History;
+var State = ReactRouter.State;
 
 module.exports = React.createClass({
-    mixins: [FluxMixin, History, StoreWatchMixin("AdminUsersStore")],
+    mixins: [FluxMixin, State, History, StoreWatchMixin("AdminUsersStore")],
 
     getStateFromFlux: function() {
         var store = this.getFlux().store("AdminUsersStore");
@@ -23,39 +24,39 @@ module.exports = React.createClass({
         };
     },
 
-    loadPage: function(pageNum) {
-        this.getFlux().actions.admin.users.loadUsers(pageNum);
+    loadPage: function(pageNum, sortQuery) {
+        this.getFlux().actions.admin.users.loadUsers(pageNum, sortQuery);
     },
 
     componentDidMount: function() {
-        this.loadPage(this.props.query.page);
+        this.loadPage(this.props.page, this.props.sort);
     },
 
     componentWillReceiveProps: function(nextProps) {
-        this.loadPage(nextProps.query.page);
+        this.loadPage(nextProps.page, nextProps.sort);
     },
 
     getDefaultProps: function() {
         return {
-            query: {page: 1}
+            page: 1,
+            sort: "fullName:ASC"
         }
     },
 
     render: function() {
-        var query = this.props.query || {};
-        var page = query.page || this.props.page;
+        var page = this.props.page;
 
         var NameColumn = React.createClass({
             render: function() {
                 var user = this.props.rowData;
-                return (<Link to={"/admin/users/" + user.id}>{user.fullName}</Link>)
+                return (<Link to={"/admin/users/" + user.userId}>{user.fullName}</Link>)
             }
         });
 
         var EmailColumn = React.createClass({
             render: function() {
                 var user = this.props.rowData;
-                return (<Link to={"/admin/users/" + user.id}>{user.email}</Link>)
+                return (<Link to={"/admin/users/" + user.userId}>{user.email}</Link>)
             }
         });
 
@@ -96,7 +97,6 @@ module.exports = React.createClass({
         return (<ActiveTable page={this.state.page}
                              error={this.state.error}
                              loading={this.state.loading}
-                             pageLinkName="admin-list-users"
                              pageChangeCallback={pageChangeCallback}
                              keyFunction={keyFunction}
                              columns={columns} />);

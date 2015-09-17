@@ -17,7 +17,7 @@ module.exports = {
 
     output: {
         path: "./src/main/resources/static/js/compiled",
-        publicPath: "js/compiled/",
+        publicPath: "/js/compiled/",
         filename: "[name].js",
         chunkFilename: "[chunkhash].js"
     },

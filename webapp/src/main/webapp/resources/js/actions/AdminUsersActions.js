@@ -3,12 +3,15 @@ var app = require('../app');
 
 module.exports = {
 
-    loadUsers: function(pageNum) {
+    loadUsers: function(pageNum, sortQuery ) {
         // The API uses zero-indexed page numbers
         pageNum = pageNum ? pageNum - 1 : 0;
         this.dispatch(constants.ADMIN_LOAD_USERS);
         app.client.get("admin/users", {
-            data: {page: pageNum},
+            data: {
+                page: pageNum,
+                sort: sortQuery
+            },
 
             success: function(data, status) {
                 this.dispatch(constants.ADMIN_LOAD_USERS_SUCCESS, {page: data});

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +60,8 @@ public class AdminUsersAPIController {
                                                    @RequestParam(value = "sort", required = false)
                                                    String sort) {
         PageRequest pageRequest = new PageRequest(page == null ? 0 : page,
-                                                  size == null ? 10 : size);
+                                                  size == null ? 10 : size,
+                                                  sort == null ? null : SortQuery.toSort(sort));
         Page<User> usersPage = userRepository.findAll(pageRequest);
         List<UserResource> resources = new ArrayList<>();
 
