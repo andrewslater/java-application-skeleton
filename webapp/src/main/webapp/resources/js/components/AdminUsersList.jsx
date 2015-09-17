@@ -24,22 +24,23 @@ module.exports = React.createClass({
         };
     },
 
-    loadPage: function(pageNum, sortQuery) {
-        this.getFlux().actions.admin.users.loadUsers(pageNum, sortQuery);
+    loadPage: function(pageNum, sortQuery, filter) {
+        this.getFlux().actions.admin.users.loadUsers(pageNum, sortQuery, filter);
     },
 
     componentDidMount: function() {
-        this.loadPage(this.props.page, this.props.sort);
+        this.loadPage(this.props.page, this.props.sort, this.props.filter);
     },
 
     componentWillReceiveProps: function(nextProps) {
-        this.loadPage(nextProps.page, nextProps.sort);
+        this.loadPage(nextProps.page, nextProps.sort, nextProps.filter);
     },
 
     getDefaultProps: function() {
         return {
             page: 1,
-            sort: "fullName:ASC"
+            sort: "fullName:ASC",
+            filter: null
         }
     },
 
@@ -79,11 +80,11 @@ module.exports = React.createClass({
         });
 
         var columns = [
-            {name: $.i18n.prop('name'), component: NameColumn, sortable: true},
-            {name: $.i18n.prop('email'), component: EmailColumn, sortable: true},
-            {name: $.i18n.prop('created-at'), component: CreatedAtColumn, sortable: true},
-            {name: $.i18n.prop('last-login'), component: LastLoginColumn, sortable: true},
-            {name: $.i18n.prop('actions'), component: ActionsColumn, sortable: false}
+            {name: $.i18n.prop('name'), component: NameColumn, sortProperty: "fullName"},
+            {name: $.i18n.prop('email'), component: EmailColumn, sortProperty: "email"},
+            {name: $.i18n.prop('created-at'), component: CreatedAtColumn, sortProperty: "createdAt"},
+            {name: $.i18n.prop('last-login'), component: LastLoginColumn, sortProperty: "lastLogin"},
+            {name: $.i18n.prop('actions'), component: ActionsColumn}
         ];
 
         var keyFunction = function(rowData) {

@@ -13,10 +13,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,16 +53,28 @@ public class AdminUsersAPIController {
 
     @RequestMapping(value = Mappings.ADMIN_API_LIST_USERS, method = RequestMethod.GET)
     @JsonView(APIView.Internal.class)
-    public HttpEntity<Page<UserResource>> getUsers(@RequestParam(value = "page", required = false)
-    Integer page,
-                                                   @RequestParam(value = "size", required = false)
-                                                   Integer size,
-                                                   @RequestParam(value = "sort", required = false)
-                                                   String sort) {
+    public HttpEntity<Page<UserResource>> getUsers(
+        @RequestParam(value = "page", required = false)
+        Integer page,
+        @RequestParam(value = "size", required = false)
+        Integer size,
+        @RequestParam(value = "sort", required = false)
+        String sort,
+        @RequestParam(value = "filter", required = false)
+        String filter) {
+
         PageRequest pageRequest = new PageRequest(page == null ? 0 : page,
                                                   size == null ? 10 : size,
                                                   sort == null ? null : SortQuery.toSort(sort));
-        Page<User> usersPage = userRepository.findAll(pageRequest);
+        Page<User> usersPage = null;
+
+        if (!StringUtils.isEmpty(filter)) {
+            usersPage = userRepository.findByEmailContainingOrFullNameContainingAllIgnoreCase(
+                filter, filter, pageRequest);
+        } else {
+            usersPage = userRepository.findAll(pageRequest);
+        }
+
         List<UserResource> resources = new ArrayList<>();
 
         for (User user : usersPage) {

@@ -10,6 +10,6 @@ module.exports = React.createClass({
 
     render: function() {
         var query = this.props.location.query;
-        return (<AdminUsersList page={query.page} sort={query.sort} />);
+        return (<AdminUsersList page={query.page} sort={query.sort} filter={query.filter} />);
     }
 });
