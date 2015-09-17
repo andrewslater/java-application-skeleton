@@ -1,9 +1,9 @@
 var React = require("react");
-var Router = require("router");
+var ReactRouter = require("react-router");
 var app = require("../app");
 var Fluxxor = require("fluxxor");
 
-var Link = Router.Link;
+var Link = ReactRouter.Link;
 var FluxMixin = Fluxxor.FluxMixin(React),
     StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
@@ -49,9 +49,9 @@ module.exports = React.createClass({
                               role="button" aria-expanded="false">Admin<span
                                className="caret"></span></a>
                            <ul className="dropdown-menu" role="menu">
-                               <li><Link to="admin-edit-settings">{$.i18n.prop('edit-settings')}</Link></li>
-                               <li><Link to="admin-list-users">{$.i18n.prop('list-users')}</Link></li>
-                               <li><a href={app.contextPath + '/admin/users/create'}>Create User</a></li>
+                               <li><Link to="/admin/settings">{$.i18n.prop('edit-settings')}</Link></li>
+                               <li><Link to="/admin/users">{$.i18n.prop('list-users')}</Link></li>
+                               <li><a href={'/admin/users/create'}>Create User</a></li>
                            </ul>
                        </li>
                    </ul>
@@ -61,11 +61,11 @@ module.exports = React.createClass({
                               role="button" aria-expanded="false"><span>{principalName}</span>&nbsp;
                                <span className="caret"></span></a>
                            <ul className="dropdown-menu" role="menu">
-                               <li><a href={app.contextPath + 'settings/account'}>Settings</a></li>
+                               <li><a href={'/settings/account'}>Settings</a></li>
                                <li><a href="#">Preferences</a></li>
                                <li className="divider"></li>
                                <li>
-                                   <form action={app.contextPath + '/logout'} method="post">
+                                   <form action={'/logout'} method="post">
                                        <input type="submit" value="Logout" className="btn btn-link"/>
                                        <input type="hidden" name="_csrf" value={app.csrf} />
                                    </form>

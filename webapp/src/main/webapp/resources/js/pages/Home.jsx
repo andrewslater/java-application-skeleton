@@ -1,9 +1,8 @@
 var React = require("react");
-var Router = require("router");
+var ReactRouter = require("react-router");
 var Fluxxor = require("fluxxor");
 var Header = require("../components/Header");
 
-var RouteHandler = Router.RouteHandler;
 var FluxMixin = Fluxxor.FluxMixin(React);
 
 module.exports = React.createClass({
@@ -14,7 +13,7 @@ module.exports = React.createClass({
             <div>
                 <Header />
                 <div className="container">
-                    <RouteHandler />
+                    {this.props.children}
                 </div>
             </div>
 

@@ -1,7 +1,7 @@
 var React = require("react");
-var Router = require("router");
+var ReactRouter = require("react-router");
 
-var Link = Router.Link;
+var Link = ReactRouter.Link;
 
 module.exports = React.createClass({
 
@@ -70,7 +70,7 @@ module.exports = React.createClass({
             pageLinks.push(
                 <li key={i}
                     className={i == page.number ? "active" : ""}>
-                    <Link to={this.props.pageLinkName} query={{page: i+1}}>{i+1}</Link>
+                    <a href="javascript:void(0)" onClick={this.props.pageChangeCallback.bind(this, i+1)}>{i+1}</a>
                 </li>);
         }
 
@@ -78,15 +78,15 @@ module.exports = React.createClass({
         var nextLink = <a href="javascript:void(0)">&raquo;</a>;
 
         if (!page.first) {
-            prevLink = (<Link to={this.props.pageLinkName} query={{page: page.number}} aria-label={$.i18n.prop('previous')}>
+            prevLink = (<a href="javascript:void(0)" onClick={this.props.pageChangeCallback.bind(this, page.number)} aria-label={$.i18n.prop('previous')}>
                 <span aria-hidden="true">&laquo;</span>
-            </Link>);
+            </a>);
         }
 
         if (!page.last) {
-            nextLink = (<Link to={this.props.pageLinkName} query={{page: page.number + 2}} aria-label={$.i18n.prop('next')}>
+            nextLink = (<a href="javascript:void(0)" onClick={this.props.pageChangeCallback.bind(this, page.number + 2)} aria-label={$.i18n.prop('next')}>
                 <span aria-hidden="true">&raquo;</span>
-            </Link>);
+            </a>);
         }
 
         return <nav>

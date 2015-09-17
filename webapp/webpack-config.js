@@ -7,7 +7,7 @@ var VENDOR_ROOT = JS_ROOT + "/vendor/";
 module.exports = {
     cache: true,
     entry: {
-        app: "expose?app!./src/main/webapp/resources/js/app.js",
+        app: "expose?app!./src/main/webapp/resources/js/app.jsx",
         basic: ["expose?$!jquery",
                 "formValidation",
                 "formValidationBootstrap",
@@ -15,10 +15,9 @@ module.exports = {
                 "./src/main/webapp/resources/js/stylesheets.js"]
     },
 
-    // TODO: Remove hardcoded context path 'skeleton' from publicPath. Need a way to inject it.
     output: {
         path: "./src/main/resources/static/js/compiled",
-        publicPath: "/skeleton/js/compiled/",
+        publicPath: "js/compiled/",
         filename: "[name].js",
         chunkFilename: "[chunkhash].js"
     },
@@ -41,7 +40,6 @@ module.exports = {
 
     resolve: {
         alias: {
-            router: "react-router",
             formValidation: VENDOR_ROOT + "formValidation",
             formValidationBootstrap: VENDOR_ROOT + "formValidation-bootstrap",
             i18n: VENDOR_ROOT + "jquery.i18n.properties"

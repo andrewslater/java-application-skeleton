@@ -27,9 +27,9 @@ public class UserConfirmationFilter extends SecurityContextHolderAwareRequestFil
         HttpServletRequest req = (HttpServletRequest)request;
         HttpServletResponse res = (HttpServletResponse)response;
 
-        String resourcesUri = req.getContextPath() + "/resources";
-        String unconfirmedUri = req.getContextPath() + "/unconfirmed";
-        String confirmUri = req.getContextPath() + "/confirm";
+        String resourcesUri = "/resources";
+        String unconfirmedUri = "/unconfirmed";
+        String confirmUri = "/confirm";
 
         if (req.getRequestURI().startsWith(resourcesUri) ||
             req.getRequestURI().startsWith(unconfirmedUri) ||

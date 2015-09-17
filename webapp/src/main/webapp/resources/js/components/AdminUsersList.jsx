@@ -1,16 +1,18 @@
 var $ = require("jquery");
+var util = require("util");
 var React = require("react");
-var Router = require("router");
+var ReactRouter = require("react-router");
 var Fluxxor = require("fluxxor");
 var ActiveTable = require("./ActiveTable");
 var APIClient = require("../APIClient");
 
 var FluxMixin = Fluxxor.FluxMixin(React);
 var StoreWatchMixin = Fluxxor.StoreWatchMixin;
-var Link = Router.Link;
+var Link = ReactRouter.Link;
+var History = ReactRouter.History;
 
 module.exports = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin("AdminUsersStore")],
+    mixins: [FluxMixin, History, StoreWatchMixin("AdminUsersStore")],
 
     getStateFromFlux: function() {
         var store = this.getFlux().store("AdminUsersStore");
@@ -46,14 +48,14 @@ module.exports = React.createClass({
         var NameColumn = React.createClass({
             render: function() {
                 var user = this.props.rowData;
-                return (<Link to="admin-view-user" params={{userId: user.userId}}>{user.fullName}</Link>)
+                return (<Link to={"/admin/users/" + user.id}>{user.fullName}</Link>)
             }
         });
 
         var EmailColumn = React.createClass({
             render: function() {
                 var user = this.props.rowData;
-                return (<Link to="admin-view-user" params={{userId: user.userId}}>{user.email}</Link>)
+                return (<Link to={"/admin/users/" + user.id}>{user.email}</Link>)
             }
         });
 
@@ -87,10 +89,15 @@ module.exports = React.createClass({
             return APIClient.getLink(rowData, "admin-self")
         };
 
+        var pageChangeCallback = function(pageNum) {
+            this.history.pushState(null, "/admin/users", {page: pageNum});
+        }.bind(this);
+
         return (<ActiveTable page={this.state.page}
                              error={this.state.error}
                              loading={this.state.loading}
                              pageLinkName="admin-list-users"
+                             pageChangeCallback={pageChangeCallback}
                              keyFunction={keyFunction}
                              columns={columns} />);
     }

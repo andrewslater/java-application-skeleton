@@ -13,16 +13,15 @@
     <link rel="icon" type="image/png" sizes="96x96" href="/resources/images/favicon-96x96.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/resources/images/favicon-16x16.png" />
 
-    <script th:if="${webpackMode == 'DYNAMIC'}" th:src="'http://localhost:9090/' + ${#httpServletRequest.getContextPath()} + '/js/compiled/basic.js'"></script>
+    <script th:if="${webpackMode == 'DYNAMIC'}" th:src="'http://localhost:9090/js/compiled/basic.js'"></script>
     <script th:if="${webpackMode != 'DYNAMIC'}" th:src="@{/js/compiled/basic.js}"></script>
 
     <script th:inline="javascript">
         //<![CDATA[
-        var contextPath = /*[[${#httpServletRequest.getContextPath()}]]*/ "";
 
         $.i18n.properties({
             name:'messages',
-            path: contextPath + '/i18n/',
+            path: '/i18n/',
             mode:'map',
             language:'en_US',
             callback: function() {

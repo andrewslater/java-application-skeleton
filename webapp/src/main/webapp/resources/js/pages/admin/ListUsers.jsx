@@ -1,3 +1,4 @@
+var util = require("util");
 var React = require("react");
 var Fluxxor = require("fluxxor");
 var AdminUsersList = require("../../components/AdminUsersList");
@@ -8,6 +9,6 @@ module.exports = React.createClass({
     mixins: [FluxMixin],
 
     render: function() {
-        return (<AdminUsersList query={this.props.query} />);
+        return (<AdminUsersList query={this.props.location.query} />);
     }
 });

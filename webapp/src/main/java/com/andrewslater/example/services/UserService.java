@@ -84,7 +84,7 @@ public class UserService {
         // TODO: Correctly formulate confirmationLink
         final Context ctx = new Context(Locale.US);
         ctx.setVariable("user", user);
-        ctx.setVariable("confirmationLink", "http://localhost:8080/skeleton/confirm");
+        ctx.setVariable("confirmationLink", "http://localhost:8080/confirm");
 
         final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
         final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");

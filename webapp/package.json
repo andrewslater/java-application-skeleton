@@ -27,10 +27,11 @@
     "fluxxor": "~1.7.1",
     "form-data-to-object": "~0.2.0",
     "formsy-react": "~0.14.1",
+    "history": "~1.9.1 ",
     "jquery": "~2.1.4",
     "noty": "~2.3.6",
     "react": "~0.13.3",
-    "react-router": "~0.13.3",
+    "react-router": "1.0.0-rc1",
     "underscore": "~1.8.3"
   }
 }
