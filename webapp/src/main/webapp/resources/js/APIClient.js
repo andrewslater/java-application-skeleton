@@ -56,5 +56,17 @@ APIClient.getLink = function (resource, rel) {
     return null;
 };
 
+APIClient.parseSort = function(sortString) {
+    var sorts = {};
+    sortString = sortString || "";
+    var sortParts = sortString.split(",");
+    for (var i = 0; i < sortParts.length; i++) {
+        var sortPieces = sortParts[i].split(":");
+        sorts[sortPieces[0]] = sortPieces[1];
+    }
+    return sorts;
+};
+
+
 module.exports = APIClient;
 

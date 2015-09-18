@@ -98,7 +98,17 @@ module.exports = React.createClass({
                 query.sort = this.props.sort;
             }
 
-            console.log("Filter: " + this.props.filter);
+            if (this.props.filter) {
+                query.filter = this.props.filter;
+            }
+
+            this.history.pushState(null, "/admin/users", query);
+        }.bind(this);
+
+        var sortChangeCallback = function(sort) {
+            var query = {
+                sort: sort
+            };
 
             if (this.props.filter) {
                 query.filter = this.props.filter;
@@ -110,7 +120,9 @@ module.exports = React.createClass({
         return (<ActiveTable page={this.state.page}
                              error={this.state.error}
                              loading={this.state.loading}
+                             sorts={APIClient.parseSort(this.props.sort)}
                              pageChangeCallback={pageChangeCallback}
+                             sortChangeCallback={sortChangeCallback}
                              keyFunction={keyFunction}
                              columns={columns} />);
     }

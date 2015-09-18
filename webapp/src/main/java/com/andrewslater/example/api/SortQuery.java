@@ -14,9 +14,11 @@ public class SortQuery {
         List<Sort.Order> orders = new ArrayList<>();
         for (String orderPart : sortQuery.split(",")) {
             String[] queryParts = orderPart.split(":");
+
             if (queryParts.length != 2) {
                 throw new RuntimeException("Invalid sort query: " + sortQuery);
             }
+
             String property = queryParts[0];
             String order = queryParts[1].toUpperCase();
             orders.add(new Sort.Order(Sort.Direction.fromStringOrNull(order), property));

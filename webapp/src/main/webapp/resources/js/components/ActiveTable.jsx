@@ -45,8 +45,22 @@ module.exports = React.createClass({
                     <thead>
                     <tr>
                         {this.props.columns.map(function(column) {
-                            return <th key={'column-heading-' + column.name}>{column.name}</th>
-                        })}
+                            var sortIcon = null;
+                            var currentSort = null;
+
+                            if (column.sortProperty) {
+                                if (this.props.sorts.hasOwnProperty(column.sortProperty)) {
+                                    currentSort = this.props.sorts[column.sortProperty].toLowerCase();
+                                    sortIcon = <span>&nbsp;<i className={'fa fa-sort-' + currentSort}></i></span>;
+                                }
+                            }
+                            var headingText = <span>{column.name}{sortIcon}</span>;
+                            if (column.sortProperty) {
+                                var newDirection = currentSort == 'asc' ? 'DESC' : 'ASC';
+                                headingText = <a href="javascript:void(0)" onClick={this.props.sortChangeCallback.bind(this, column.sortProperty + ':' + newDirection)}>{headingText}</a>
+                            }
+                            return <th key={'column-heading-' + column.name}>{headingText}</th>
+                        }.bind(this))}
                     </tr>
                     {tableContent}
                     </thead>
