@@ -39,14 +39,12 @@ module.exports = React.createClass({
     getDefaultProps: function() {
         return {
             page: 1,
-            sort: "fullName:ASC",
+            sort: null,
             filter: null
         }
     },
 
     render: function() {
-        var page = this.props.page;
-
         var NameColumn = React.createClass({
             render: function() {
                 var user = this.props.rowData;
@@ -92,7 +90,21 @@ module.exports = React.createClass({
         };
 
         var pageChangeCallback = function(pageNum) {
-            this.history.pushState(null, "/admin/users", {page: pageNum, sort: this.props.sort, filter: this.props.filter});
+            var query = {
+                page: pageNum
+            };
+
+            if (this.props.sort) {
+                query.sort = this.props.sort;
+            }
+
+            console.log("Filter: " + this.props.filter);
+
+            if (this.props.filter) {
+                query.filter = this.props.filter;
+            }
+
+            this.history.pushState(null, "/admin/users", query);
         }.bind(this);
 
         return (<ActiveTable page={this.state.page}

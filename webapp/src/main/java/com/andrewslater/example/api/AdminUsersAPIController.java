@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,9 +64,11 @@ public class AdminUsersAPIController {
         @RequestParam(value = "filter", required = false)
         String filter) {
 
-        PageRequest pageRequest = new PageRequest(page == null ? 0 : page,
-                                                  size == null ? 10 : size,
-                                                  sort == null ? null : SortQuery.toSort(sort));
+        Sort defaultSort = SortQuery.toSort("lastLogin:DESC");
+
+        PageRequest pageRequest = new PageRequest(StringUtils.isEmpty(page) ? 0 : page,
+                                                  StringUtils.isEmpty(size) ? 10 : size,
+                                                  StringUtils.isEmpty(sort) ? defaultSort : SortQuery.toSort(sort));
         Page<User> usersPage = null;
 
         if (!StringUtils.isEmpty(filter)) {
