@@ -92,7 +92,7 @@ module.exports = React.createClass({
         };
 
         var pageChangeCallback = function(pageNum) {
-            this.history.pushState(null, "/admin/users", {page: pageNum});
+            this.history.pushState(null, "/admin/users", {page: pageNum, sort: this.props.sort, filter: this.props.filter});
         }.bind(this);
 
         return (<ActiveTable page={this.state.page}

@@ -22,7 +22,7 @@ This is a sample Spring Boot web application which provides basic functionality 
 Maven (https://maven.apache.org/) is our build system. It allows us to easily build our application.
 
 ## PostgreSQL
-PostgreSQL is used for the relation database. This is where all of our application data is stored. 
+PostgreSQL is used for the relational database. This is where all of our application data is stored. 
  
 # Configuration
 Start by cloning the repository and setting up a local development configuration file.
@@ -89,6 +89,14 @@ creates a new database migration:
 
     curl http://localhost:8080/skeleton/api/users -H "Authorization: Bearer ff16372e-38a7-4e29-88c2-1fb92897f558" -H "Accept: application/json"
 
+# Seed Data
 
+It is useful in a development environment to have some representative data. There is rudimentary support for generating fake users in the java-application-skeleton plugin. First we run a command to create the file /tmp/users.sql and fill it with SQL which will insert 1000 random users. All users share the same password: p4ssw0rd
 
+    mvn java-application-skeleton:seed-users -DnumUsers=1000 -Doutput=/tmp/users.sql
+    
+Next we run the psql shell and pass the /tmp/users.sql file to it in order to insert them into the 'java-app-skeleton' database. You may need to pass additional arguments to the psql command depending on your configuration.
+ 
+    psql --file=/tmp/users.sql java-app-skeleton 
 
+TODO: Have the plugin connect automatically to the database
