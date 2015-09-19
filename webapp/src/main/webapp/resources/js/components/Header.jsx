@@ -33,7 +33,7 @@ module.exports = React.createClass({
                        <span className="icon-bar"></span>
                    </button>
                    <a className="navbar-brand" href="#">
-                       <img alt="Brand" src="/skeleton/images/logo.jpg"/>
+                       <img alt="Brand" src="/images/logo.jpg"/>
                    </a>
                </div>
 

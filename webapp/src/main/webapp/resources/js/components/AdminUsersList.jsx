@@ -5,6 +5,7 @@ var ReactRouter = require("react-router");
 var Fluxxor = require("fluxxor");
 var ActiveTable = require("./ActiveTable");
 var APIClient = require("../APIClient");
+var TextInput = require("./form/TextInput");
 
 var FluxMixin = Fluxxor.FluxMixin(React);
 var StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -117,13 +118,32 @@ module.exports = React.createClass({
             this.history.pushState(null, "/admin/users", query);
         }.bind(this);
 
-        return (<ActiveTable page={this.state.page}
+        var filterChangeCallback = function(event) {
+            console.log("Event: " + util.inspect(event.target.value));
+            var query = {
+                filter: event.target.value
+            };
+
+            if (this.props.sort) {
+                query.sort = this.props.sort;
+            }
+
+            this.history.pushState(null, "/admin/users", query);
+        }.bind(this);
+
+        return (
+            <div>
+                <div className="form-row">
+                    {$.i18n.prop('search')}:<input name="filterInput" defaultValue={this.props.filter} onChange={filterChangeCallback}/>
+                </div>
+                <ActiveTable page={this.state.page}
                              error={this.state.error}
                              loading={this.state.loading}
                              sorts={APIClient.parseSort(this.props.sort)}
                              pageChangeCallback={pageChangeCallback}
                              sortChangeCallback={sortChangeCallback}
                              keyFunction={keyFunction}
-                             columns={columns} />);
+                             columns={columns} />
+            </div>);
     }
 });
