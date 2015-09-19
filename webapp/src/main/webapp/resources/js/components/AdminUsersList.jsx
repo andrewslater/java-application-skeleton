@@ -128,7 +128,7 @@ module.exports = React.createClass({
                 query.sort = this.props.sort;
             }
 
-            this.history.pushState(null, "/admin/users", query);
+            this.history.replaceState(null, "/admin/users", query);
         }.bind(this);
 
         return (
