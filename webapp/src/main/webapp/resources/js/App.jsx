@@ -72,7 +72,7 @@ module.exports = {
         React.render(
             <Router createElement={createElement} history={history}>
                 <Route component={Home} path="/">
-                    <Route component={AdminApp} path="admin">
+                    <Route path="admin">
                         <Route component={ListUsers} path="users" />
                         <Route component={ViewUser} path="users/:userId" />
                         <Route component={SystemSettings} path="settings" />

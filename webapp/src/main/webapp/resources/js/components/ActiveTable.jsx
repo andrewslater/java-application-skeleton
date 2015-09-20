@@ -14,7 +14,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-
         var tableContent;
         var fillerRows = [];
 
@@ -46,37 +45,45 @@ module.exports = React.createClass({
 
 
         if (this.props.page === undefined) {
-            tableContent = <tr><td colSpan="5"><Spinner /></td></tr>
+            tableContent = <tr><td colSpan={this.props.columns.length}><Spinner /></td></tr>
         }
 
         return (
-            <div>
-                <table className="table table-hover">
-                    <thead>
-                    <tr>
-                        {this.props.columns.map(function(column) {
-                            var sortIcon = null;
-                            var currentSort = null;
+            <div class="container">
+            <div className="row">
+                <div className="col-xs-12">
+                    <table className="table table-hover">
+                        <thead>
+                        <tr>
+                            {this.props.columns.map(function(column) {
+                                var sortIcon = null;
+                                var currentSort = null;
 
-                            if (column.sortProperty) {
-                                if (this.props.sorts.hasOwnProperty(column.sortProperty)) {
-                                    currentSort = this.props.sorts[column.sortProperty].toLowerCase();
-                                    sortIcon = <span>&nbsp;<i className={'fa fa-sort-' + currentSort}></i></span>;
+                                if (column.sortProperty) {
+                                    if (this.props.sorts.hasOwnProperty(column.sortProperty)) {
+                                        currentSort = this.props.sorts[column.sortProperty].toLowerCase();
+                                        sortIcon = <span>&nbsp;<i className={'fa fa-sort-' + currentSort}></i></span>;
+                                    }
                                 }
-                            }
-                            var headingText = <span>{column.name}{sortIcon}</span>;
-                            if (column.sortProperty) {
-                                var newDirection = currentSort == 'asc' ? 'DESC' : 'ASC';
-                                headingText = <a href="javascript:void(0)" onClick={this.props.sortChangeCallback.bind(null, column.sortProperty + ':' + newDirection)}>{headingText}</a>
-                            }
-                            return <th key={'column-heading-' + column.name}>{headingText}</th>
-                        }.bind(this))}
-                    </tr>
-                    {tableContent}
-                    {fillerRows}
-                    </thead>
-                </table>
-                {this.renderPagination()}
+                                var headingText = <span>{column.name}{sortIcon}</span>;
+                                if (column.sortProperty) {
+                                    var newDirection = currentSort == 'asc' ? 'DESC' : 'ASC';
+                                    headingText = <a href="javascript:void(0)" onClick={this.props.sortChangeCallback.bind(null, column.sortProperty + ':' + newDirection)}>{headingText}</a>
+                                }
+                                return <th key={'column-heading-' + column.name}>{headingText}</th>
+                            }.bind(this))}
+                        </tr>
+                        {tableContent}
+                        {fillerRows}
+                        </thead>
+                    </table>
+                </div>
+                <div className="row">
+                    <div className="col-xs-12 center-block text-center">
+                        {this.renderPagination()}
+                    </div>
+                </div>
+            </div>
             </div>
         )
     },
