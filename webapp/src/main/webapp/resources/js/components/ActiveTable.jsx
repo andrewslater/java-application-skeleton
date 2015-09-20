@@ -1,3 +1,4 @@
+var _ = require("underscore");
 var React = require("react");
 var ReactRouter = require("react-router");
 
@@ -15,6 +16,7 @@ module.exports = React.createClass({
     render: function() {
 
         var tableContent;
+        var fillerRows = [];
 
         if (this.props.error) {
             tableContent = <tr><td colSpan="5" className="text-center">
@@ -25,7 +27,9 @@ module.exports = React.createClass({
                 </div>
             </td></tr>;
         } else if (this.props.page) {
+            var rowCount = 0;
             tableContent = this.props.page.content.map(function(rowData) {
+                rowCount++;
                 return <tr key={this.props.keyFunction(rowData)}>
                     {this.props.columns.map(function(column) {
                         var contents = React.createElement(column.component, {rowData: rowData});
@@ -33,7 +37,13 @@ module.exports = React.createClass({
                     })}
                 </tr>;
             }.bind(this));
+
+            _.range(rowCount, this.props.page.size).map(function(i) {
+                fillerRows.push(<tr><td colSpan={this.props.columns.length}>&nbsp;</td></tr>);
+            }.bind(this));
+
         }
+
 
         if (this.props.page === undefined) {
             tableContent = <tr><td colSpan="5"><Spinner /></td></tr>
@@ -63,6 +73,7 @@ module.exports = React.createClass({
                         }.bind(this))}
                     </tr>
                     {tableContent}
+                    {fillerRows}
                     </thead>
                 </table>
                 {this.renderPagination()}
