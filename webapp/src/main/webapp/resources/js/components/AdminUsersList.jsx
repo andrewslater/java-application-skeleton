@@ -91,44 +91,49 @@ module.exports = React.createClass({
             return APIClient.getLink(rowData, "admin-self")
         };
 
-        var pageChangeCallback = function(pageNum) {
-            var query = APIClient.collapseQuery({
-                page: pageNum,
-                sort: this.props.sort,
-                filter: this.props.filter
-            });
-            this.history.pushState(null, "/admin/users", query);
-        }.bind(this);
-
-        var sortChangeCallback = function(sort) {
-            var query = APIClient.collapseQuery({
-                sort: sort,
-                filter: this.props.filter
-            });
-            this.history.pushState(null, "/admin/users", query);
-        }.bind(this);
-
-        var filterChangeCallback = function(event) {
-            var query = APIClient.collapseQuery({
-                filter: event.target.value,
-                sort: this.props.sort
-            });
-            this.history.replaceState(null, "/admin/users", query);
-        }.bind(this);
-
         return (
             <div>
                 <div className="form-row">
-                    {$.i18n.prop('search')}:<input name="filterInput" defaultValue={this.props.filter} onChange={filterChangeCallback}/>
+                    {$.i18n.prop('search')}:<input name="filterInput" defaultValue={this.props.filter} onChange={this.filterChangeCallback}/>
                 </div>
                 <ActiveTable page={this.state.page}
                              error={this.state.error}
                              loading={this.state.loading}
                              sorts={APIClient.parseSort(this.props.sort)}
-                             pageChangeCallback={pageChangeCallback}
-                             sortChangeCallback={sortChangeCallback}
+                             pageChangeCallback={this.pageChangeCallback}
+                             sortChangeCallback={this.sortChangeCallback}
                              keyFunction={keyFunction}
                              columns={columns} />
             </div>);
+    },
+
+    pageChangeCallback: function(pageNum) {
+        this.pushHistoryState({
+            page: pageNum,
+            sort: this.props.sort,
+            filter: this.props.filter
+        });
+    },
+
+    sortChangeCallback: function(sort) {
+        this.pushHistoryState({
+            sort: sort,
+            filter: this.props.filter
+        });
+    },
+
+    filterChangeCallback: function(event) {
+        this.replaceHistoryState({
+            filter: event.target.value,
+            sort: this.props.sort
+        })
+    },
+
+    pushHistoryState: function(query) {
+        this.history.pushState(null, "/admin/users", APIClient.collapseQuery(query));
+    },
+
+    replaceHistoryState: function(query) {
+        this.history.replaceState(null, "/admin/users", APIClient.collapseQuery(query));
     }
 });

@@ -57,7 +57,7 @@ module.exports = React.createClass({
                             var headingText = <span>{column.name}{sortIcon}</span>;
                             if (column.sortProperty) {
                                 var newDirection = currentSort == 'asc' ? 'DESC' : 'ASC';
-                                headingText = <a href="javascript:void(0)" onClick={this.props.sortChangeCallback.bind(this, column.sortProperty + ':' + newDirection)}>{headingText}</a>
+                                headingText = <a href="javascript:void(0)" onClick={this.props.sortChangeCallback.bind(null, column.sortProperty + ':' + newDirection)}>{headingText}</a>
                             }
                             return <th key={'column-heading-' + column.name}>{headingText}</th>
                         }.bind(this))}
@@ -75,16 +75,22 @@ module.exports = React.createClass({
             return null;
         }
 
+        // TODO: Figure out a more clear way of performing these pagination calculations
         var page = this.props.page;
         var firstPageNum = Math.max(page.number - Math.floor(this.props.maxPaginationLinks / 2), 0);
         var lastPageNum = Math.min(firstPageNum + this.props.maxPaginationLinks - 1, page.totalPages - 1);
+        var numLinks = lastPageNum - firstPageNum + 1;
         var pageLinks = [];
+
+        if (numLinks < this.props.maxPaginationLinks) {
+            firstPageNum = Math.max(0, firstPageNum - (this.props.maxPaginationLinks - numLinks));
+        }
 
         for (var i = firstPageNum; i <= lastPageNum; i++) {
             pageLinks.push(
                 <li key={i}
                     className={i == page.number ? "active" : ""}>
-                    <a href="javascript:void(0)" onClick={this.props.pageChangeCallback.bind(this, i+1)}>{i+1}</a>
+                    <a href="javascript:void(0)" onClick={this.props.pageChangeCallback.bind(null, i+1)}>{i+1}</a>
                 </li>);
         }
 
@@ -92,13 +98,13 @@ module.exports = React.createClass({
         var nextLink = <a href="javascript:void(0)">&raquo;</a>;
 
         if (!page.first) {
-            prevLink = (<a href="javascript:void(0)" onClick={this.props.pageChangeCallback.bind(this, page.number)} aria-label={$.i18n.prop('previous')}>
+            prevLink = (<a href="javascript:void(0)" onClick={this.props.pageChangeCallback.bind(null, page.number)} aria-label={$.i18n.prop('previous')}>
                 <span aria-hidden="true">&laquo;</span>
             </a>);
         }
 
         if (!page.last) {
-            nextLink = (<a href="javascript:void(0)" onClick={this.props.pageChangeCallback.bind(this, page.number + 2)} aria-label={$.i18n.prop('next')}>
+            nextLink = (<a href="javascript:void(0)" onClick={this.props.pageChangeCallback.bind(null, page.number + 2)} aria-label={$.i18n.prop('next')}>
                 <span aria-hidden="true">&raquo;</span>
             </a>);
         }
