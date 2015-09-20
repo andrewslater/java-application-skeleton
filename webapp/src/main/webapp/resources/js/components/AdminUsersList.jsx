@@ -119,7 +119,6 @@ module.exports = React.createClass({
         }.bind(this);
 
         var filterChangeCallback = function(event) {
-            console.log("Event: " + util.inspect(event.target.value));
             var query = {
                 filter: event.target.value
             };

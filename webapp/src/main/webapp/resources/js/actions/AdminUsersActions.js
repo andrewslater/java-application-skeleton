@@ -6,13 +6,9 @@ module.exports = {
     loadUsersRequest: null,
 
     loadUsers: function(pageNum, sortQuery, filter ) {
-        // The API uses zero-indexed page numbers
+        // The API uses zero-indexed page numbers so we'll adjust from the one-indexed pagination of our urls
         pageNum = pageNum ? pageNum - 1 : 0;
         this.dispatch(constants.ADMIN_LOAD_USERS);
-
-        if (this.loadUsersRequest) {
-            this.loadUsersRequest.abort();
-        }
 
         this.loadUsersRequest = app.client.get("admin/users", {
             data: {
@@ -21,12 +17,18 @@ module.exports = {
                 filter: filter
             },
 
-            success: function(data, status) {
+            success: function(data, status, jqXHR) {
+                if (jqXHR != this.loadUsersRequest) {
+                    return;
+                }
                 this.loadUsersRequest = null;
                 this.dispatch(constants.ADMIN_LOAD_USERS_SUCCESS, {page: data});
             }.bind(this),
 
             error: function(error) {
+                if (jqXHR != this.loadUsersRequest) {
+                    return;
+                }
                 this.loadUsersRequest = null;
                 if (error.statusText != "abort") {
                     this.dispatch(constants.ADMIN_LOAD_USERS_FAIL, {error: error.responseJSON});                    
