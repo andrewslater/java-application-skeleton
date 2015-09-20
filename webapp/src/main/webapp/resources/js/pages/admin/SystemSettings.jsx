@@ -59,15 +59,18 @@ module.exports = React.createClass({
             <Formsy.Form onSubmit={this.submitForm} onChange={this.onFormChange} mapping={this.mapInputs}>
                 <legend>{$.i18n.prop('system-settings')}</legend>
 
-                <Checkbox name="allowRegistration"
+                <Checkbox id="allowRegistrationCheckbox"
+                          name="allowRegistration"
                           label={$.i18n.prop('system-settings.allow-registration')}
                           value={this.state.settings.allowRegistration} />
 
-                <Checkbox name="requireEmailConfirmation"
+                <Checkbox id="requireEmailConfirmationCheckbox"
+                          name="requireEmailConfirmation"
                           label={$.i18n.prop('system-settings.require-email-confirmation')}
                           value={this.state.settings.requireEmailConfirmation} />
 
-                <Checkbox name="restrictRegistrationDomains"
+                <Checkbox id="restrictRegistrationDomainsCheckbox"
+                          name="restrictRegistrationDomains"
                           label={$.i18n.prop('system-settings.restrict-registration-domains')}
                           value={this.state.settings.restrictRegistrationDomains} />
 

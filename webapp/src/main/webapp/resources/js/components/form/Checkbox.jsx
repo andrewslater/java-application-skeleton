@@ -13,8 +13,8 @@ var Checkbox = React.createClass({
     render: function() {
         return (
             <div className="checkbox">
-                <input type="checkbox" onChange={this.changeValue} defaultChecked={this.props.value} name={this.props.name}  />
-                <label>{this.props.label}</label>
+                <input id={this.props.id} type="checkbox" onChange={this.changeValue} defaultChecked={this.props.value} name={this.props.name}  />
+                <label htmlFor={this.props.id}>{this.props.label}</label>
             </div>
         );
     }

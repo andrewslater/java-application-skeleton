@@ -120,16 +120,18 @@ module.exports = React.createClass({
             </a>);
         }
 
-        return <nav>
-            <ul className="pagination">
-                <li className={page.first ? 'disabled' : ''}>
-                    {prevLink}
-                </li>
-                {pageLinks}
-                <li className={page.last ? 'disabled' : ''}>
-                    {nextLink}
-                </li>
-            </ul>
-        </nav>;
+        return <div className="center-block">
+            <nav>
+                <ul className="pagination">
+                    <li className={page.first ? 'disabled' : ''}>
+                        {prevLink}
+                    </li>
+                    {pageLinks}
+                    <li className={page.last ? 'disabled' : ''}>
+                        {nextLink}
+                    </li>
+                </ul>
+            </nav>
+        </div>;
     }
 });
