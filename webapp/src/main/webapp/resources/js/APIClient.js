@@ -67,6 +67,11 @@ APIClient.parseSort = function(sortString) {
     return sorts;
 };
 
+APIClient.collapseQuery = function(query) {
+    return _.omit(query, function(value) {
+        return _.isUndefined(value) || _.isNull(value) || value === '';
+    });
+};
 
 module.exports = APIClient;
 

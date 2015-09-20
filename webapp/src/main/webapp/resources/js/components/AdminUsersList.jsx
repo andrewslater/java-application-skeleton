@@ -1,3 +1,4 @@
+var _ = require("underscore");
 var $ = require("jquery");
 var util = require("util");
 var React = require("react");
@@ -91,42 +92,27 @@ module.exports = React.createClass({
         };
 
         var pageChangeCallback = function(pageNum) {
-            var query = {
-                page: pageNum
-            };
-
-            if (this.props.sort) {
-                query.sort = this.props.sort;
-            }
-
-            if (this.props.filter) {
-                query.filter = this.props.filter;
-            }
-
+            var query = APIClient.collapseQuery({
+                page: pageNum,
+                sort: this.props.sort,
+                filter: this.props.filter
+            });
             this.history.pushState(null, "/admin/users", query);
         }.bind(this);
 
         var sortChangeCallback = function(sort) {
-            var query = {
-                sort: sort
-            };
-
-            if (this.props.filter) {
-                query.filter = this.props.filter;
-            }
-
+            var query = APIClient.collapseQuery({
+                sort: sort,
+                filter: this.props.filter
+            });
             this.history.pushState(null, "/admin/users", query);
         }.bind(this);
 
         var filterChangeCallback = function(event) {
-            var query = {
-                filter: event.target.value
-            };
-
-            if (this.props.sort) {
-                query.sort = this.props.sort;
-            }
-
+            var query = APIClient.collapseQuery({
+                filter: event.target.value,
+                sort: this.props.sort
+            });
             this.history.replaceState(null, "/admin/users", query);
         }.bind(this);
 
