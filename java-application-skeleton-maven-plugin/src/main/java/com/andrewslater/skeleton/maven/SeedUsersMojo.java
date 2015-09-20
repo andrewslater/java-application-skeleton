@@ -8,6 +8,7 @@ import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -64,9 +65,10 @@ public class SeedUsersMojo extends AbstractMojo
 
             emails.add(email);
 
+            String lastLogin = Math.random() >= 0.05 ? "(SELECT NOW() - '1 minute'::INTERVAL * ROUND(RANDOM() * 9999999))" : "null";
             String insert = String.format(
-                "INSERT INTO users VALUES (NEXTVAL('users_id_seq'), '%s', null, '%s %s', true, '$2a$10$S30wfsLaAUrPLjEKZ981Vuy6xAK/TpL6pOFgi8VlDhBtoz.r0gBGe', null, now(), null);\n",
-                email, firstName, lastName);
+                "INSERT INTO users VALUES (NEXTVAL('users_id_seq'), '%s', null, '%s %s', true, '$2a$10$S30wfsLaAUrPLjEKZ981Vuy6xAK/TpL6pOFgi8VlDhBtoz.r0gBGe', %s, (SELECT NOW() - '1 minute'::INTERVAL * ROUND(RANDOM() * 9999999)), null);\n",
+                email, firstName, lastName, lastLogin);
 
             if (outputFile != null) {
                 try {
@@ -79,4 +81,5 @@ public class SeedUsersMojo extends AbstractMojo
             }
         }
     }
+
 }
