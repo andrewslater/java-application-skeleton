@@ -46,6 +46,36 @@ module.exports = React.createClass({
         }
     },
 
+    pageChangeCallback: function(pageNum) {
+        this.pushHistoryState({
+            page: pageNum,
+            sort: this.props.sort,
+            filter: this.props.filter
+        });
+    },
+
+    sortChangeCallback: function(sort) {
+        this.pushHistoryState({
+            sort: sort,
+            filter: this.props.filter
+        });
+    },
+
+    filterChangeCallback: function(event) {
+        this.replaceHistoryState({
+            filter: event.target.value,
+            sort: this.props.sort
+        })
+    },
+
+    pushHistoryState: function(query) {
+        this.history.pushState(null, "/admin/users", APIClient.collapseQuery(query));
+    },
+
+    replaceHistoryState: function(query) {
+        this.history.replaceState(null, "/admin/users", APIClient.collapseQuery(query));
+    },
+
     render: function() {
         var NameColumn = React.createClass({
             render: function() {
@@ -105,35 +135,5 @@ module.exports = React.createClass({
                              keyFunction={keyFunction}
                              columns={columns} />
             </div>);
-    },
-
-    pageChangeCallback: function(pageNum) {
-        this.pushHistoryState({
-            page: pageNum,
-            sort: this.props.sort,
-            filter: this.props.filter
-        });
-    },
-
-    sortChangeCallback: function(sort) {
-        this.pushHistoryState({
-            sort: sort,
-            filter: this.props.filter
-        });
-    },
-
-    filterChangeCallback: function(event) {
-        this.replaceHistoryState({
-            filter: event.target.value,
-            sort: this.props.sort
-        })
-    },
-
-    pushHistoryState: function(query) {
-        this.history.pushState(null, "/admin/users", APIClient.collapseQuery(query));
-    },
-
-    replaceHistoryState: function(query) {
-        this.history.replaceState(null, "/admin/users", APIClient.collapseQuery(query));
     }
 });
