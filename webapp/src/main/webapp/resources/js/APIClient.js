@@ -11,7 +11,6 @@ APIClient.prototype = {
         return $.ajax($.extend(this.getBaseAjaxOptions(resourceUri, "GET"), options));
     },
 
-
     patch: function (resourceUri, options) {
         return $.ajax($.extend(this.getBaseAjaxOptions(resourceUri, "PATCH"), options));
     },
@@ -43,7 +42,6 @@ APIClient.prototype = {
         };
         return apiOptions;
     }
-
 };
 
 APIClient.getLink = function (resource, rel) {
