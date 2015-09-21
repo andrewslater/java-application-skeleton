@@ -40,7 +40,7 @@ module.exports = React.createClass({
                         sortIcon = <span>&nbsp;<i className={'fa fa-sort-' + currentSort}></i></span>;
                     }
                 }
-                var headingText = <span>{column.name}{sortIcon}</span>;
+                var headingText = <span>{column.name}&nbsp;{sortIcon}</span>;
                 if (column.sortProperty) {
                     var newDirection = currentSort == 'asc' ? 'DESC' : 'ASC';
                     headingText = <a href="javascript:void(0)" onClick={this.props.sortChangeCallback.bind(null, column.sortProperty + ':' + newDirection)}>{headingText}</a>

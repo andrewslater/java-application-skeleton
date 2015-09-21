@@ -66,18 +66,21 @@ public class SeedUsersMojo extends AbstractMojo
             emails.add(email);
 
             String lastLogin = Math.random() >= 0.05 ? "(SELECT NOW() - '1 minute'::INTERVAL * ROUND(RANDOM() * 9999999))" : "null";
-            String insert = String.format(
+            String insertUser = String.format(
                 "INSERT INTO users VALUES (NEXTVAL('users_id_seq'), '%s', null, '%s %s', true, '$2a$10$S30wfsLaAUrPLjEKZ981Vuy6xAK/TpL6pOFgi8VlDhBtoz.r0gBGe', %s, (SELECT NOW() - '1 minute'::INTERVAL * ROUND(RANDOM() * 9999999)), null);\n",
                 email, firstName, lastName, lastLogin);
+            String insertRoles = String.format(
+                "INSERT INTO user_roles VALUES((SELECT id FROM users WHERE email = '%s'), 'USER');\n", email);
 
             if (outputFile != null) {
                 try {
-                    FileUtils.fileAppend(output, "utf-8", insert);
+                    FileUtils.fileAppend(output, "utf-8", insertUser);
+                    FileUtils.fileAppend(output, "utf-8", insertRoles);
                 } catch (IOException ex) {
                     throw new MojoExecutionException("Failed to write to file: " + output);
                 }
             } else {
-                System.out.println(insert);
+                System.out.println(insertUser);
             }
         }
     }

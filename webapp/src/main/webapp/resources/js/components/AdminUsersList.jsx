@@ -124,7 +124,7 @@ module.exports = React.createClass({
         return (
             <div>
                 <div className="form-row">
-                    {$.i18n.prop('search')}:<input name="filterInput" defaultValue={this.props.filter} onChange={this.filterChangeCallback}/>
+                    <input name="filterInput" placeholder={$.i18n.prop('search')} defaultValue={this.props.filter} onChange={this.filterChangeCallback}/>
                 </div>
                 <ActiveTable page={this.state.page}
                              error={this.state.error}
