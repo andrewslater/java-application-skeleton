@@ -29,18 +29,25 @@ module.exports = {
     client: new APIClient(),
 
     run: function(csrf) {
+        React.render(<Spinner />, document.body);
 
-        console.log("Running application...");
         this.csrf = csrf;
-
         this.configureI18n();
 
         if (!localStorage.getItem("apiToken")) {
-            React.render(React.createElement(Spinner), document.body);
-            $.get("/ajax/token", function (data) {
+
+            var request = $.get("/ajax/token");
+
+            request.done(function(data) {
                 localStorage.setItem("apiToken", data.access_token);
                 this.renderRoutes();
             }.bind(this));
+
+            request.fail(function(jqXhr, textStatus) {
+                console.log("Failed to retrieve API token: " + textStatus);
+                // TODO: Show error page?
+            });
+
         } else {
             this.renderRoutes();
         }
@@ -53,6 +60,9 @@ module.exports = {
         var AdminDashboard = require("./pages/admin/AdminDashboard");
         var SystemSettings = require("./pages/admin/SystemSettings");
         var AdminApp = require("./pages/admin/AdminApp");
+        var Preferences = require("./pages/Preferences");
+        var Profile = require("./pages/Profile");
+
         var Home = require("./pages/Home");
 
         this.apiToken = localStorage.getItem("apiToken");
@@ -63,8 +73,7 @@ module.exports = {
         flux.actions.principal.loadUser();
 
         var createElement = function(Component, props) {
-            props.flux = flux;
-            return <Component {...props} />
+            return <Component {...props} flux={flux} />
         };
 
         var createBrowserHistory = require('history/lib/createBrowserHistory');
@@ -72,6 +81,8 @@ module.exports = {
         React.render(
             <Router createElement={createElement} history={history}>
                 <Route component={Home} path="/">
+                    <Route component={Profile} path="profile" />
+                    <Route component={Preferences} path="preferences" />
                     <Route path="admin">
                         <Route component={ListUsers} path="users" />
                         <Route component={ViewUser} path="users/:userId" />

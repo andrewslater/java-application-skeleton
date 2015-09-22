@@ -61,12 +61,12 @@ module.exports = React.createClass({
                               role="button" aria-expanded="false"><span>{principalName}</span>&nbsp;
                                <span className="caret"></span></a>
                            <ul className="dropdown-menu" role="menu">
-                               <li><a href={'/settings/account'}>Settings</a></li>
-                               <li><a href="#">Preferences</a></li>
+                               <li><Link to="/profile">{$.i18n.prop('profile')}</Link></li>
+                               <li><Link to={'/preferences'}>{$.i18n.prop('preferences')}</Link></li>
                                <li className="divider"></li>
                                <li>
                                    <form action={'/logout'} method="post">
-                                       <input type="submit" value="Logout" className="btn btn-link"/>
+                                       <input type="submit" value={$.i18n.prop('logout')} className="btn btn-link"/>
                                        <input type="hidden" name="_csrf" value={app.csrf} />
                                    </form>
                                </li>
