@@ -45,15 +45,9 @@ module.exports = {
     },
 
     renderRoutes: function() {
+        var routes = require("./routes");
         var flux = require("./flux");
-        var ListUsers = require("./pages/admin/ListUsers");
-        var ViewUser = require("./pages/admin/ViewUser");
-        var AdminDashboard = require("./pages/admin/AdminDashboard");
-        var SystemSettings = require("./pages/admin/SystemSettings");
-        var AdminApp = require("./pages/admin/AdminApp");
-        var Preferences = require("./pages/Preferences");
-        var Profile = require("./pages/Profile");
-        var Home = require("./pages/Home");
+        var history = require('history/lib/createBrowserHistory')();
 
         this.apiToken = localStorage.getItem("apiToken");
         this.client = new APIClient("/api/", this.apiToken, csrf);
@@ -65,20 +59,10 @@ module.exports = {
             return <Component {...props} flux={flux} />
         };
 
-        var createBrowserHistory = require('history/lib/createBrowserHistory');
-        var history = createBrowserHistory();
         React.render(
-            <Router createElement={createElement} history={history}>
-                <Route component={Home} path="/">
-                    <Route component={Profile} path="profile" />
-                    <Route component={Preferences} path="preferences" />
-                    <Route path="admin">
-                        <Route component={ListUsers} path="users" />
-                        <Route component={ViewUser} path="users/:userId" />
-                        <Route component={SystemSettings} path="settings" />
-                    </Route>
-                </Route>
-            </Router>, document.body)
+            <Router createElement={createElement} history={history} routes={routes} />,
+            document.body
+        );
     },
 
     configureI18n: function() {
