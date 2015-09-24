@@ -27,17 +27,11 @@ module.exports = {
 
         if (!localStorage.getItem("apiToken")) {
 
-            $.get("/ajax/token", {
-                success: function(data) {
+            $.get("/ajax/token", function(data, status) {
                     localStorage.setItem("apiToken", data.access_token);
                     this.renderRoutes();
-                }.bind(this),
-
-                error: function(jqXhr, textStatus) {
-                    console.log("Failed to retrieve API token: " + textStatus);
-                    // TODO: Show error page?
-                }
-            });
+                }.bind(this)
+            );
 
         } else {
             this.renderRoutes();

@@ -14,6 +14,19 @@ module.exports = {
                 this.dispatch(constants.LOAD_PRINCIPAL_USER_FAIL, {error: error.responseJSON});
             }.bind(this)
         });
+    },
+
+    uploadAvatar: function(file) {
+        this.dispatch(constants.UPLOAD_PROFILE_AVATAR);
+        app.client.post("/profile/avatar", {
+            success: function(data, status) {
+                this.dispatch(constants.UPLOAD_PROFILE_AVATAR_SUCCESS, {user: data});
+            }.bind(this),
+
+            error: function(error) {
+                this.dispatch(constants.UPLOAD_PROFILE_AVATAR_FAIL, {error: error.responseJSON});
+            }.bind(this)
+        });
     }
 
 };

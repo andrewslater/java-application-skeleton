@@ -33,14 +33,18 @@ APIClient.prototype = {
             method: ajaxMethod,
             dataType: "json",
             contentType: "application/json",
-            headers: {
-                'Authorization': 'Bearer ' + this.apiToken
-            },
+            headers: this.getHeaders(),
             error: function(req, status, errorThrown) {
                 console.log("Error encountered for API call: " + req + " (" + status + "): " + errorThrown);
             }
         };
         return apiOptions;
+    },
+
+    getHeaders: function() {
+        return {
+            'Authorization': 'Bearer ' + this.apiToken
+        };
     }
 };
 

@@ -8,9 +8,9 @@ var AdminUserStore = require("./stores/AdminUserStore");
 var SystemSettingsStore = require("./stores/SystemSettingsStore");
 var PrincipalUserStore = require("./stores/PrincipalUserStore");
 
-var AdminUsersActions = require("./actions/AdminUsersActions");
-var SystemSettingsActions = require("./actions/SystemSettingsActions");
-var PrincipalUserActions = require("./actions/PrincipalUserActions");
+var AdminUsersActions = require("./actions/AdminUsersActions"),
+    SystemSettingsActions = require("./actions/SystemSettingsActions"),
+    PrincipalUserActions = require("./actions/PrincipalUserActions");
 
 var stores = {
     AdminUsersStore: new AdminUsersStore(),

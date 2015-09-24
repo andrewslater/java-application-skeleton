@@ -14,13 +14,16 @@ public class Mappings {
     private static final Logger LOG = LoggerFactory.getLogger(Mappings.class);
 
     // Admin API
-    public static final String ADMIN_API_USER_DETAILS = "/api/admin/user/{userId}";
-    public static final String ADMIN_API_LIST_USERS = "/api/admin/users";
-    public static final String ADMIN_API_SETTINGS = "/api/admin/settings";
+    private static final String ADMIN_API_BASE = "/api/admin/";
+    public static final String ADMIN_API_USER_DETAILS = ADMIN_API_BASE + "user/{userId}";
+    public static final String ADMIN_API_LIST_USERS =   ADMIN_API_BASE + "users";
+    public static final String ADMIN_API_SETTINGS =     ADMIN_API_BASE + "settings";
 
     // Authenticated API
-    public static final String API_USER_RESOURCE = "/api/user/{userId}";
-    public static final String API_PRINCIPAL_RESOURCE = "/api/user/principal";
+    private static final String API_BASE = "/api/";
+    public static final String API_USER_RESOURCE =      API_BASE + "user/{userId}";
+    public static final String API_PRINCIPAL_RESOURCE = API_BASE + "user/principal";
+    public static final String API_PRINCIPAL_AVATAR =   API_BASE + "user/principal/avatar";
 
     private static final Pattern PROPS_PATTERN = Pattern.compile("\\{(.+?)\\}");
 

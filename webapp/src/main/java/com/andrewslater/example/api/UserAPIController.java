@@ -4,6 +4,7 @@ import com.andrewslater.example.Mappings;
 import com.andrewslater.example.api.assemblers.UserResourceAssembler;
 import com.andrewslater.example.api.resources.UserResource;
 import com.andrewslater.example.models.User;
+import com.andrewslater.example.models.UserFile;
 import com.andrewslater.example.repositories.UserRepository;
 import com.andrewslater.example.security.SecurityUser;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -19,7 +20,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(produces = "application/hal+json")

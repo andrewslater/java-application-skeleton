@@ -5,3 +5,4 @@ require("../css/formValidation.css");
 require("../css/font-awesome.css");
 require("../css/spinkit.css");
 require("../css/animate.css");
+require("../css/dropzone.min.css");
