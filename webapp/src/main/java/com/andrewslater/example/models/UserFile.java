@@ -124,6 +124,10 @@ public class UserFile {
         this.updatedAt = updatedAt;
     }
 
+    public String getUrl() {
+        return getPath();
+    }
+
     public boolean equals(Object obj) {
         if (obj == null) { return false; }
         if (obj == this) { return true; }

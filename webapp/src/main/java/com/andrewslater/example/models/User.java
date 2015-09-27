@@ -3,6 +3,7 @@ package com.andrewslater.example.models;
 import com.andrewslater.example.api.APIView;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.gson.Gson;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -89,12 +90,12 @@ public class User implements Serializable {
     // TODO: Apply constraint that the User owns their avatar UserFiles
     @OneToOne
     @JoinColumn(name = "small_avatar_file_id")
-    @JsonView(APIView.Authenticated.class)
+    @JsonIgnore
     private UserFile smallAvatar;
 
     @OneToOne
     @JoinColumn(name = "medium_avatar_file_id")
-    @JsonView(APIView.Authenticated.class)
+    @JsonIgnore
     private UserFile mediumAvatar;
 
     public User() {
