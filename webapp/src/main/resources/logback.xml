@@ -20,8 +20,11 @@
     </appender>
 
     <logger name="org.springframework" level="WARN"/>
+    <logger name="org.hibernate.transaction.JDBCTransaction" level="DEBUG"/>
     <logger name="org.springframework.web.servlet.mvc" level="DEBUG" />
+    <logger name="org.springframework.orm.jpa.JpaTransactionManager" level="DEBUG"/>
     <logger name="com.andrewslater" level="DEBUG"/>
+
 
     <root level="warn">
         <appender-ref ref="consoleAppender"/>

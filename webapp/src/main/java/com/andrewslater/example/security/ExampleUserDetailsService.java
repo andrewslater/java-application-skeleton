@@ -1,5 +1,6 @@
 package com.andrewslater.example.security;
 
+import com.andrewslater.example.repositories.UserFilesRepository;
 import com.andrewslater.example.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,9 @@ public class ExampleUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private UserFilesRepository filesRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

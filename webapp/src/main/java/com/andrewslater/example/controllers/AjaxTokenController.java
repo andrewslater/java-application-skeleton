@@ -1,4 +1,4 @@
-package com.andrewslater.example.ajax;
+package com.andrewslater.example.controllers;
 
 import com.andrewslater.example.OAuthServerConfiguration;
 import com.andrewslater.example.security.SecurityUser;
@@ -25,9 +25,9 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/ajax")
-public class TokenController {
+public class AjaxTokenController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TokenController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AjaxTokenController.class);
 
     @Autowired
     private AuthorizationServerTokenServices tokenServices;

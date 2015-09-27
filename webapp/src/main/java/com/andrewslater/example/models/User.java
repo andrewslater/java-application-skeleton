@@ -23,6 +23,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -83,6 +85,17 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     @JsonView(APIView.Internal.class)
     private Set<Role> roles = new HashSet<>();
+
+    // TODO: Apply constraint that the User owns their avatar UserFiles
+    @OneToOne
+    @JoinColumn(name = "small_avatar_file_id")
+    @JsonView(APIView.Authenticated.class)
+    private UserFile smallAvatar;
+
+    @OneToOne
+    @JoinColumn(name = "medium_avatar_file_id")
+    @JsonView(APIView.Authenticated.class)
+    private UserFile mediumAvatar;
 
     public User() {
 
@@ -194,6 +207,22 @@ public class User implements Serializable {
             emailPendingConfirmation);
     }
 
+    public UserFile getSmallAvatar() {
+        return smallAvatar;
+    }
+
+    public void setSmallAvatar(UserFile smallAvatar) {
+        this.smallAvatar = smallAvatar;
+    }
+
+    public UserFile getMediumAvatar() {
+        return mediumAvatar;
+    }
+
+    public void setMediumAvatar(UserFile mediumAvatar) {
+        this.mediumAvatar = mediumAvatar;
+    }
+
     public boolean equals(Object obj) {
         if (obj == null) { return false; }
         if (obj == this) { return true; }
@@ -213,22 +242,25 @@ public class User implements Serializable {
             .append(createdAt, rhs.createdAt)
             .append(lastLogin, rhs.lastLogin)
             .append(roles, rhs.roles)
+            .append(smallAvatar, rhs.smallAvatar)
+            .append(mediumAvatar, rhs.mediumAvatar)
             .isEquals();
     }
 
-
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).
-            append(userId).
-            append(email).
-            append(emailPendingConfirmation).
-            append(fullName).
-            append(enabled).
-            append(password).
-            append(confirmationToken).
-            append(createdAt).
-            append(lastLogin).
-            append(roles).
-            toHashCode();
+        return new HashCodeBuilder(17, 37)
+            .append(userId)
+            .append(email)
+            .append(emailPendingConfirmation)
+            .append(fullName)
+            .append(enabled)
+            .append(password)
+            .append(confirmationToken)
+            .append(createdAt)
+            .append(lastLogin)
+            .append(roles)
+            .append(smallAvatar)
+            .append(mediumAvatar)
+            .toHashCode();
     }
 }
