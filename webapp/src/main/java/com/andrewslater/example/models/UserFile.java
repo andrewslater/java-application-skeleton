@@ -35,6 +35,7 @@ public class UserFile {
 
     @ManyToOne
     @JoinColumn(name="user_id", nullable = false, updatable = false)
+    @JsonIgnore
     private User user;
 
     @JsonIgnore
@@ -141,7 +142,6 @@ public class UserFile {
             .append(updatedAt, rhs.updatedAt)
             .isEquals();
     }
-
 
     public int hashCode() {
         return new HashCodeBuilder(17, 37)

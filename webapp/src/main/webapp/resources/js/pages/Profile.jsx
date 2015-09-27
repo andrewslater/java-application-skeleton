@@ -18,7 +18,7 @@ module.exports = React.createClass({
             loading: store.loading,
             error: store.error,
             principal: store.principal,
-            img: null
+            img: "/images/default-profile.png"
         };
     },
 
