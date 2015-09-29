@@ -1,12 +1,12 @@
-var util = require("util");
-var _ = require("underscore");
-var React = require("react");
-var Fluxxor = require("fluxxor");
-var Dropzone = require("react-dropzone-component");
-var AvatarCropper = require("react-avatar-cropper");
-var app = require("../app");
-var APIClient = require("../APIClient");
-var Spinner = require("../components/Spinner");
+var util = require("util"),
+    _ = require("underscore"),
+    React = require("react"),
+    Fluxxor = require("fluxxor"),
+    Dropzone = require("react-dropzone-component"),
+    app = require("../app"),
+    APIClient = require("../APIClient"),
+    AvatarEditor = require("../components/AvatarEditor"),
+    Spinner = require("../components/Spinner");
 
 var FluxMixin = Fluxxor.FluxMixin(React),
     StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -39,37 +39,10 @@ module.exports = React.createClass({
     getStateFromFlux: function() {
         var store = this.getFlux().store("PrincipalUserStore");
         return {
-            cropperOpen: false,
             loading: store.loading,
-            error: store.error,
             principal: store.principal,
-            img: null,
-            croppedImg: store.principal ? APIClient.getLink(store.principal, "resource-avatar-medium") : null
-        };
-    },
-
-    handleFileChange: function(dataURI) {
-        this.setState({
-            img: dataURI,
-            croppedImg: this.state.croppedImg,
-            cropperOpen: true
-        });
-    },
-
-    handleRequestHide: function() {
-        console.log("onRequestHide()");
-        this.setState({
-            cropperOpen: false
-        });
-    },
-
-    handleCrop: function(dataURI) {
-        console.log("handleCrop");
-        this.setState({
-            cropperOpen: false,
-            img: null,
-            croppedImg: dataURI
-        });
+            error: store.error
+        }
     },
 
     render: function() {
@@ -106,26 +79,31 @@ module.exports = React.createClass({
 
         return (
             <div>
-                <div className="avatar-photo">
-                    <FileUpload handleFileChange={this.handleFileChange} />
-                    <div className="avatar-edit">
-                        <span>Click to Pick Avatar</span>
-                        <i className="fa fa-camera"></i>
-                    </div>
-                    <img src={this.state.croppedImg} />
-                </div>
-                {this.state.cropperOpen &&
-                <AvatarCropper
-                    onRequestHide={this.handleRequestHide}
-                    onCrop={this.handleCrop}
-                    image={this.state.img}
-                    width={225}
-                    height={225}
-                    />
-                }
+                <AvatarEditor user={this.state.principal} />
             </div>
-        )
+        );
 
+        //return (
+        //    <div>
+        //        <div className="avatar-photo">
+        //            <FileUpload handleFileChange={this.handleFileChange} />
+        //            <div className="avatar-edit">
+        //                <span>Click to Pick Avatar</span>
+        //                <i className="fa fa-camera"></i>
+        //            </div>
+        //            <img src={this.state.croppedImg} />
+        //        </div>
+        //        {this.state.cropperOpen &&
+        //        <AvatarCropper
+        //            onRequestHide={this.handleRequestHide}
+        //            onCrop={this.handleCrop}
+        //            image={this.state.img}
+        //            width={225}
+        //            height={225}
+        //            />
+        //        }
+        //    </div>
+        //)
     },
 
     onImageReady: function() {
