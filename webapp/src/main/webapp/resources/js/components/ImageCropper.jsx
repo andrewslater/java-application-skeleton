@@ -5,7 +5,8 @@ var $ = require("jquery"),
     ReactBootstrap = require("react-bootstrap"),
     isDataURL = require("../functions/isDataURL");
 
-var Button = ReactBootstrap.Button;
+var Button = ReactBootstrap.Button,
+    Modal = ReactBootstrap.Modal;
 
 module.exports = React.createClass({
 
@@ -40,11 +41,11 @@ module.exports = React.createClass({
 
         if (canvasAspectRatio > imageAspectRatio) {
             scaledHeight = this.props.height;
-            let scaleRatio = scaledHeight / height;
+            var scaleRatio = scaledHeight / height;
             scaledWidth = width * scaleRatio;
         } else {
             scaledWidth = this.props.width;
-            let scaleRatio = scaledWidth / width;
+            var scaleRatio = scaledWidth / width;
             scaledHeight = height * scaleRatio;
         }
 
@@ -54,13 +55,13 @@ module.exports = React.createClass({
     prepareImage: function(imageUri) {
         var img = new Image();
         if (!isDataURL(imageUri)) img.crossOrigin = 'anonymous';
-        img.onload = () => {
+        img.onload = function() {
             var scaledImage = this.fitImageToCanvas(img.width, img.height);
             scaledImage.resource = img;
             scaledImage.x = 0;
             scaledImage.y = 0;
             this.setState({dragging: false, image: scaledImage, preview: this.toDataURL()});
-        };
+        }.bind(this);
         img.src = imageUri;
     },
 
@@ -155,15 +156,15 @@ module.exports = React.createClass({
         this.prepareImage(this.props.image);
 
         this.listeners = {
-            mousemove: e => this.mouseMoveListener(e),
-            mouseup: e => this.mouseUpListener(e),
-            mousedown: e => this.mouseDownListener(e)
+            mousemove: this.mouseMoveListener,
+            mouseup: this.mouseUpListener,
+            mousedown: this.mouseDownListener
         };
 
         window.addEventListener("mousemove", this.listeners.mousemove, false);
         window.addEventListener("mouseup", this.listeners.mouseup, false);
         canvas.addEventListener("mousedown", this.listeners.mousedown, false);
-        document.onselectstart = e => this.preventSelection(e);
+        document.onselectstart = this.preventSelection
     },
 
     // make sure we clean up listeners when unmounted.
@@ -226,44 +227,52 @@ module.exports = React.createClass({
     handleZoomUpdate: function() {
         var newstate = this.state;
         newstate.zoom = React.findDOMNode(this.refs.zoom).value;
-        this.setState({newstate});
+        this.setState(newstate);
     },
 
     render: function() {
         return (
-            <div className="AvatarCropper-canvas">
-                <div className="row">
-                    <canvas
-                        ref="canvas"
-                        width={this.props.width}
-                        height={this.props.height}>
-                    </canvas>
-                </div>
+            <Modal show={this.props.show} onHide={this.props.onRequestHide} backdrop={false}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{$.i18n.prop('crop-your-avatar')}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="AvatarCropper-base">
+                        <div className="AvatarCropper-canvas">
+                            <div className="row">
+                                <canvas
+                                    ref="canvas"
+                                    width={this.props.width}
+                                    height={this.props.height}>
+                                </canvas>
+                            </div>
 
-                <div className="row">
-                    <input
-                        type="range"
-                        name="zoom"
-                        ref="zoom"
-                        onChange={this.handleZoomUpdate}
-                        style={{width: this.props.width}}
-                        min="1"
-                        max="3"
-                        step="0.01"
-                        defaultValue="1"
-                        />
-                </div>
-
-                <div className='modal-footer'>
+                            <div className="row">
+                                <input
+                                    type="range"
+                                    name="zoom"
+                                    ref="zoom"
+                                    onChange={this.handleZoomUpdate}
+                                    style={{width: this.props.width}}
+                                    min="1"
+                                    max="3"
+                                    step="0.01"
+                                    defaultValue="1"/>
+                            </div>
+                        </div>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
                     <Button onClick={this.props.onRequestHide}>
                         {this.props.closeMessage}
                     </Button>
                     <Button bsStyle='primary' onClick={this.handleCrop}>
                         {this.props.cropMessage}
                     </Button>
-                </div>
+                </Modal.Footer>
+            </Modal>
 
-            </div>
+
         );
     }
 });

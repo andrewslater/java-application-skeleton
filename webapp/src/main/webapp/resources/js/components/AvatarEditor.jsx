@@ -3,8 +3,6 @@ var React = require("react"),
     ImageCropper = require("./ImageCropper"),
     APIClient = require("../APIClient");
 
-var Modal = ReactBootstrap.Modal;
-
 var FileUpload = React.createClass({
 
     handleFile: function(e) {
@@ -36,7 +34,8 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            cropperOpen: true
+            cropperOpen: true,
+            img: "/images/default-avatar-medium.png"
         }
     },
 
@@ -68,7 +67,7 @@ module.exports = React.createClass({
         });
     },
 
-    handleCrop: function(dataURI) {
+    handleCrop: function(dataURI)   {
         console.log("handleCrop");
         this.setState({
             cropperOpen: false,
@@ -79,19 +78,15 @@ module.exports = React.createClass({
 
     render: function() {
 
+        var cropper = this.state.cropperOpen ? <ImageCropper show={true}
+                                    onCrop={this.handleCrop}
+                                    image={this.state.img}
+                                    onRequestHide={this.handleRequestHide} /> : null;
+
         return (
             <div>
                 <img src={APIClient.getLink(this.props.user, "resource-avatar-medium")} />
-                <Modal show={this.state.cropperOpen} onHide={this.handleRequestHide} backdrop={false}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>{$.i18n.prop('crop-your-avatar')}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div className="AvatarCropper-base">
-                            <ImageCropper onCrop={this.handleCrop} image={this.state.img} onRequestHide={this.handleRequestHide} />
-                        </div>
-                    </Modal.Body>
-                </Modal>
+                {cropper}
             </div>
         );
     }
