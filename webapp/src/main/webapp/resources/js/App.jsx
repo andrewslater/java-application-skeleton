@@ -24,6 +24,7 @@ module.exports = {
         this.csrf = csrf;
         this.configureI18n();
         this.configureNotifications();
+        this.disableFileDropping();
 
         if (!localStorage.getItem("apiToken")) {
 
@@ -103,5 +104,15 @@ module.exports = {
                 close: 'animated bounceOutUp'
             }
         });
+    },
+
+    disableFileDropping: function() {
+        var preventEvent = function(event) {
+            event.stopPropagation();
+            event.preventDefault();
+        };
+
+        window.addEventListener('dragover', preventEvent);
+        window.addEventListener('drop', preventEvent);
     }
 };
