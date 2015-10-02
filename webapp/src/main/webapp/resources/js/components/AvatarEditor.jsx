@@ -23,14 +23,12 @@ module.exports = React.createClass({
     },
 
     handleRequestHide: function() {
-        console.log("onRequestHide()");
         this.setState({
             cropperOpen: false
         });
     },
 
     handleCrop: function(dataURI)   {
-        console.log("handleCrop");
         this.setState({
             cropperOpen: false,
             img: null,
@@ -84,7 +82,7 @@ module.exports = React.createClass({
         var avatarImage = this.state.croppedImg ? this.state.croppedImg : APIClient.getLink(this.props.user, "resource-avatar-medium");
         return (
             <div>
-                <img ref="avatarImage" src={avatarImage} onDragOver={this.onDragOver} onDrop={this.onDrop} />
+                <img className="img-rounded" ref="avatarImage" src={avatarImage} onDragOver={this.onDragOver} onDrop={this.onDrop} />
                 {cropper}
             </div>
         );
