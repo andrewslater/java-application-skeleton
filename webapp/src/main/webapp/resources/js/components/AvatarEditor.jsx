@@ -1,31 +1,13 @@
-var React = require("react"),
+var util = require("util"),
+    $ = require("jquery"),
+    React = require("react"),
+    noty = require("noty"),
     ReactBootstrap = require("react-bootstrap"),
     ImageCropper = require("./ImageCropper"),
     APIClient = require("../APIClient");
 
-var FileUpload = React.createClass({
-
-    handleFile: function(e) {
-        var reader = new FileReader();
-        var file = e.target.files[0];
-
-        if (!file) return;
-
-        reader.onload = function(img) {
-            React.findDOMNode(this.refs.in).value = '';
-            this.props.handleFileChange(img.target.result);
-        }.bind(this);
-        reader.readAsDataURL(file);
-    },
-
-    render: function() {
-        return (
-            <input ref="in" type="file" accept="image/*" onChange={this.handleFile} />
-        );
-    }
-});
-
 module.exports = React.createClass({
+
     getDefaultProps: function() {
         return {
             user: null
@@ -34,31 +16,11 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            cropperOpen: true,
-            img: "/images/default-avatar-medium.png"
+            cropperOpen: false,
+            croppedImg: null,
+            img: null
         }
     },
-
-    //getStateFromFlux: function() {
-    //    var store = this.getFlux().store("PrincipalUserStore");
-    //    return {
-    //        cropperOpen: false,
-    //        loading: store.loading,
-    //        error: store.error,
-    //        principal: store.principal,
-    //        img: null,
-    //        croppedImg: store.principal ? APIClient.getLink(store.principal, "resource-avatar-medium") : null
-    //    };
-    //},
-    //
-    //handleFileChange: function(dataURI) {
-    //    this.setState({
-    //        img: dataURI,
-    //        croppedImg: this.state.croppedImg,
-    //        cropperOpen: true
-    //    });
-    //},
-    //
 
     handleRequestHide: function() {
         console.log("onRequestHide()");
@@ -76,6 +38,42 @@ module.exports = React.createClass({
         });
     },
 
+    componentDidMount: function() {
+        var node = React.findDOMNode(this.refs.avatarImage);
+        if (node) {
+            node.addEventListener('dragover', this.onDragOver);
+            node.addEventListener('drop', this.onDrop);
+        }
+    },
+
+    onDragOver: function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
+    },
+
+    onDrop: function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        this.openCropperWithFile(event.dataTransfer.files[0]);
+    },
+
+    openCropperWithFile: function(file) {
+        if (!file) {
+            return;
+        }
+
+        var reader = new FileReader();
+        reader.onload = function(img) {
+            this.setState({
+                img: img.target.result,
+                cropperOpen: true
+            });
+        }.bind(this);
+        reader.readAsDataURL(file);
+    },
+
     render: function() {
 
         var cropper = this.state.cropperOpen ? <ImageCropper show={true}
@@ -83,9 +81,10 @@ module.exports = React.createClass({
                                     image={this.state.img}
                                     onRequestHide={this.handleRequestHide} /> : null;
 
+        var avatarImage = this.state.croppedImg ? this.state.croppedImg : APIClient.getLink(this.props.user, "resource-avatar-medium");
         return (
             <div>
-                <img src={APIClient.getLink(this.props.user, "resource-avatar-medium")} />
+                <img ref="avatarImage" src={avatarImage} onDragOver={this.onDragOver} onDrop={this.onDrop} />
                 {cropper}
             </div>
         );
