@@ -57,6 +57,10 @@ module.exports = React.createClass({
         this.openCropperWithFile(event.dataTransfer.files[0]);
     },
 
+    onFileSelection: function(event) {
+        this.openCropperWithFile(event.target.files[0]);
+    },
+
     openCropperWithFile: function(file) {
         if (!file) {
             return;
@@ -72,6 +76,11 @@ module.exports = React.createClass({
         reader.readAsDataURL(file);
     },
 
+    openFileSelector: function() {
+        React.findDOMNode(this.refs.avatarFileInput).click();
+        return false;
+    },
+
     render: function() {
 
         var cropper = this.state.cropperOpen ? <ImageCropper show={true}
@@ -82,7 +91,13 @@ module.exports = React.createClass({
         var avatarImage = this.state.croppedImg ? this.state.croppedImg : APIClient.getLink(this.props.user, "resource-avatar-medium");
         return (
             <div>
-                <img className="img-rounded" ref="avatarImage" src={avatarImage} onDragOver={this.onDragOver} onDrop={this.onDrop} />
+                <input ref="avatarFileInput" type="file" className="hidden" onChange={this.onFileSelection} />
+                <img className="img-rounded"
+                     ref="avatarImage"
+                     src={avatarImage}
+                     onDragOver={this.onDragOver}
+                     onDrop={this.onDrop}
+                     onClick={this.openFileSelector}/>
                 {cropper}
             </div>
         );
