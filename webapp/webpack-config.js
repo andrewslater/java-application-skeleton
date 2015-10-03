@@ -29,6 +29,7 @@ module.exports = {
             { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
             { test: /\.scss$/,  loader: 'style!css!sass' },
             { test: /\.jsx$/,   loader: "jsx-loader?insertPragma=React.DOM" },
+            { test: /\.js$/,   loader: "jsx-loader?insertPragma=React.DOM" },
             { test: /\.less$/, loader: 'style-loader!css-loader!less-loader'},
             { test: /\.css$/, loader: 'style-loader!css-loader'},
             { test: /\.woff(2)?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },

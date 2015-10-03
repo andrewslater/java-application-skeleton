@@ -1,6 +1,7 @@
 var util = require("util"),
     $ = require("jquery"),
     React = require("react"),
+    Progress = require("react-progress"),
     noty = require("noty"),
     ReactBootstrap = require("react-bootstrap"),
     ImageCropper = require("./ImageCropper"),
@@ -18,13 +19,15 @@ module.exports = React.createClass({
         return {
             cropperOpen: false,
             croppedImg: null,
+            imageReadProgress: null,
             img: null
         }
     },
 
     handleRequestHide: function() {
         this.setState({
-            cropperOpen: false
+            cropperOpen: false,
+            img: null
         });
     },
 
@@ -67,39 +70,76 @@ module.exports = React.createClass({
         }
 
         var reader = new FileReader();
+
         reader.onload = function(img) {
             this.setState({
                 img: img.target.result,
-                cropperOpen: true
+                cropperOpen: true,
+                imageReadProgress: null
             });
         }.bind(this);
+
+        reader.onprogress = function(event) {
+            var percentComplete = Math.round(event.loaded / event.total * 100);
+            this.setState({
+                imageReadProgress: percentComplete
+            });
+        }.bind(this);
+
         reader.readAsDataURL(file);
     },
 
     openFileSelector: function() {
         React.findDOMNode(this.refs.avatarFileInput).click();
-        return false;
     },
 
     render: function() {
-
-        var cropper = this.state.cropperOpen ? <ImageCropper show={true}
-                                    onCrop={this.handleCrop}
-                                    image={this.state.img}
-                                    onRequestHide={this.handleRequestHide} /> : null;
-
-        var avatarImage = this.state.croppedImg ? this.state.croppedImg : APIClient.getLink(this.props.user, "resource-avatar-medium");
         return (
-            <div>
-                <input ref="avatarFileInput" type="file" className="hidden" onChange={this.onFileSelection} />
+            <div className="avatar-editor">
+                <input ref="avatarFileInput"
+                       type="file"
+                       className="hidden"
+                       accept="image/*"
+                       onChange={this.onFileSelection} />
                 <img className="img-rounded"
                      ref="avatarImage"
-                     src={avatarImage}
+                     src={this.getAvatarImage()}
                      onDragOver={this.onDragOver}
                      onDrop={this.onDrop}
-                     onClick={this.openFileSelector}/>
-                {cropper}
+                     onClick={this.openFileSelector} />
+                {this.renderImageReadProgress()}
+                {this.renderImageCropper()}
             </div>
         );
+    },
+
+    renderImageCropper: function() {
+        if (!this.state.cropperOpen) {
+            return null;
+        }
+
+        return (
+            <ImageCropper show={true}
+                          width={250}
+                          height={250}
+                          onCrop={this.handleCrop}
+                          image={this.state.img}
+                          onRequestHide={this.handleRequestHide}/>
+        )
+    },
+
+    renderImageReadProgress: function() {
+        if (!this.state.imageReadProgress) {
+            return null;
+        }
+
+        return <progress value={this.state.imageReadProgress} max="100"></progress>;
+    },
+
+    getAvatarImage: function() {
+        if (this.state.croppedImg) {
+            return this.state.croppedImg;
+        }
+        return APIClient.getLink(this.props.user, "resource-avatar-medium");
     }
 });

@@ -25,13 +25,21 @@ module.exports = React.createClass({
 
     render: function() {
 
+        var principal = this.state.principal;
+
         if (this.state.loading) {
             return <Spinner />;
         }
 
         return (
-            <div>
-                <AvatarEditor user={this.state.principal} />
+            <div className="row">
+                <div className="col-md-3">
+                    <AvatarEditor user={principal} />
+                </div>
+                <div className="col-md-8">
+                    <h1>{principal.fullName}</h1>
+                    <h3>{principal.email}</h3>
+                </div>
             </div>
         );
     }
