@@ -98,6 +98,11 @@ public class User implements Serializable {
     @JsonIgnore
     private UserFile mediumAvatar;
 
+    @OneToOne
+    @JoinColumn(name = "large_avatar_file_id")
+    @JsonIgnore
+    private UserFile largeAvatar;
+    
     public User() {
 
     }
@@ -224,6 +229,14 @@ public class User implements Serializable {
         this.mediumAvatar = mediumAvatar;
     }
 
+    public UserFile getLargeAvatar() {
+        return largeAvatar;
+    }
+
+    public void setLargeAvatar(UserFile largeAvatar) {
+        this.largeAvatar = largeAvatar;
+    }
+
     public boolean equals(Object obj) {
         if (obj == null) { return false; }
         if (obj == this) { return true; }
@@ -245,6 +258,7 @@ public class User implements Serializable {
             .append(roles, rhs.roles)
             .append(smallAvatar, rhs.smallAvatar)
             .append(mediumAvatar, rhs.mediumAvatar)
+            .append(largeAvatar, rhs.largeAvatar)
             .isEquals();
     }
 
@@ -262,6 +276,7 @@ public class User implements Serializable {
             .append(roles)
             .append(smallAvatar)
             .append(mediumAvatar)
+            .append(largeAvatar)
             .toHashCode();
     }
 }

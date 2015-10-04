@@ -21,19 +21,20 @@ public class Mappings {
 
     // Authenticated API
     private static final String API_BASE = "/api/";
+    public static final String API_AVATAR_SIZES =       API_BASE + "/avatar-sizes";
     public static final String API_USER_RESOURCE =      API_BASE + "user/{userId}";
     public static final String API_PRINCIPAL_RESOURCE = API_BASE + "user/principal";
     public static final String API_PRINCIPAL_AVATAR =   API_BASE + "user/principal/avatar";
 
     private static final Pattern PROPS_PATTERN = Pattern.compile("\\{(.+?)\\}");
 
-    public static Link getLink(String path, String ref) {
+    public static Link getLink(String ref, String path) {
         return new Link(
             ServletUriComponentsBuilder.fromCurrentContextPath().path(path).toUriString(), ref);
     }
 
     public static Link getLink(String path, Map<String, Object> props, String ref) {
-        return getLink(composePath(path, props), ref);
+        return getLink(ref, composePath(path, props));
     }
 
     public static String composePath(String path, Object ... props) {

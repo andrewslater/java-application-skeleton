@@ -12,7 +12,21 @@ module.exports = React.createClass({
             return null;
         }
 
-        return <progress value={this.props.percentComplete} max="100"></progress>;
+        var style = {
+            width: this.props.percentComplete + '%'
+        };
+
+        return (
+            <div className="progress">
+                <div className="progress-bar"
+                     role="progressbar"
+                     aria-valuenow={this.props.percentComplete}
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     style={style}>
+                </div>
+            </div>
+        );
     }
 
 });
