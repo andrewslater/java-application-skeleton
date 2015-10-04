@@ -11,6 +11,7 @@
     "grunt-webpack": "~1.0.11",
     "react-tools": "~0.13.3",
     "grunt-react": "~0.12.2",
+    "jq-ajax-progress": "~0.1.6",
     "jsx-loader": "~0.13.2",
     "imports-loader": "~0.6.4",
     "expose-loader": "~0.7.0",

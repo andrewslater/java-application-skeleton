@@ -32,11 +32,17 @@ module.exports = React.createClass({
     },
 
     handleCrop: function(dataURI)   {
+        console.log("Handling crop");
+
         this.setState({
             cropperOpen: false,
             img: null,
             croppedImg: dataURI
         });
+
+        if (this.props.uploadAction) {
+            this.props.uploadAction(dataURI);
+        }
     },
 
     componentDidMount: function() {

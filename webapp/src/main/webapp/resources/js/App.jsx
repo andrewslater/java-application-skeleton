@@ -1,14 +1,16 @@
-require("./stylesheets");
-require("i18n");
-require("noty");
-require("bootstrap");
-
 var $ = require("jquery"),
     _ = require("underscore"),
     React = require("react"),
     ReactRouter = require("react-router"),
     APIClient = require("./APIClient"),
     Spinner = require("./components/Spinner");
+
+require("jq-ajax-progress");
+require("./stylesheets");
+require("i18n");
+require("noty");
+require("bootstrap");
+
 
 var Router = ReactRouter.Router,
     Route = ReactRouter.Route;

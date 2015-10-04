@@ -16,16 +16,24 @@ module.exports = {
         });
     },
 
-    uploadAvatar: function(file) {
+    uploadAvatar: function(imageData) {
+        console.log("Uploading avatar: " + imageData);
         this.dispatch(constants.UPLOAD_PROFILE_AVATAR);
-        app.client.post("/profile/avatar", {
+        app.client.post("/user/principal/avatar", {
+
+            data: imageData,
+            contentType: "image/png",
+
             success: function(data, status) {
                 this.dispatch(constants.UPLOAD_PROFILE_AVATAR_SUCCESS, {user: data});
+                //this.loadUser();
             }.bind(this),
 
             error: function(error) {
                 this.dispatch(constants.UPLOAD_PROFILE_AVATAR_FAIL, {error: error.responseJSON});
             }.bind(this)
+        }).uploadProgress(function(event) {
+            console.log("Upload progress: " + event);
         });
     }
 
