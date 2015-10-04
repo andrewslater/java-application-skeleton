@@ -3,9 +3,11 @@ var util = require("util"),
     React = require("react"),
     Progress = require("react-progress"),
     noty = require("noty"),
-    ReactBootstrap = require("react-bootstrap"),
+    ReactBootstrap = require("react-bootstrap");
+
+var APIClient = require("../APIClient"),
     ImageCropper = require("./ImageCropper"),
-    APIClient = require("../APIClient");
+    ProgressBar = require("./ProgressBar");
 
 module.exports = React.createClass({
 
@@ -113,7 +115,8 @@ module.exports = React.createClass({
                      onDragOver={this.onDragOver}
                      onDrop={this.onDrop}
                      onClick={this.openFileSelector} />
-                {this.renderImageReadProgress()}
+                <ProgressBar percentComplete={this.state.imageReadProgress} />
+                <ProgressBar percentComplete={this.props.uploadProgress} />
                 {this.renderImageCropper()}
             </div>
         );
@@ -132,14 +135,6 @@ module.exports = React.createClass({
                           image={this.state.img}
                           onRequestHide={this.handleRequestHide}/>
         )
-    },
-
-    renderImageReadProgress: function() {
-        if (!this.state.imageReadProgress) {
-            return null;
-        }
-
-        return <progress value={this.state.imageReadProgress} max="100"></progress>;
     },
 
     getAvatarImage: function() {

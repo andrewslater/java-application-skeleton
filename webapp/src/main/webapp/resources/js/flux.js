@@ -7,6 +7,7 @@ var AdminUsersStore = require("./stores/AdminUsersStore");
 var AdminUserStore = require("./stores/AdminUserStore");
 var SystemSettingsStore = require("./stores/SystemSettingsStore");
 var PrincipalUserStore = require("./stores/PrincipalUserStore");
+var PrincipalAvatarStore = require("./stores/PrincipalAvatarStore");
 
 var AdminUsersActions = require("./actions/AdminUsersActions"),
     SystemSettingsActions = require("./actions/SystemSettingsActions"),
@@ -16,7 +17,8 @@ var stores = {
     AdminUsersStore: new AdminUsersStore(),
     AdminUserStore: new AdminUserStore(),
     SystemSettingsStore: new SystemSettingsStore(),
-    PrincipalUserStore: new PrincipalUserStore()
+    PrincipalUserStore: new PrincipalUserStore(),
+    PrincipalAvatarStore: new PrincipalAvatarStore()
 };
 
 var actions = {

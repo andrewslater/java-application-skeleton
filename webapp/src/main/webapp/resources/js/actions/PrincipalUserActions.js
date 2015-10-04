@@ -26,6 +26,7 @@ module.exports = {
 
             success: function(data, status) {
                 this.dispatch(constants.UPLOAD_PROFILE_AVATAR_SUCCESS, {user: data});
+                // TODO: Reload principal. Have to go through app.actions?
                 //this.loadUser();
             }.bind(this),
 
@@ -33,8 +34,12 @@ module.exports = {
                 this.dispatch(constants.UPLOAD_PROFILE_AVATAR_FAIL, {error: error.responseJSON});
             }.bind(this)
         }).uploadProgress(function(event) {
-            console.log("Upload progress: " + event);
-        });
+            if (event.lengthComputable) {
+                var progressPercentage = Math.round((event.loaded * 100) / event.total);
+                console.log("Upload progress: " + progressPercentage);
+                this.dispatch(constants.UPLOAD_PROFILE_AVATAR_PROGRESS, {progress: progressPercentage});
+            }
+        }.bind(this));
     }
 
 };
