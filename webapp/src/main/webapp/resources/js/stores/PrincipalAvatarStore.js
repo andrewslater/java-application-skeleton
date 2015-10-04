@@ -31,6 +31,7 @@ module.exports = Fluxxor.createStore({
         this.error = null;
         this.uploadProgress = null;
         this.uploading = false;
+        this.emit("change");
     },
 
     onUploadFail: function(payload) {

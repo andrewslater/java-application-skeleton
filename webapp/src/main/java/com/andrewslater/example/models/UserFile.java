@@ -38,6 +38,11 @@ public class UserFile {
     @JsonIgnore
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "volume_id", nullable = false)
+    @JsonIgnore
+    private Volume volume;
+
     @JsonIgnore
     @Column(name = "path")
     private String path;
@@ -139,6 +144,7 @@ public class UserFile {
             .appendSuper(super.equals(obj))
             .append(fileId, rhs.fileId)
             .append(user, rhs.user)
+            .append(volume, rhs.volume)
             .append(sizeInBytes, rhs.sizeInBytes)
             .append(mimeType, rhs.mimeType)
             .append(status, rhs.status)
@@ -151,6 +157,7 @@ public class UserFile {
         return new HashCodeBuilder(17, 37)
             .append(fileId)
             .append(user)
+            .append(volume)
             .append(sizeInBytes)
             .append(mimeType)
             .append(status)

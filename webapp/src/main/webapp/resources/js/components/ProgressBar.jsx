@@ -8,7 +8,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        if (this.props.percentComplete == null) {
+        if (!this.props.percentComplete) {
             return null;
         }
 
