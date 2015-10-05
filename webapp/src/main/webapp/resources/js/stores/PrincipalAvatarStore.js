@@ -37,7 +37,7 @@ module.exports = Fluxxor.createStore({
     onUploadFail: function(payload) {
         this.uploading = false;
         this.uploadProgress = null;
-        this.error = payload.error;
+        this.error = payload.error | {};
         if (this.error.message === undefined) {
             this.error.message = $.i18n.prop('error.something-went-wrong');
         }

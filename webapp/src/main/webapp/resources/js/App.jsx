@@ -60,6 +60,7 @@ module.exports = {
 
         this.apiToken = localStorage.getItem("apiToken");
         this.client = new APIClient("/api/", this.apiToken, csrf);
+        this.flux = flux;
 
         this.configureAutoTokenRefresh();
         flux.actions.principal.loadUser();

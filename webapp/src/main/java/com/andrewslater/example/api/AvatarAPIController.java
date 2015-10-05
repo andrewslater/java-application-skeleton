@@ -1,33 +1,33 @@
 package com.andrewslater.example.api;
 
 import com.andrewslater.example.Mappings;
+import com.andrewslater.example.api.resources.UserResource;
 import com.andrewslater.example.models.AvatarSize;
 import com.andrewslater.example.models.User;
 import com.andrewslater.example.models.UserFile;
 import com.andrewslater.example.security.SecurityUser;
 import com.andrewslater.example.services.UserFilesService;
 import com.andrewslater.example.services.UserService;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 @RestController
-public class AvatarController {
-    private static final Logger LOG = LoggerFactory.getLogger(AvatarController.class);
+public class AvatarAPIController {
+    private static final Logger LOG = LoggerFactory.getLogger(AvatarAPIController.class);
 
     @Autowired
     private UserFilesService userFilesService;
@@ -36,8 +36,8 @@ public class AvatarController {
     private UserService userService;
 
     @RequestMapping(value = Mappings.API_PRINCIPAL_AVATAR, method = RequestMethod.POST)
-    @ResponseBody
-    public User uploadAvatar(@AuthenticationPrincipal SecurityUser securityUser,
+    @JsonView(APIView.Authenticated.class)
+    public HttpEntity<UserResource> uploadAvatar(@AuthenticationPrincipal SecurityUser securityUser,
                                  @RequestBody BufferedImage image) throws IOException {
         User principal = securityUser.getUser();
         int requiredDimension = AvatarSize.getLargestSize().getSize();
@@ -64,7 +64,7 @@ public class AvatarController {
 
         userService.update(principal);
 
-        return principal;
+        return userService.getResponseEntity(principal);
     }
 
 

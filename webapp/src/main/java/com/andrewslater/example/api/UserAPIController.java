@@ -7,6 +7,7 @@ import com.andrewslater.example.models.User;
 import com.andrewslater.example.models.UserFile;
 import com.andrewslater.example.repositories.UserRepository;
 import com.andrewslater.example.security.SecurityUser;
+import com.andrewslater.example.services.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,26 +35,25 @@ public class UserAPIController {
     private UserRepository userRepository;
 
     @Autowired
-    @Qualifier("userResourceAssembler")
-    private UserResourceAssembler userAssembler;
+    private UserService userService;
 
     @RequestMapping(value = Mappings.API_USER_RESOURCE, method = RequestMethod.GET)
     @JsonView(APIView.Authenticated.class)
     public HttpEntity<UserResource> getUser(@PathVariable Long userId) {
         User user = userRepository.findOne(userId);
-        return new ResponseEntity<>(userAssembler.toResource(user), HttpStatus.OK);
+        return userService.getResponseEntity(user);
     }
 
     @RequestMapping(value = Mappings.API_USER_RESOURCE, method = RequestMethod.PATCH)
     @JsonView(APIView.Authenticated.class)
     public HttpEntity<UserResource> patchUser(@PathVariable Long userId, @RequestBody User user) {
         User existingUser = userRepository.findOne(userId);
-        return new ResponseEntity<>(userAssembler.toResource(user), HttpStatus.OK);
+        return userService.getResponseEntity(user);
     }
 
     @RequestMapping(value = Mappings.API_PRINCIPAL_RESOURCE, method = RequestMethod.GET)
     @JsonView(APIView.Authenticated.class)
     public HttpEntity<UserResource> getPrincipal(@AuthenticationPrincipal SecurityUser securityUser) {
-        return new ResponseEntity<>(userAssembler.toResource(securityUser.getUser()), HttpStatus.OK);
+        return userService.getResponseEntity(securityUser.getUser());
     }
 }

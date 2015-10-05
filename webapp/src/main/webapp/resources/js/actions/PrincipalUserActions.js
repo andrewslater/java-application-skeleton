@@ -26,8 +26,7 @@ module.exports = {
 
             success: function(data, status) {
                 this.dispatch(constants.UPLOAD_PROFILE_AVATAR_SUCCESS, {user: data});
-                // TODO: Reload principal. Have to go through app.actions?
-                //this.loadUser();
+                app.flux.actions.principal.loadUser();
             }.bind(this),
 
             error: function(error) {
