@@ -36,6 +36,7 @@
     "react-dropzone-component": "~0.6.0",
     "react-progress": "~0.0.3",
     "react-router": "1.0.0-rc1",
-    "underscore": "~1.8.3"
+    "underscore": "~1.8.3",
+    "uuid-v4": "~0.1.0"
   }
 }

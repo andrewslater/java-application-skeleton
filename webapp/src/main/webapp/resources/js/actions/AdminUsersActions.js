@@ -25,8 +25,10 @@ module.exports = {
         this.loadUsersRequestData = requestData;
 
         this.loadUsersRequest = app.client.get("admin/users", {
-            data: requestData,
+
             success: function(data, status, jqXHR) {
+                console.log("JQXHR: " + util.inspect(jqXHR));
+                console.log("this.loadUsersRequest: " + util.inspect(this.loadUsersRequest));
                 if (jqXHR != this.loadUsersRequest) {
                     return;
                 }

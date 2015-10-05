@@ -1,5 +1,6 @@
-var $ = require("jquery");
-var _ = require("underscore");
+var $ = require("jquery"),
+    _ = require("underscore"),
+    uuid = require("uuid-v4");
 
 function APIClient(baseUrl, apiToken) {
     this.baseUrl = baseUrl;
@@ -8,19 +9,25 @@ function APIClient(baseUrl, apiToken) {
 
 APIClient.prototype = {
     get: function (resourceUri, options) {
-        return $.ajax($.extend(this.getBaseAjaxOptions(resourceUri, "GET"), options));
+        return this.ajax(resourceUri, "GET", options);
     },
 
     patch: function (resourceUri, options) {
-        return $.ajax($.extend(this.getBaseAjaxOptions(resourceUri, "PATCH"), options));
+        return this.ajax(resourceUri, "PATCH", options);
     },
 
     post: function (resourceUri, options) {
-        return $.ajax($.extend(this.getBaseAjaxOptions(resourceUri, "POST"), options));
+        return this.ajax(resourceUri, "POST", options);
     },
 
     getRef: function(ref, options) {
         return this.get("", _.extend(options, {url: ref}));
+    },
+
+    ajax: function(resourceUri, method, options) {
+        var jqXHR = $.ajax($.extend(this.getBaseAjaxOptions(resourceUri, method), options));
+        jqXHR.requestId = uuid();
+        return jqXHR;
     },
 
     setAPIToken: function(token) {

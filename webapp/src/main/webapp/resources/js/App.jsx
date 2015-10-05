@@ -5,7 +5,6 @@ var $ = require("jquery"),
     APIClient = require("./APIClient"),
     Spinner = require("./components/Spinner");
 
-require("jq-ajax-progress");
 require("./stylesheets");
 require("i18n");
 require("noty");

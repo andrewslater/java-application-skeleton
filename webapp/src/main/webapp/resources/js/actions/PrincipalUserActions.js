@@ -24,21 +24,26 @@ module.exports = {
             data: imageData,
             contentType: "image/png",
 
-            success: function(data, status) {
+            success: function (data, status) {
                 this.dispatch(constants.UPLOAD_PROFILE_AVATAR_SUCCESS, {user: data});
                 app.flux.actions.principal.loadUser();
             }.bind(this),
 
-            error: function(error) {
+            error: function (error) {
                 this.dispatch(constants.UPLOAD_PROFILE_AVATAR_FAIL, {error: error.responseJSON});
-            }.bind(this)
-        }).uploadProgress(function(event) {
-            if (event.lengthComputable) {
-                var progressPercentage = Math.round((event.loaded * 100) / event.total);
-                console.log("Upload progress: " + progressPercentage);
-                this.dispatch(constants.UPLOAD_PROFILE_AVATAR_PROGRESS, {progress: progressPercentage});
+            }.bind(this),
+
+            xhr: function () {
+                var xhr = new window.XMLHttpRequest();
+                xhr.addEventListener("progress", function (event) {
+                    if (event.lengthComputable) {
+                        var progressPercentage = Math.round((event.loaded * 100) / event.total);
+                        this.dispatch(constants.UPLOAD_PROFILE_AVATAR_PROGRESS, {progress: progressPercentage});
+                    }
+                }.bind(this), false);
+                return xhr;
             }
-        }.bind(this));
+        });
     }
 
 };
