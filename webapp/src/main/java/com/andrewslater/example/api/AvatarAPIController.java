@@ -51,8 +51,8 @@ public class AvatarAPIController {
             throw new RuntimeException(errorMessage);
         }
 
-        BufferedImage mediumImage = Scalr.resize(image, AvatarSize.MEDIUM.getSize());
-        BufferedImage smallImage = Scalr.resize(image, AvatarSize.SMALL.getSize());
+        BufferedImage mediumImage = Scalr.resize(image, Scalr.Method.ULTRA_QUALITY, AvatarSize.MEDIUM.getSize());
+        BufferedImage smallImage = Scalr.resize(image, Scalr.Method.ULTRA_QUALITY, AvatarSize.SMALL.getSize());
 
         UserFile largeAvatar = userFilesService.createUserFile(securityUser.getUser(), "avatar-large.png", image);
         UserFile mediumAvatar = userFilesService.createUserFile(securityUser.getUser(), "avatar-medium.png", mediumImage);

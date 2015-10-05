@@ -44,7 +44,7 @@ module.exports = React.createClass({
                 <div className="col-md-9">
                     <h1>{principal.fullName}</h1>
                     <h3>{principal.email}</h3>
-                    <Avatar user={principal} size="medium" /><Avatar user={principal} size="small" />
+                    <Avatar user={principal} size="medium" />&nbsp;<Avatar user={principal} size="small" />
                 </div>
             </div>
         );

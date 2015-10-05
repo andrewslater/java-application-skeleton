@@ -127,8 +127,8 @@ module.exports = React.createClass({
 
         return (
             <ImageCropper show={true}
-                          width={250}
-                          height={250}
+                          width={256}
+                          height={256}
                           onCrop={this.handleCrop}
                           image={this.state.img}
                           onRequestHide={this.handleRequestHide}/>

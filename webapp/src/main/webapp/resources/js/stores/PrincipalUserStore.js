@@ -17,7 +17,6 @@ module.exports = Fluxxor.createStore({
 
     onLoadUser: function() {
         this.loading = true;
-        this.principal = null;
         this.error = null;
         this.emit("change");
     },
