@@ -87,8 +87,10 @@ module.exports = React.createClass({
                     <table className="table table-hover">
                         <thead>
                         {this.renderHeaders()}
-                        {this.renderTableRows()}
                         </thead>
+                        <tbody>
+                        {this.renderTableRows()}
+                        </tbody>
                     </table>
                 </div>
                 <div className="row">
@@ -119,7 +121,7 @@ module.exports = React.createClass({
 
         for (var i = firstPageNum; i <= lastPageNum; i++) {
             pageLinks.push(
-                <li key={i}
+                <li key={'pageLink-' + i}
                     className={i == page.number ? "active" : ""}>
                     <a href="javascript:void(0)" onClick={this.props.pageChangeCallback.bind(null, i+1)}>{i+1}</a>
                 </li>);
