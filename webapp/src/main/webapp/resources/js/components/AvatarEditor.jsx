@@ -34,8 +34,6 @@ module.exports = React.createClass({
     },
 
     handleCrop: function(dataURI)   {
-        console.log("Handling crop");
-
         this.setState({
             cropperOpen: false,
             img: null,
@@ -141,6 +139,6 @@ module.exports = React.createClass({
         if (this.state.croppedImg) {
             return this.state.croppedImg;
         }
-        return APIClient.getLink(this.props.user, "resource-avatar-medium");
+        return APIClient.getLink(this.props.user, "resource-avatar-large");
     }
 });

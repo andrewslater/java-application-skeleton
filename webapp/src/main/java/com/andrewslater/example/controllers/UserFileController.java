@@ -1,0 +1,41 @@
+package com.andrewslater.example.controllers;
+
+import com.andrewslater.example.models.UserFile;
+import com.andrewslater.example.repositories.UserFilesRepository;
+import com.andrewslater.example.repositories.VolumeRepository;
+import com.andrewslater.example.services.UserFilesService;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+@Controller
+public class UserFileController {
+    private static final Logger LOG = LoggerFactory.getLogger(UserFileController.class);
+
+    @Autowired
+    private UserFilesRepository repository;
+
+    @Autowired
+    private UserFilesService service;
+
+    @RequestMapping(value = "/user-file/{id}")
+    @ResponseBody
+    public void getFile(@PathVariable Long id,
+                        HttpServletRequest request,
+                        HttpServletResponse response) throws IOException {
+        UserFile userFile = repository.findOne(id);
+        response.setContentType(userFile.getMimeType());
+        IOUtils.copy(new FileInputStream(service.getFile(userFile)), response.getOutputStream());
+        response.flushBuffer();
+    }
+}

@@ -17,6 +17,16 @@ public enum AvatarSize {
         this.linkRel = linkRel;
     }
 
+    public static AvatarSize getLargestSize() {
+        AvatarSize largest = null;
+
+        for (AvatarSize size : values()) {
+            largest = largest == null || size.getSize() > largest.getSize() ? size : largest;
+        }
+
+        return largest;
+    }
+
     public int getSize() {
         return size;
     }

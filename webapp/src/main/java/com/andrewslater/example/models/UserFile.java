@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 public class UserFile {
     private static final Logger LOG = LoggerFactory.getLogger(UserFile.class);
 
-    public enum Status {UPLOADING, AVAILABLE, SOFT_DELETED, HARD_DELETED;}
+    public enum Status {UPLOADING, SAVING, AVAILABLE, SOFT_DELETED, HARD_DELETED;}
 
     @Id
     @Column(name = "id")
@@ -43,9 +43,12 @@ public class UserFile {
     @JsonIgnore
     private Volume volume;
 
-    @JsonIgnore
     @Column(name = "path")
+    @JsonIgnore
     private String path;
+
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "size_in_bytes", nullable = false)
     private Long sizeInBytes;
@@ -89,6 +92,22 @@ public class UserFile {
         this.path = path;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Volume getVolume() {
+        return volume;
+    }
+
+    public void setVolume(Volume volume) {
+        this.volume = volume;
+    }
+
     public Long getSizeInBytes() {
         return sizeInBytes;
     }
@@ -130,7 +149,7 @@ public class UserFile {
     }
 
     public String getUrl() {
-        return getPath();
+        return "/user-file/" + getFileId() + ".png";
     }
 
     public boolean equals(Object obj) {
@@ -145,6 +164,8 @@ public class UserFile {
             .append(fileId, rhs.fileId)
             .append(user, rhs.user)
             .append(volume, rhs.volume)
+            .append(path, rhs.path)
+            .append(name, rhs.name)
             .append(sizeInBytes, rhs.sizeInBytes)
             .append(mimeType, rhs.mimeType)
             .append(status, rhs.status)
@@ -158,6 +179,8 @@ public class UserFile {
             .append(fileId)
             .append(user)
             .append(volume)
+            .append(path)
+            .append(name)
             .append(sizeInBytes)
             .append(mimeType)
             .append(status)

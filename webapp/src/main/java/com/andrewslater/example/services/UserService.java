@@ -61,6 +61,10 @@ public class UserService {
         return user;
     }
 
+    public User update(User user) {
+        return userRepository.save(user);
+    }
+
     public User recordLastLogin(User user) {
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);

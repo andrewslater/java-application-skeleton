@@ -13,6 +13,7 @@ CREATE TABLE user_files (
   user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   volume_id INTEGER NOT NULL REFERENCES volumes(id) ON DELETE CASCADE,
   path VARCHAR NOT NULL,
+  name VARCHAR NOT NULL,
   mimetype VARCHAR,
   size_in_bytes BIGINT NOT NULL,
   status VARCHAR NOT NULL,

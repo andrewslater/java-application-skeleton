@@ -1,5 +1,6 @@
 package com.andrewslater.example.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Set;
 
@@ -34,6 +36,11 @@ public class SystemSettings {
     @CollectionTable(name = "system_settings_allowed_domains", joinColumns = @JoinColumn(name = "settings_id"))
     @Column(name = "domain", nullable = false)
     private Set<String> allowedDomains;
+
+    @OneToOne
+    @JoinColumn(name = "active_volume_id")
+    @JsonIgnore
+    private Volume activeVolume;
 
     public boolean isAllowRegistration() {
         return allowRegistration;
@@ -65,5 +72,13 @@ public class SystemSettings {
 
     public void setRequireEmailConfirmation(boolean requireEmailConfirmation) {
         this.requireEmailConfirmation = requireEmailConfirmation;
+    }
+
+    public Volume getActiveVolume() {
+        return activeVolume;
+    }
+
+    public void setActiveVolume(Volume activeVolume) {
+        this.activeVolume = activeVolume;
     }
 }

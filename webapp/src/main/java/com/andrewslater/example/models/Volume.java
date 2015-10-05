@@ -17,7 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "volume")
+@Table(name = "volumes")
 public class Volume {
     private static final Logger LOG = LoggerFactory.getLogger(Volume.class);
 

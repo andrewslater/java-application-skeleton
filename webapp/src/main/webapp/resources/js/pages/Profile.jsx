@@ -5,6 +5,7 @@ var util = require("util"),
 
 var app = require("../app"),
     APIClient = require("../APIClient"),
+    Avatar = require("../components/Avatar"),
     AvatarEditor = require("../components/AvatarEditor"),
     Spinner = require("../components/Spinner");
 
@@ -43,6 +44,7 @@ module.exports = React.createClass({
                 <div className="col-md-9">
                     <h1>{principal.fullName}</h1>
                     <h3>{principal.email}</h3>
+                    <Avatar user={principal} size="medium" /><Avatar user={principal} size="small" />
                 </div>
             </div>
         );
