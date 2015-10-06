@@ -19,7 +19,6 @@ module.exports = React.createClass({
         var userStore = this.getFlux().store("PrincipalUserStore");
         var avatarStore = this.getFlux().store("PrincipalAvatarStore");
         return {
-            loading: userStore.loading,
             principal: userStore.principal,
             error: userStore.error,
             avatarUploadProgress: avatarStore.uploadProgress
@@ -30,7 +29,7 @@ module.exports = React.createClass({
 
         var principal = this.state.principal;
 
-        if (this.state.loading) {
+        if (!this.state.principal) {
             return <Spinner />;
         }
 

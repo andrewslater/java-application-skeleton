@@ -68,6 +68,7 @@ module.exports = React.createClass({
 
     onFileSelection: function(event) {
         this.openCropperWithFile(event.target.files[0]);
+        React.findDOMNode(this.refs.avatarFileInput).value = null;
     },
 
     openCropperWithFile: function(file) {
