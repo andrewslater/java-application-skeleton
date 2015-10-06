@@ -89,6 +89,11 @@ public class User implements Serializable {
 
     // TODO: Apply constraint that the User owns their avatar UserFiles
     @OneToOne
+    @JoinColumn(name = "micro_avatar_file_id")
+    @JsonIgnore
+    private UserFile microAvatar;
+
+    @OneToOne
     @JoinColumn(name = "small_avatar_file_id")
     @JsonIgnore
     private UserFile smallAvatar;
@@ -213,6 +218,14 @@ public class User implements Serializable {
             emailPendingConfirmation);
     }
 
+    public UserFile getMicroAvatar() {
+        return microAvatar;
+    }
+
+    public void setMicroAvatar(UserFile microAvatar) {
+        this.microAvatar = microAvatar;
+    }
+
     public UserFile getSmallAvatar() {
         return smallAvatar;
     }
@@ -256,6 +269,7 @@ public class User implements Serializable {
             .append(createdAt, rhs.createdAt)
             .append(lastLogin, rhs.lastLogin)
             .append(roles, rhs.roles)
+            .append(microAvatar, rhs.microAvatar)
             .append(smallAvatar, rhs.smallAvatar)
             .append(mediumAvatar, rhs.mediumAvatar)
             .append(largeAvatar, rhs.largeAvatar)
@@ -263,8 +277,7 @@ public class User implements Serializable {
     }
 
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-            .append(userId)
+        return new HashCodeBuilder(17, 37).append(userId)
             .append(email)
             .append(emailPendingConfirmation)
             .append(fullName)
@@ -274,6 +287,7 @@ public class User implements Serializable {
             .append(createdAt)
             .append(lastLogin)
             .append(roles)
+            .append(microAvatar)
             .append(smallAvatar)
             .append(mediumAvatar)
             .append(largeAvatar)

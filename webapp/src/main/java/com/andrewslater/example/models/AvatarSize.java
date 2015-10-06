@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum AvatarSize {
+    MICRO(32, Links.RESOURCE_AVATAR_MICRO),
     SMALL(64, Links.RESOURCE_AVATAR_SMALL),
     MEDIUM(128, Links.RESOURCE_AVATAR_MEDIUM),
     LARGE(256, Links.RESOURCE_AVATAR_LARGE);

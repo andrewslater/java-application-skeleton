@@ -53,14 +53,17 @@ public class AvatarAPIController {
 
         BufferedImage mediumImage = Scalr.resize(image, Scalr.Method.ULTRA_QUALITY, AvatarSize.MEDIUM.getSize());
         BufferedImage smallImage = Scalr.resize(image, Scalr.Method.ULTRA_QUALITY, AvatarSize.SMALL.getSize());
+        BufferedImage microImage = Scalr.resize(image, Scalr.Method.ULTRA_QUALITY, AvatarSize.MICRO.getSize());
 
         UserFile largeAvatar = userFilesService.createUserFile(securityUser.getUser(), "avatar-large.png", image);
         UserFile mediumAvatar = userFilesService.createUserFile(securityUser.getUser(), "avatar-medium.png", mediumImage);
         UserFile smallAvatar = userFilesService.createUserFile(securityUser.getUser(), "avatar-small.png", smallImage);
+        UserFile microAvatar = userFilesService.createUserFile(securityUser.getUser(), "avatar-micro.png", microImage);
 
         principal.setLargeAvatar(largeAvatar);
         principal.setMediumAvatar(mediumAvatar);
         principal.setSmallAvatar(smallAvatar);
+        principal.setMicroAvatar(microAvatar);
 
         userService.update(principal);
 
