@@ -1,6 +1,8 @@
-var React = require("react");
-var Fluxxor = require("fluxxor");
-var Spinner = require("../../components/Spinner");
+var React = require("react"),
+    Fluxxor = require("fluxxor");
+
+var Avatar = require("../../components/Avatar"),
+    Spinner = require("../../components/Spinner");
 
 var FluxMixin = Fluxxor.FluxMixin(React),
 StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -32,7 +34,17 @@ module.exports = React.createClass({
             return <Spinner />
         }
 
-        return (<h1>{this.state.user.email}</h1>);
+        return (
+            <div className="row">
+                <div className="col-md-3">
+                    <Avatar user={this.state.user} size="large" />
+                </div>
+                <div className="col-md-9">
+                    <h1>{this.state.user.fullName}</h1>
+                    <h3>{this.state.user.email}</h3>
+                </div>
+            </div>
+        );
     },
 
     renderError: function() {
