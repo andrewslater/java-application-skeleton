@@ -1,10 +1,12 @@
 package com.andrewslater.example.models;
 
+import com.andrewslater.example.annotations.Patchable;
 import com.andrewslater.example.api.APIView;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -27,6 +29,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -56,6 +59,7 @@ public class User implements Serializable {
 
     @Column(name = "full_name", nullable = false)
     @JsonView(APIView.Authenticated.class)
+    @Patchable
     private String fullName;
 
     @JsonView(APIView.Internal.class)
@@ -85,7 +89,7 @@ public class User implements Serializable {
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     @JsonView(APIView.Internal.class)
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     // TODO: Apply constraint that the User owns their avatar UserFiles
     @OneToOne
@@ -118,7 +122,11 @@ public class User implements Serializable {
     }
 
     public String toString() {
-        return new Gson().toJson(this);
+        try {
+            return new ObjectMapper().writeValueAsString(this);
+        } catch (IOException ex) {
+            throw new RuntimeException("Unable to serialize User to JSON string: " + ex.getMessage(), ex);
+        }
     }
 
     public Long getUserId() {

@@ -1,5 +1,6 @@
 package com.andrewslater.example.services;
 
+import com.andrewslater.example.api.ModelPatcher;
 import com.andrewslater.example.api.assemblers.UserResourceAssembler;
 import com.andrewslater.example.api.resources.UserResource;
 import com.andrewslater.example.forms.RegistrationForm;
@@ -44,6 +45,9 @@ public class UserService {
     private UserResourceAssembler userAssembler;
 
     @Autowired
+    private ModelPatcher modelPatcher;
+
+    @Autowired
     public UserService(UserRepository repository,
         JavaMailSender mailSender,
         TemplateEngine templateEngine) {
@@ -77,13 +81,28 @@ public class UserService {
 
     public User recordLastLogin(User user) {
         user.setLastLogin(LocalDateTime.now());
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
         return user;
 
     }
 
     public ResponseEntity<UserResource> getResponseEntity(User user) {
         return new ResponseEntity<>(userAssembler.toResource(user), HttpStatus.OK);
+    }
+
+    public ResponseEntity<UserResource> patchUser(User user) {
+        if (user.getUserId() == null) {
+            throw new RuntimeException("No user id specified for user to patch: " + user.toString());
+        }
+
+        User existingUser = userRepository.findOne(user.getUserId());
+
+        if (existingUser == null) {
+            throw new RuntimeException("Unable to find existing user to patch with id " + user.getUserId());
+        }
+
+        modelPatcher.patchModel(existingUser, user);
+        return getResponseEntity(userRepository.save(existingUser));
     }
 
     private void sendInitialEmail(User user) {

@@ -3,6 +3,7 @@ package com.andrewslater.example.api;
 import com.andrewslater.example.Mappings;
 import com.andrewslater.example.api.assemblers.UserResourceAssembler;
 import com.andrewslater.example.api.resources.UserResource;
+import com.andrewslater.example.exceptions.ForbiddenException;
 import com.andrewslater.example.models.User;
 import com.andrewslater.example.models.UserFile;
 import com.andrewslater.example.repositories.UserRepository;
@@ -46,14 +47,19 @@ public class UserAPIController {
 
     @RequestMapping(value = Mappings.API_USER_RESOURCE, method = RequestMethod.PATCH)
     @JsonView(APIView.Authenticated.class)
-    public HttpEntity<UserResource> patchUser(@PathVariable Long userId, @RequestBody User user) {
-        User existingUser = userRepository.findOne(userId);
-        return userService.getResponseEntity(user);
+    public HttpEntity<UserResource> patchUser(@PathVariable Long userId,
+                                              @RequestBody User user,
+                                              @AuthenticationPrincipal SecurityUser securityUser) {
+        if (!securityUser.getUser().getUserId().equals(userId)) {
+            throw new ForbiddenException();
+        }
+        user.setUserId(userId);
+        return userService.patchUser(user);
     }
 
     @RequestMapping(value = Mappings.API_PRINCIPAL_RESOURCE, method = RequestMethod.GET)
     @JsonView(APIView.Authenticated.class)
     public HttpEntity<UserResource> getPrincipal(@AuthenticationPrincipal SecurityUser securityUser) {
-        return userService.getResponseEntity(securityUser.getUser());
+        return userService.getResponseEntity(userRepository.findOne(securityUser.getUser().getUserId()));
     }
 }
