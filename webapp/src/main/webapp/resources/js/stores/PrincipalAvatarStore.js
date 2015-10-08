@@ -9,10 +9,10 @@ module.exports = Fluxxor.createStore({
         this.error = null;
 
         this.bindActions(
-            constants.UPLOAD_PROFILE_AVATAR, this.onUpload,
-            constants.UPLOAD_PROFILE_AVATAR_PROGRESS, this.onUploadProgress,
-            constants.UPLOAD_PROFILE_AVATAR_SUCCESS, this.onUploadSuccess,
-            constants.UPLOAD_PROFILE_AVATAR_FAIL, this.onUploadFail
+            constants.UPLOAD_AVATAR, this.onUpload,
+            constants.UPLOAD_AVATAR_PROGRESS, this.onUploadProgress,
+            constants.UPLOAD_AVATAR_SUCCESS, this.onUploadSuccess,
+            constants.UPLOAD_AVATAR_FAIL, this.onUploadFail
         );
     },
 

@@ -43,6 +43,10 @@ module.exports = React.createClass({
         this.getFlux().actions.users.patchUser(this.state.principal.userId, properties);
     },
 
+    uploadAvatar: function(dataURI) {
+        this.getFlux().actions.users.uploadAvatar(this.state.principal.userId, dataURI);
+    },
+
     render: function() {
 
         var principal = this.state.principal;
@@ -55,7 +59,7 @@ module.exports = React.createClass({
             <div className="row">
                 <div className="col-md-3">
                     <AvatarEditor user={principal}
-                                  uploadAction={this.getFlux().actions.principal.uploadAvatar}
+                                  uploadAction={this.uploadAvatar}
                                   uploadProgress={this.state.avatarUploadProgress} />
                 </div>
                 <Formsy.Form onSubmit={this.submitForm} onChange={this.onFormChange} mapping={this.mapInputs}>

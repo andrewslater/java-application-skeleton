@@ -24,7 +24,7 @@ public class Mappings {
     public static final String API_AVATAR_SIZES =       API_BASE + "/avatar-sizes";
     public static final String API_USER_RESOURCE =      API_BASE + "user/{userId}";
     public static final String API_PRINCIPAL_RESOURCE = API_BASE + "user/principal";
-    public static final String API_PRINCIPAL_AVATAR =   API_BASE + "user/principal/avatar";
+    public static final String API_USER_AVATAR =   API_BASE + "user/{userId}/avatar";
 
     private static final Pattern PROPS_PATTERN = Pattern.compile("\\{(.+?)\\}");
 

@@ -1,6 +1,8 @@
-package com.andrewslater.example.api;
+package com.andrewslater.example.api.controllers;
 
 import com.andrewslater.example.Mappings;
+import com.andrewslater.example.api.APIView;
+import com.andrewslater.example.api.SortQuery;
 import com.andrewslater.example.api.assemblers.AdminUserResourceAssembler;
 import com.andrewslater.example.api.resources.UserResource;
 import com.andrewslater.example.models.User;
