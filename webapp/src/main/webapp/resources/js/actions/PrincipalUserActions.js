@@ -27,7 +27,6 @@ module.exports = {
 
             success: function (data, status) {
                 this.dispatch(constants.UPLOAD_PROFILE_AVATAR_SUCCESS, {user: data});
-                noty({text: $.i18n.prop('avatar-updated')});
                 app.flux.actions.principal.loadUser();
             }.bind(this),
 

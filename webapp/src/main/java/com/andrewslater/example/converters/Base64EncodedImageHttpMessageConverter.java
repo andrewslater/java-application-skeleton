@@ -22,7 +22,7 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 public class Base64EncodedImageHttpMessageConverter extends
     AbstractHttpMessageConverter<BufferedImage> {
 
-    private Logger logger = Logger.getLogger(this.getClass());
+    private Logger LOG = Logger.getLogger(this.getClass());
 
     public Base64EncodedImageHttpMessageConverter() {
 
@@ -41,9 +41,6 @@ public class Base64EncodedImageHttpMessageConverter extends
         return clazz.equals(BufferedImage.class);
     }
 
-    /** This uses a data uri. If that's not you,
-     * you'll need to modify this method to decode the base64 data
-     * straight. */
     @Override
     protected BufferedImage readInternal(Class<? extends BufferedImage> clazz,
         HttpInputMessage inputMessage) throws IOException,
@@ -53,20 +50,16 @@ public class Base64EncodedImageHttpMessageConverter extends
         IOUtils.copy(inputMessage.getBody(), writer, "UTF-8");
         String imageInBase64 = writer.toString();
         int startOfBase64Data = imageInBase64.indexOf(",") + 1;
-        imageInBase64 = imageInBase64.substring(startOfBase64Data,
-            imageInBase64.length());
+        imageInBase64 = imageInBase64.substring(startOfBase64Data, imageInBase64.length());
 
         if (!Base64.isBase64(imageInBase64)) {
-            logger.error("************************************************");
-            logger.error("*** IMAGE IN REQUEST IS NOT IN BASE64 FORMAT ***");
-            logger.error("************************************************");
+            LOG.error("************************************************");
+            LOG.error("*** IMAGE IN REQUEST IS NOT IN BASE64 FORMAT ***");
+            LOG.error("************************************************");
         }
 
         byte[] decodeBase64 = Base64.decodeBase64(imageInBase64);
-        BufferedImage image = ImageIO.read(new ByteArrayInputStream(
-            decodeBase64));
-        return image;
-
+        return ImageIO.read(new ByteArrayInputStream(decodeBase64));
     }
 
     @Override

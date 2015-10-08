@@ -11,7 +11,8 @@ var PrincipalAvatarStore = require("./stores/PrincipalAvatarStore");
 
 var AdminUsersActions = require("./actions/AdminUsersActions"),
     SystemSettingsActions = require("./actions/SystemSettingsActions"),
-    PrincipalUserActions = require("./actions/PrincipalUserActions");
+    PrincipalUserActions = require("./actions/PrincipalUserActions"),
+    UserActions = require("./actions/UserActions");
 
 var stores = {
     AdminUsersStore: new AdminUsersStore(),
@@ -26,7 +27,8 @@ var actions = {
         users: AdminUsersActions,
         settings: SystemSettingsActions
     },
-    principal: PrincipalUserActions
+    principal: PrincipalUserActions,
+    users: UserActions
 };
 
 var flux = new Fluxxor.Flux(stores, actions);

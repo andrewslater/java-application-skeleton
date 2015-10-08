@@ -1,12 +1,14 @@
-var $ = require("jquery");
-var React = require("react");
-var Fluxxor = require("fluxxor");
-var Formsy = require("formsy-react");
-var FormData = require("form-data-to-object");
-var Spinner = require("../../components/Spinner");
-var Checkbox = require("../../components/form/Checkbox");
-var TextInput = require("../../components/form/TextInput");
-var classnames = require("classnames");
+var $ = require("jquery"),
+    React = require("react"),
+    Fluxxor = require("fluxxor"),
+    Formsy = require("formsy-react"),
+    FormData = require("form-data-to-object"),
+    classnames = require("classnames");
+
+var Spinner = require("../../components/Spinner"),
+    Checkbox = require("../../components/form/Checkbox"),
+    TextInput = require("../../components/form/TextInput");
+
 
 var FluxMixin = Fluxxor.FluxMixin(React),
     StoreWatchMixin = Fluxxor.StoreWatchMixin;

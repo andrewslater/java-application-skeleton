@@ -34,7 +34,6 @@ public class WebApplication extends WebMvcConfigurerAdapter {
     public ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasenames("classpath:/static/i18n/messages");
-        LOG.debug("MessageSource: {}", messageSource);
         return messageSource;
     }
 
