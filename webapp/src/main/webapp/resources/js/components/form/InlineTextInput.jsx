@@ -7,24 +7,17 @@ var TextInput = React.createClass({
     getInitialState: function() {
         return {
             editing: false,
+            submittedValue: null
         }
     },
 
     changeValue: function changeValue(event) {
-        var value = event.currentTarget.value;
-        this.setValue(value);
+        this.setValue(event.currentTarget.value);
     },
 
     onClickHandler: function(event) {
         this.setState({
             editing: true
-        });
-    },
-
-    onBlurHandler: function(event) {
-        this.props.onSubmit(this.getValue());
-        this.setState({
-            editing: false
         });
     },
 
@@ -40,21 +33,38 @@ var TextInput = React.createClass({
         });
     },
 
+    onKeyDown: function(event) {
+        if (event.keyCode == 13) {
+            this.submitValue();
+        }
+    },
+
+    submitValue: function() {
+        this.props.onSubmit(this.getValue());
+        this.setState({
+            editing: false,
+            submittedValue: this.getValue()
+        });
+    },
+
     render: function() {
+        var displayValue = this.state.submittedValue || this.props.value;
+
         if (this.state.editing) {
             return (
                 <input type="text"
                        className="inline-text-input"
                        onChange={this.changeValue}
-                       defaultValue={this.props.value}
-                       onBlur={this.onBlurHandler}
+                       defaultValue={displayValue}
+                       onBlur={this.submitValue}
+                       onKeyDown={this.onKeyDown}
                        name={this.props.name}
                        autoFocus={true} />
 
             );
         }
 
-        return <span className="inline-text-input" onClick={this.onClickHandler}>{this.props.value}</span>;
+        return <span className="inline-text-input" onClick={this.onClickHandler}>{displayValue}</span>;
     }
 });
 

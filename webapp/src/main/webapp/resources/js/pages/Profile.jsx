@@ -29,8 +29,18 @@ module.exports = React.createClass({
 
     onFullNameSubmit: function(fullName) {
         if (fullName != this.state.principal.fullName) {
-            this.getFlux().actions.users.patchUser(this.state.principal.userId, {fullName: fullName});
+            this.patchUser({fullName: fullName});
         }
+    },
+
+    onEmailSubmit: function(email) {
+        if (email != this.state.principal.email) {
+            this.patchUser({email: email});
+        }
+    },
+
+    patchUser: function(properties) {
+        this.getFlux().actions.users.patchUser(this.state.principal.userId, properties);
     },
 
     render: function() {
@@ -50,8 +60,16 @@ module.exports = React.createClass({
                 </div>
                 <Formsy.Form onSubmit={this.submitForm} onChange={this.onFormChange} mapping={this.mapInputs}>
                 <div className="col-md-9">
-                    <h1><InlineTextInput value={principal.fullName} onSubmit={this.onFullNameSubmit} name="fullName" /></h1>
-                    <h3>{principal.email}</h3>
+                    <h1>
+                        <InlineTextInput value={principal.fullName}
+                                         onSubmit={this.onFullNameSubmit}
+                                         name="fullName" />
+                    </h1>
+                    <h3>
+                        <InlineTextInput value={principal.email}
+                                         onSubmit={this.onEmailSubmit}
+                                         name="email" />
+                    </h3>
                 </div>
                 </Formsy.Form>
             </div>
