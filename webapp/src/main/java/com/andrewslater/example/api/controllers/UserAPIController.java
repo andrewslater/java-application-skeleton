@@ -51,7 +51,7 @@ public class UserAPIController {
     }
 
     @RequestMapping(value = Mappings.API_PRINCIPAL_RESOURCE, method = RequestMethod.GET)
-    @JsonView(APIView.Authenticated.class)
+    @JsonView(APIView.Owner.class)
     public HttpEntity<UserResource> getPrincipal(@AuthenticationPrincipal SecurityUser securityUser) {
         return userService.getResponseEntity(userRepository.findOne(securityUser.getUser().getUserId()));
     }

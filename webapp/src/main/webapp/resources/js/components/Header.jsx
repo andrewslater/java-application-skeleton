@@ -1,7 +1,9 @@
-var React = require("react");
-var ReactRouter = require("react-router");
-var app = require("../app");
-var Fluxxor = require("fluxxor");
+var React = require("react"),
+    ReactRouter = require("react-router"),
+    Fluxxor = require("fluxxor");
+
+var app = require("../app"),
+    hasRole = require("../functions/hasRole");
 
 var Link = ReactRouter.Link;
 var FluxMixin = Fluxxor.FluxMixin(React),
@@ -19,8 +21,25 @@ module.exports = React.createClass({
 
     render: function () {
         principalName = this.state.principal ? this.state.principal.fullName : "";
+        var adminMenu = null;
+        var principal = this.state.principal;
 
-       return (<nav className="navbar navbar-default">
+        if (principal && hasRole(principal, 'ADMIN')) {
+            adminMenu = (
+                <ul className="nav navbar-nav navbar-left">
+                    <li className="dropdown">
+                        <a href="#" className="dropdown-toggle" data-toggle="dropdown"
+                           role="button" aria-expanded="false">Admin<span
+                            className="caret"></span></a>
+                        <ul className="dropdown-menu" role="menu">
+                            <li><Link to="/admin/settings">{$.i18n.prop('edit-settings')}</Link></li>
+                            <li><Link to="/admin/users">{$.i18n.prop('list-users')}</Link></li>
+                        </ul>
+                    </li>
+                </ul>
+            );
+        }
+        return (<nav className="navbar navbar-default">
            <div className="container-fluid">
                <div className="navbar-header">
                    <button type="button" className="navbar-toggle collapsed"
@@ -41,18 +60,7 @@ module.exports = React.createClass({
                            <input type="text" className="form-control" placeholder="Search"/>
                        </div>
                    </form>
-                   <ul className="nav navbar-nav navbar-left">
-                       <li className="dropdown">
-                           <a href="#" className="dropdown-toggle" data-toggle="dropdown"
-                              role="button" aria-expanded="false">Admin<span
-                               className="caret"></span></a>
-                           <ul className="dropdown-menu" role="menu">
-                               <li><Link to="/admin/settings">{$.i18n.prop('edit-settings')}</Link></li>
-                               <li><Link to="/admin/users">{$.i18n.prop('list-users')}</Link></li>
-                               <li><a href={'/admin/users/create'}>Create User</a></li>
-                           </ul>
-                       </li>
-                   </ul>
+                   {adminMenu}
                    <ul className="nav navbar-nav navbar-right">
                        <li className="dropdown">
                            <a href="#" className="dropdown-toggle" data-toggle="dropdown"
@@ -73,7 +81,7 @@ module.exports = React.createClass({
                    </ul>
                </div>
            </div>
-       </nav>)
+        </nav>)
    }
 
 });

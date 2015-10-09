@@ -89,7 +89,7 @@ public class User implements Serializable {
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    @JsonView(APIView.Internal.class)
+    @JsonView({APIView.Internal.class, APIView.Owner.class})
     private Set<Role> roles;
 
     // TODO: Apply constraint that the User owns their avatar UserFiles
