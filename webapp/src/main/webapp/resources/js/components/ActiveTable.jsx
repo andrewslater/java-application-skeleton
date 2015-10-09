@@ -73,7 +73,7 @@ module.exports = React.createClass({
         }.bind(this));
 
         _.range(rowCount, this.props.page.size).map(function(i) {
-            content.push(<tr><td colSpan={this.props.columns.length}>&nbsp;</td></tr>);
+            content.push(<tr key={'blank-row-' + i}><td colSpan={this.props.columns.length}>&nbsp;</td></tr>);
         }.bind(this));
 
         return content;
