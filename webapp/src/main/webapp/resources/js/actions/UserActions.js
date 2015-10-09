@@ -1,4 +1,5 @@
-var noty = require("noty");
+var util = require("util"),
+    noty = require("noty");
 
 var constants = require("../constants"),
     app = require('../app');
@@ -57,7 +58,6 @@ module.exports = {
             contentType: "image/png",
 
             success: function (data, status) {
-                this.users[data.user.userId].user = data.user;
                 this.dispatch(constants.UPLOAD_AVATAR_SUCCESS, {user: data});
                 this.dispatch(constants.LOAD_USER_SUCCESS, {user: data});
             }.bind(this),
