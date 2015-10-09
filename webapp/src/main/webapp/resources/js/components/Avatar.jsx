@@ -11,6 +11,7 @@ module.exports = React.createClass({
 
     render: function() {
         var src = APIClient.getLink(this.props.user, "resource-avatar-" + this.props.size);
+        console.log("SRC: " + src);
         return (<img className="img-rounded"
                      src={src} />);
     }

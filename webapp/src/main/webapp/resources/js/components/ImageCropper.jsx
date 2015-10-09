@@ -2,6 +2,7 @@
 
 var $ = require("jquery"),
     React = require("react"),
+    ReactDOM = require("react-dom"),
     ReactBootstrap = require("react-bootstrap"),
     isDataURL = require("../functions/isDataURL");
 
@@ -151,7 +152,7 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-        var canvas = React.findDOMNode(this.refs.canvas);
+        var canvas = ReactDOM.findDOMNode(this.refs.canvas);
         var context = canvas.getContext("2d");
         this.prepareImage(this.props.image);
 
@@ -169,14 +170,14 @@ module.exports = React.createClass({
 
     // make sure we clean up listeners when unmounted.
     componentWillUnmount: function() {
-        var canvas = React.findDOMNode(this.refs.canvas);
+        var canvas = ReactDOM.findDOMNode(this.refs.canvas);
         window.removeEventListener("mousemove", this.listeners.mousemove);
         window.removeEventListener("mouseup", this.listeners.mouseup);
         canvas.removeEventListener("mousedown", this.listeners.mousedown);
     },
 
     componentDidUpdate: function() {
-        var context = React.findDOMNode(this.refs.canvas).getContext("2d");
+        var context = ReactDOM.findDOMNode(this.refs.canvas).getContext("2d");
         context.clearRect(0, 0, this.props.width, this.props.height);
         this.addImageToCanvas(context, this.state.image);
     },
@@ -226,7 +227,7 @@ module.exports = React.createClass({
 
     handleZoomUpdate: function() {
         var newstate = this.state;
-        newstate.zoom = React.findDOMNode(this.refs.zoom).value;
+        newstate.zoom = ReactDOM.findDOMNode(this.refs.zoom).value;
         this.setState(newstate);
     },
 

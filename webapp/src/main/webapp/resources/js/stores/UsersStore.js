@@ -86,7 +86,4 @@ module.exports = Fluxxor.createStore({
 
         return this.users[this.principalUserId].user;
     }
-
-
-
 });

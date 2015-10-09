@@ -59,13 +59,13 @@
     <div th:replace="fragments/notice_pending_email_confirmation :: notice" />
 </div>
 
-<div sec:authorize="isAnonymous()">
+<!--<div sec:authorize="isAnonymous()">-->
     <div th:replace="fragments/header_anonymous :: header" />
-</div>
+<!--</div>-->
 
-<div sec:authorize="hasRole('ROLE_USER') and !principal.getUser().requiresAccountConfirmation()">
-    <div th:replace="fragments/header_authenticated :: header" />
-</div>
+<!--<div sec:authorize="hasRole('ROLE_USER') and !principal.getUser().requiresAccountConfirmation()">-->
+    <!--<div th:replace="fragments/header_authenticated :: header" />-->
+<!--</div>-->
 
 <div sec:authorize="hasRole('ROLE_USER') and principal.getUser().requiresAccountConfirmation()">
     <div th:replace="fragments/header_unconfirmed :: header" />

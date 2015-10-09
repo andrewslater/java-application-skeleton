@@ -1,6 +1,7 @@
 var $ = require("jquery"),
     _ = require("underscore"),
     React = require("react"),
+    ReactDOM = require("react-dom"),
     ReactRouter = require("react-router"),
     APIClient = require("./APIClient"),
     Spinner = require("./components/Spinner");
@@ -27,7 +28,7 @@ module.exports = {
      * @param csrf
      */
     run: function(csrf) {
-        React.render(<Spinner />, document.body);
+        ReactDOM.render(<Spinner />, document.getElementById("app"));
 
         this.csrf = csrf;
         this.configureI18n();
@@ -68,9 +69,9 @@ module.exports = {
             return <Component {...props} flux={flux} />
         };
 
-        React.render(
+        ReactDOM.render(
             <Router createElement={createElement} history={history} routes={routes} />,
-            document.body
+            document.getElementById("app")
         );
     },
 

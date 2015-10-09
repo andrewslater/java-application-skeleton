@@ -1,9 +1,8 @@
 var util = require("util"),
     $ = require("jquery"),
     React = require("react"),
-    Progress = require("react-progress"),
-    noty = require("noty"),
-    ReactBootstrap = require("react-bootstrap");
+    ReactDOM = require("react-dom"),
+    noty = require("noty");
 
 var APIClient = require("../APIClient"),
     ImageCropper = require("./ImageCropper"),
@@ -46,7 +45,7 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-        var node = React.findDOMNode(this.refs.avatarImage);
+        var node = ReactDOM.findDOMNode(this.refs.avatarImage);
         if (node) {
             node.addEventListener('dragover', this.onDragOver);
             node.addEventListener('drop', this.onDrop);
@@ -68,7 +67,7 @@ module.exports = React.createClass({
 
     onFileSelection: function(event) {
         this.openCropperWithFile(event.target.files[0]);
-        React.findDOMNode(this.refs.avatarFileInput).value = null;
+        ReactDOM.findDOMNode(this.refs.avatarFileInput).value = null;
     },
 
     openCropperWithFile: function(file) {
@@ -97,7 +96,7 @@ module.exports = React.createClass({
     },
 
     openFileSelector: function() {
-        React.findDOMNode(this.refs.avatarFileInput).click();
+        ReactDOM.findDOMNode(this.refs.avatarFileInput).click();
     },
 
     render: function() {

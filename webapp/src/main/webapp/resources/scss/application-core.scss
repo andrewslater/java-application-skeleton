@@ -11,6 +11,10 @@ form {
 
 .inline-text-input {
   width: 100%;
+  margin: 3px;
+  &:hover {
+    border: 1px solid #000;
+  }
 }
 
 .AvatarCropper-base {

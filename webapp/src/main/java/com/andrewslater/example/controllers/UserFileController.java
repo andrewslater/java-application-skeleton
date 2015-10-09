@@ -33,9 +33,14 @@ public class UserFileController {
     public void getFile(@PathVariable Long id,
                         HttpServletRequest request,
                         HttpServletResponse response) throws IOException {
-        UserFile userFile = repository.findOne(id);
-        response.setContentType(userFile.getMimeType());
-        IOUtils.copy(new FileInputStream(service.getFile(userFile)), response.getOutputStream());
-        response.flushBuffer();
+        try {
+            UserFile userFile = repository.findOne(id);
+            response.setContentType(userFile.getMimeType());
+            IOUtils.copy(new FileInputStream(service.getFile(userFile)), response.getOutputStream());
+            response.flushBuffer();
+        } catch (Exception ex) {
+            LOG.debug("Exception reading UserFile: {}", ex.getMessage(), ex);
+            throw ex;
+        }
     }
 }
