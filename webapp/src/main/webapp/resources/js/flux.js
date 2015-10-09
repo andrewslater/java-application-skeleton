@@ -1,25 +1,25 @@
-var $ = require("jquery");
-var Fluxxor = require("fluxxor");
-var app = require("./app");
-var constants = require("./constants");
+var $ = require("jquery"),
+    Fluxxor = require("fluxxor");
 
-var AdminUsersStore = require("./stores/AdminUsersStore");
-var AdminUserStore = require("./stores/AdminUserStore");
-var SystemSettingsStore = require("./stores/SystemSettingsStore");
-var PrincipalUserStore = require("./stores/PrincipalUserStore");
-var PrincipalAvatarStore = require("./stores/PrincipalAvatarStore");
+var app = require("./app"),
+    constants = require("./constants");
+
+var AdminUsersStore = require("./stores/AdminUsersStore"),
+    AdminUserStore = require("./stores/AdminUserStore"),
+    SystemSettingsStore = require("./stores/SystemSettingsStore"),
+    PrincipalAvatarStore = require("./stores/PrincipalAvatarStore"),
+    UsersStore = require("./stores/UsersStore");
 
 var AdminUsersActions = require("./actions/AdminUsersActions"),
     SystemSettingsActions = require("./actions/SystemSettingsActions"),
-    PrincipalUserActions = require("./actions/PrincipalUserActions"),
     UserActions = require("./actions/UserActions");
 
 var stores = {
     AdminUsersStore: new AdminUsersStore(),
     AdminUserStore: new AdminUserStore(),
     SystemSettingsStore: new SystemSettingsStore(),
-    PrincipalUserStore: new PrincipalUserStore(),
-    PrincipalAvatarStore: new PrincipalAvatarStore()
+    PrincipalAvatarStore: new PrincipalAvatarStore(),
+    UsersStore: new UsersStore()
 };
 
 var actions = {
@@ -27,7 +27,6 @@ var actions = {
         users: AdminUsersActions,
         settings: SystemSettingsActions
     },
-    principal: PrincipalUserActions,
     users: UserActions
 };
 

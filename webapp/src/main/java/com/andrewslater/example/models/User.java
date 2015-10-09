@@ -51,6 +51,7 @@ public class User implements Serializable {
 
     @Column(nullable = false)
     @JsonView(APIView.Authenticated.class)
+    @Patchable
     private String email;
 
     @Column

@@ -84,7 +84,6 @@ public class AvatarAPIController {
         return userService.getResponseEntity(userService.update(user));
     }
 
-
     @RequestMapping(value = Mappings.API_AVATAR_SIZES, method = RequestMethod.GET)
     public List<AvatarSize> getSizes() {
         return Arrays.asList(AvatarSize.values());

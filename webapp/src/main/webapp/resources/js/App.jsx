@@ -62,7 +62,7 @@ module.exports = {
         this.flux = flux;
 
         this.configureAutoTokenRefresh();
-        flux.actions.principal.loadUser();
+        flux.actions.users.loadPrincipalUser();
 
         var createElement = function(Component, props) {
             return <Component {...props} flux={flux} />

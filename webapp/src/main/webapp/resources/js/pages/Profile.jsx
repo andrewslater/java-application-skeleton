@@ -15,14 +15,13 @@ var FluxMixin = Fluxxor.FluxMixin(React),
     StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 module.exports = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin("PrincipalUserStore", "PrincipalAvatarStore")],
+    mixins: [FluxMixin, StoreWatchMixin("UsersStore", "PrincipalAvatarStore")],
 
     getStateFromFlux: function() {
-        var userStore = this.getFlux().store("PrincipalUserStore");
+        var usersStore = this.getFlux().store("UsersStore");
         var avatarStore = this.getFlux().store("PrincipalAvatarStore");
         return {
-            principal: userStore.principal,
-            error: userStore.error,
+            principal: usersStore.getPrincipalUser(),
             avatarUploadProgress: avatarStore.uploadProgress
         }
     },

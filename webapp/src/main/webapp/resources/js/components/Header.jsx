@@ -8,14 +8,12 @@ var FluxMixin = Fluxxor.FluxMixin(React),
     StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 module.exports = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin("PrincipalUserStore")],
+    mixins: [FluxMixin, StoreWatchMixin("UsersStore")],
 
     getStateFromFlux: function() {
-        var store = this.getFlux().store("PrincipalUserStore");
+        var store = this.getFlux().store("UsersStore");
         return {
-            loading: store.loading,
-            error: store.error,
-            principal: store.principal
+            principal: store.getPrincipalUser()
         };
     },
 
