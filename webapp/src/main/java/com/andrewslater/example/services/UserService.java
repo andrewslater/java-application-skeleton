@@ -4,10 +4,13 @@ import com.andrewslater.example.api.ModelPatcher;
 import com.andrewslater.example.api.assemblers.UserResourceAssembler;
 import com.andrewslater.example.api.resources.UserResource;
 import com.andrewslater.example.forms.RegistrationForm;
+import com.andrewslater.example.models.AvatarSize;
 import com.andrewslater.example.models.Role;
 import com.andrewslater.example.models.SystemSettings;
 import com.andrewslater.example.models.User;
+import com.andrewslater.example.models.UserFile;
 import com.andrewslater.example.repositories.UserRepository;
+import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 import java.util.Locale;
 
@@ -46,6 +50,9 @@ public class UserService {
 
     @Autowired
     private ModelPatcher modelPatcher;
+
+    @Autowired
+    private UserFilesService userFilesService;
 
     @Autowired
     public UserService(UserRepository repository,
@@ -105,6 +112,40 @@ public class UserService {
         return getResponseEntity(userRepository.save(existingUser));
     }
 
+    public ResponseEntity<UserResource> updateUserAvatar(Long userId, BufferedImage image) {
+        User user = userRepository.getOne(userId);
+        int requiredDimension = AvatarSize.getLargestSize().getSize();
+
+        if (image.getWidth() != requiredDimension || image.getHeight() != requiredDimension ) {
+            String errorMessage = String.format("Provided image has incorrect dimensions (%dx%d). Must be %dx%d",
+                image.getWidth(),
+                image.getHeight(),
+                requiredDimension,
+                requiredDimension);
+            throw new RuntimeException(errorMessage);
+        }
+
+        BufferedImage mediumImage = scaleImage(image, AvatarSize.MEDIUM.getSize());
+        BufferedImage smallImage = scaleImage(image, AvatarSize.SMALL.getSize());
+        BufferedImage microImage = scaleImage(image, AvatarSize.MICRO.getSize());
+
+        UserFile largeAvatar = userFilesService.createUserFile(user, "avatar-large.png", image);
+        UserFile mediumAvatar = userFilesService.createUserFile(user, "avatar-medium.png", mediumImage);
+        UserFile smallAvatar = userFilesService.createUserFile(user, "avatar-small.png", smallImage);
+        UserFile microAvatar = userFilesService.createUserFile(user, "avatar-micro.png", microImage);
+
+        user.setLargeAvatar(largeAvatar);
+        user.setMediumAvatar(mediumAvatar);
+        user.setSmallAvatar(smallAvatar);
+        user.setMicroAvatar(microAvatar);
+
+        return getResponseEntity(update(user));
+    }
+
+    private BufferedImage scaleImage(BufferedImage image, int targetSize) {
+        return Scalr.resize(image, Scalr.Method.ULTRA_QUALITY, targetSize);
+    }
+    
     private void sendInitialEmail(User user) {
         LOG.debug("Sending initial email to {}", user.getEmail());
         if (user.requiresAccountConfirmation()) {
