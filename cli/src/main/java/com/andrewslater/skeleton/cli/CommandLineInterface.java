@@ -1,5 +1,6 @@
 package com.andrewslater.skeleton.cli;
 
+import io.airlift.airline.Arguments;
 import io.airlift.airline.Cli;
 import io.airlift.airline.Command;
 import io.airlift.airline.Help;
@@ -9,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 public class CommandLineInterface {
     private static final Logger LOG = LoggerFactory.getLogger(CommandLineInterface.class);
 
@@ -16,7 +19,7 @@ public class CommandLineInterface {
         Cli.CliBuilder<Runnable> builder = Cli.<Runnable>builder("cli")
                 .withDescription("Example command line interface")
                 .withDefaultCommand(Help.class)
-                .withCommands(Help.class, HelloWorldCommand.class);
+                .withCommands(Help.class, LoginCommand.class);
 
         Cli<Runnable> parser = builder.build();
         parser.parse(args).run();
@@ -32,21 +35,22 @@ public class CommandLineInterface {
         }
     }
 
-    @Command(name = "hello-world", description = "Says hello")
-    public static class HelloWorldCommand extends CLICommand
+    @Command(name = "login", description = "Creates an API session")
+    public static class LoginCommand extends CLICommand
     {
-        @Option(type = OptionType.COMMAND, name = "-r", description = "Who to say hello to")
-        public String recipient = "World";
-
-        @Option(type = OptionType.COMMAND, name = "-s", description = "Salutation (Hello, Goodbye)")
-        public String salutation = "Hello";
-
-        @Option(type = OptionType.COMMAND, name = "-c", description = "Capitalize name")
-        public Boolean capitalizeName;
+        @Arguments(description = "The email address of the user to login")
+        public List<String> args;
 
         @Override
         public void run() {
-            System.out.println(String.format("%s %s!", salutation, capitalizeName ? StringUtils.capitalize(recipient) : recipient));
+            if (args == null || args.size() != 1) {
+                System.err.println("You must provide the email address of the user you want to sign in");
+                return;
+            }
+
+            System.out.print(String.format("Enter password for %s: ", args.get(0)));
+            String password = new String(System.console().readPassword());
+            // TODO: Sign in and return auth token
         }
     }
 
