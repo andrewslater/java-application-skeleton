@@ -1,6 +1,8 @@
-var _ = require("underscore");
-var React = require("react");
-var ReactRouter = require("react-router");
+var util = require("util"),
+    _ = require("underscore"),
+    React = require("react"),
+    ReactRouter = require("react-router");
+
 var Spinner = require("./Spinner");
 
 module.exports = React.createClass({

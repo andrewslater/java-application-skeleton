@@ -18,8 +18,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 @Controller
-public class UserFileController {
-    private static final Logger LOG = LoggerFactory.getLogger(UserFileController.class);
+public class UserFilesController {
+    private static final Logger LOG = LoggerFactory.getLogger(UserFilesController.class);
 
     @Autowired
     private UserFilesRepository repository;
@@ -35,6 +35,7 @@ public class UserFileController {
         try {
             UserFile userFile = repository.findOne(id);
             response.setContentType(userFile.getMimeType());
+            response.setHeader("Cache-Control", "private, max-age=86400");
             IOUtils.copy(new FileInputStream(service.getFile(userFile)), response.getOutputStream());
             response.flushBuffer();
         } catch (Exception ex) {
