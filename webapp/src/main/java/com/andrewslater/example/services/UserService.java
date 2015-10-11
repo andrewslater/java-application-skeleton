@@ -45,10 +45,6 @@ public class UserService {
     private SystemSettings systemSettings;
 
     @Autowired
-    @Qualifier("userResourceAssembler")
-    private UserResourceAssembler userAssembler;
-
-    @Autowired
     private ModelPatcher modelPatcher;
 
     @Autowired
@@ -93,11 +89,7 @@ public class UserService {
 
     }
 
-    public ResponseEntity<UserResource> getResponseEntity(User user) {
-        return new ResponseEntity<>(userAssembler.toResource(user), HttpStatus.OK);
-    }
-
-    public ResponseEntity<UserResource> patchUser(User user) {
+    public User patchUser(User user) {
         if (user.getUserId() == null) {
             throw new RuntimeException("No user id specified for user to patch: " + user.toString());
         }
@@ -109,10 +101,10 @@ public class UserService {
         }
 
         modelPatcher.patchModel(existingUser, user);
-        return getResponseEntity(userRepository.save(existingUser));
+        return userRepository.save(existingUser);
     }
 
-    public ResponseEntity<UserResource> updateUserAvatar(Long userId, BufferedImage image) {
+    public User updateUserAvatar(Long userId, BufferedImage image) {
         User user = userRepository.getOne(userId);
         int requiredDimension = AvatarSize.getLargestSize().getSize();
 
@@ -139,7 +131,7 @@ public class UserService {
         user.setSmallAvatar(smallAvatar);
         user.setMicroAvatar(microAvatar);
 
-        return getResponseEntity(update(user));
+        return update(user);
     }
 
     private BufferedImage scaleImage(BufferedImage image, int targetSize) {
