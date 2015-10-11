@@ -1,8 +1,6 @@
 package com.andrewslater.example.services;
 
 import com.andrewslater.example.api.ModelPatcher;
-import com.andrewslater.example.api.assemblers.UserResourceAssembler;
-import com.andrewslater.example.api.resources.UserResource;
 import com.andrewslater.example.forms.RegistrationForm;
 import com.andrewslater.example.models.AvatarSize;
 import com.andrewslater.example.models.Role;
@@ -14,10 +12,6 @@ import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;

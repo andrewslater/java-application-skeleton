@@ -7,8 +7,6 @@ import com.andrewslater.example.models.User;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-
 @Component
 @Qualifier("adminUserResourceAssembler")
 public class AdminUserResourceAssembler extends UserResourceAssembler {

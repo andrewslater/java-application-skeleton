@@ -5,8 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 
-import java.util.List;
-
 public class SortQueryTest {
     private static final Logger LOG = LoggerFactory.getLogger(SortQueryTest.class);
 

@@ -3,7 +3,6 @@ package com.andrewslater.example.services;
 import com.andrewslater.example.models.SystemSettings;
 import com.andrewslater.example.models.User;
 import com.andrewslater.example.models.UserFile;
-import com.andrewslater.example.models.Volume;
 import com.andrewslater.example.models.VolumeType;
 import com.andrewslater.example.repositories.UserFilesRepository;
 import org.apache.commons.lang.RandomStringUtils;
@@ -13,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

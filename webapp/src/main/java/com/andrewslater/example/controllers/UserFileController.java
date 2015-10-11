@@ -2,7 +2,6 @@ package com.andrewslater.example.controllers;
 
 import com.andrewslater.example.models.UserFile;
 import com.andrewslater.example.repositories.UserFilesRepository;
-import com.andrewslater.example.repositories.VolumeRepository;
 import com.andrewslater.example.services.UserFilesService;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
