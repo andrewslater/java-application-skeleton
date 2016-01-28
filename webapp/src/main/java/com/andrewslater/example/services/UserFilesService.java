@@ -5,7 +5,7 @@ import com.andrewslater.example.models.User;
 import com.andrewslater.example.models.UserFile;
 import com.andrewslater.example.models.VolumeType;
 import com.andrewslater.example.repositories.UserFilesRepository;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
 import org.slf4j.Logger;

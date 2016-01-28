@@ -32,7 +32,7 @@ public class OAuthServerConfiguration {
 
     @Configuration
     @EnableResourceServer
-    @Order(1)
+    @Order(2)
     protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
         private static final Logger LOG = LoggerFactory.getLogger(ResourceServerConfiguration.class);
 

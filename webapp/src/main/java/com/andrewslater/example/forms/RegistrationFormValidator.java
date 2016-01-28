@@ -2,7 +2,7 @@ package com.andrewslater.example.forms;
 
 import com.andrewslater.example.models.User;
 import com.andrewslater.example.repositories.UserRepository;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

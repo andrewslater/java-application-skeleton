@@ -2,8 +2,8 @@ package com.andrewslater.example.models;
 
 import com.andrewslater.example.api.APIView;
 import com.fasterxml.jackson.annotation.JsonView;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
