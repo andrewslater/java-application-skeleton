@@ -18,7 +18,7 @@
         <module>cli</module>
         <module>gui</module>
         <module>webapp</module>
-        <module>java-application-skeleton-maven-plugin</module>
+        <module>db-maven-plugin</module>
     </modules>
 
     <build>

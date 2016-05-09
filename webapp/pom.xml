@@ -200,7 +200,7 @@
 
             <plugin>
                 <groupId>com.andrewslater</groupId>
-                <artifactId>java-application-skeleton-maven-plugin</artifactId>
+                <artifactId>db-maven-plugin</artifactId>
                 <version>${project.version}</version>
                 <configuration>
                     <migrationsDir>${migrationsDir}</migrationsDir>
