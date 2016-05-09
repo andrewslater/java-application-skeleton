@@ -1,4 +1,4 @@
-var _ = require("underscore"),
+var _ = require("lodash"),
     $ = require("jquery"),
     util = require("util"),
     React = require("react"),

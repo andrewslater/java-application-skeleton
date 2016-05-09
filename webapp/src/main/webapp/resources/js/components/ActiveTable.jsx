@@ -1,5 +1,5 @@
 var util = require("util"),
-    _ = require("underscore"),
+    _ = require("lodash"),
     React = require("react"),
     ReactRouter = require("react-router");
 

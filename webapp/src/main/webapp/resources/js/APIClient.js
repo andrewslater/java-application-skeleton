@@ -1,5 +1,5 @@
 var $ = require("jquery"),
-    _ = require("underscore"),
+    _ = require("lodash"),
     uuid = require("uuid-v4");
 
 function APIClient(baseUrl, apiToken) {

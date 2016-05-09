@@ -1,5 +1,5 @@
 var util = require("util"),
-    _ = require("underscore"),
+    _ = require("lodash"),
     React = require("react"),
     Fluxxor = require("fluxxor"),
     Formsy = require("formsy-react");

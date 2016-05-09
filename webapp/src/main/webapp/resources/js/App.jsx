@@ -1,5 +1,5 @@
 var $ = require("jquery"),
-    _ = require("underscore"),
+    _ = require("lodash"),
     React = require("react"),
     ReactDOM = require("react-dom"),
     ReactRouter = require("react-router"),
