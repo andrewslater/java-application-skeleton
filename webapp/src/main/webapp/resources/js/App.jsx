@@ -8,7 +8,6 @@ var $ = require("jquery"),
 
 require("./stylesheets");
 require("i18n");
-require("noty");
 require("bootstrap");
 
 
@@ -32,7 +31,6 @@ module.exports = {
 
         this.csrf = csrf;
         this.configureI18n();
-        this.configureNotifications();
         this.disableFileDropping();
 
         if (!localStorage.getItem("apiToken")) {
@@ -119,22 +117,6 @@ module.exports = {
                         // TODO: Force sign out and redirect to login page
                     }
                 }
-            }
-        });
-    },
-
-    /**
-     * Sets up noty (http://ned.im/noty/)
-     * Easy, consistent Growl-style notifications
-     */
-    configureNotifications: function() {
-        _.extend($.noty.defaults, {
-            layout: "topCenter",
-            timeout: 2000,
-            theme: $.noty.themes.bootstrapTheme,
-            animation: {
-                open: 'animated bounceInDown',
-                close: 'animated bounceOutUp'
             }
         });
     },

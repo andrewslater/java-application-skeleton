@@ -1,6 +1,3 @@
-var util = require("util"),
-    noty = require("noty");
-
 var constants = require("../constants"),
     app = require('../app');
 

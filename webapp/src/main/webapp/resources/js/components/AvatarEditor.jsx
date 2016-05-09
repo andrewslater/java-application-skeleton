@@ -1,8 +1,7 @@
 var util = require("util"),
     $ = require("jquery"),
     React = require("react"),
-    ReactDOM = require("react-dom"),
-    noty = require("noty");
+    ReactDOM = require("react-dom");
 
 var APIClient = require("../APIClient"),
     ImageCropper = require("./ImageCropper"),

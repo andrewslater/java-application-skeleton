@@ -1,4 +1,3 @@
-var noty = require("noty");
 var constants = require("../constants");
 
 module.exports = {
@@ -24,7 +23,6 @@ module.exports = {
             data: JSON.stringify(settings),
 
             success: function(data, status) {
-                noty({text: $.i18n.prop('settings-saved')});
                 this.dispatch(constants.ADMIN_SAVE_SETTINGS_SUCCESS, {settings: data});
             }.bind(this),
 
