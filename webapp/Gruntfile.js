@@ -10,7 +10,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: 'src/main/resources/scss/',
-                    src: ["application-core.scss", "spinkit/spinkit.scss"],
+                    src: ["application-core.scss"],
                     dest: "src/main/webapp/resources/css/compiled",
                     ext: ".css"
                 }]
@@ -21,13 +21,7 @@ module.exports = function(grunt) {
             libraries: {
                 files: {
                     'src/main/webapp/resources/minified/css/application-libraries.css' : [
-                        'src/main/webapp/resources/css/bootstrap.css',
-                        'src/main/webapp/resources/css/bootstrap-theme.css',
-                        'src/main/webapp/resources/css/awesome-bootstrap-checkbox.css',
-                        'src/main/webapp/resources/css/formValidation.css',
-                        'src/main/webapp/resources/css/font-awesome.css',
-                        'src/main/webapp/resources/css/spinkit.css',
-                        'src/main/webapp/resources/css/animate.css'
+                        'src/main/webapp/resources/css/formValidation.css'
                     ],
                     'src/main/webapp/resources/minified/css/application-core.css': [
                         'src/main/webapp/resources/css/compiled/**/*.css'

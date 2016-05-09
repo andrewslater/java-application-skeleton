@@ -3,12 +3,11 @@ package com.andrewslater.example;
 import com.andrewslater.example.models.SystemSettings;
 import com.andrewslater.example.repositories.SystemSettingsRepository;
 import com.andrewslater.example.security.ExampleAuthenticationSuccessHandler;
-import com.andrewslater.example.security.ExampleUserDetailsService;
+import com.andrewslater.example.security.ApplicationUserDetailsService;
 import com.andrewslater.example.security.UserConfirmationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -32,7 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(SecurityConfiguration.class);
 
     @Autowired
-    private ExampleUserDetailsService userDetailsService;
+    private ApplicationUserDetailsService userDetailsService;
 
     @Autowired
     private SystemSettingsRepository systemSettingsRepository;

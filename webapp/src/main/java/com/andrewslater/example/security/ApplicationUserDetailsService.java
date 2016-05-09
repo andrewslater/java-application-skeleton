@@ -11,9 +11,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ExampleUserDetailsService implements UserDetailsService {
+public class ApplicationUserDetailsService implements UserDetailsService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ExampleUserDetailsService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationUserDetailsService.class);
 
     @Autowired
     private UserRepository repository;

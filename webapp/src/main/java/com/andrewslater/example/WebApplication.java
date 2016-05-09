@@ -3,14 +3,17 @@ package com.andrewslater.example;
 import com.andrewslater.example.converters.Base64EncodedImageHttpMessageConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -19,9 +22,29 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import java.util.List;
 
 @SpringBootApplication
+@PropertySource("classpath:git.properties")
+@EnableAsync
 public class WebApplication extends WebMvcConfigurerAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebApplication.class);
+
+    @Value("${git.commit.id.describe}")
+    private String buildCommit;
+
+    @Value("${git.build.time}")
+    private String buildTime;
+
+    @Value("${git.branch}")
+    private String buildBranch;
+
+    @Value("${server.insecure.port}")
+    private Integer insecurePort;
+
+    @Value("${server.secure.port}")
+    private Integer securePort;
+
+    @Value("${info.build.version}")
+    private String version;
 
     public static void main(String[] args) {
         SpringApplication.run(WebApplication.class, args);
