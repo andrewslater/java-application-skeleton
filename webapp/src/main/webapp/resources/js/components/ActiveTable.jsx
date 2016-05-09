@@ -58,7 +58,7 @@ module.exports = React.createClass({
         }
 
         if (!this.props.page) {
-            return tableContent = <tr><td colSpan={this.props.columns.length}><Spinner /></td></tr>
+            return <tr><td colSpan={this.props.columns.length}><Spinner /></td></tr>;
         }
 
         var content = [];

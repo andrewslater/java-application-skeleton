@@ -20,9 +20,9 @@ module.exports = React.createClass({
     },
 
     render: function () {
-        principalName = this.state.principal ? this.state.principal.fullName : "";
-        var adminMenu = null;
-        var principal = this.state.principal;
+        let principalName = this.state.principal ? this.state.principal.fullName : "";
+        let adminMenu = null;
+        let principal = this.state.principal;
 
         if (principal && hasRole(principal, 'ADMIN')) {
             adminMenu = (

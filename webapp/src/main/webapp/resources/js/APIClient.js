@@ -35,7 +35,7 @@ APIClient.prototype = {
     },
 
     getBaseAjaxOptions: function(resourceUri, ajaxMethod) {
-        apiOptions = {
+        let apiOptions = {
             url: this.baseUrl + resourceUri,
             method: ajaxMethod,
             dataType: "json",
