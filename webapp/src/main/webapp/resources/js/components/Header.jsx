@@ -26,44 +26,46 @@ class Header extends Component {
                 </ul>
             );
         }
-        return (<nav className="navbar navbar-default">
-            <div className="container-fluid">
-                <div className="navbar-header">
-                    <button type="button" className="navbar-toggle collapsed"
-                            data-toggle="collapse" data-target="#header-content">
-                        <span className="sr-only">Toggle navigation</span>
-                        <span className="icon-bar"></span>
-                        <span className="icon-bar"></span>
-                        <span className="icon-bar"></span>
-                    </button>
-                    <a className="navbar-brand" href="#">
-                        <i className="fa fa-code"></i>
-                    </a>
-                </div>
+        return (
+            <nav className="navbar navbar-default">
+                <div className="container-fluid">
+                    <div className="navbar-header">
+                        <button type="button" className="navbar-toggle collapsed"
+                                data-toggle="collapse" data-target="#header-content">
+                            <span className="sr-only">Toggle navigation</span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
+                        </button>
+                        <a className="navbar-brand" href="#">
+                            <i className="fa fa-rocket"></i>
+                        </a>
+                    </div>
 
-                <div className="collapse navbar-collapse" id="header-content">
-                    {adminMenu}
-                    <ul className="nav navbar-nav navbar-right">
-                        <li className="dropdown">
-                            <a href="#" className="dropdown-toggle" data-toggle="dropdown"
-                               role="button" aria-expanded="false"><span>{userName}</span>&nbsp;
-                                <span className="caret"></span></a>
-                            <ul className="dropdown-menu" role="menu">
-                                <li><Link to="/profile">{$.i18n.prop('profile')}</Link></li>
-                                <li><Link to={'/preferences'}>{$.i18n.prop('preferences')}</Link></li>
-                                <li className="divider"></li>
-                                <li>
-                                    <form action={'/logout'} method="post">
-                                        <input type="submit" value={$.i18n.prop('logout')} className="btn btn-link"/>
-                                        <input type="hidden" name="_csrf" value={app.csrf}/>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                    <div className="collapse navbar-collapse" id="header-content">
+                        {adminMenu}
+                        <ul className="nav navbar-nav navbar-right">
+                            <li className="dropdown">
+                                <a href="#" className="dropdown-toggle" data-toggle="dropdown"
+                                   role="button" aria-expanded="false"><span>{userName}</span>&nbsp;
+                                    <span className="caret"></span></a>
+                                <ul className="dropdown-menu" role="menu">
+                                    <li><Link to="/profile">{$.i18n.prop('profile')}</Link></li>
+                                    <li><Link to={'/preferences'}>{$.i18n.prop('preferences')}</Link></li>
+                                    <li className="divider"></li>
+                                    <li>
+                                        <form action={'/logout'} method="post">
+                                            <input type="submit" value={$.i18n.prop('logout')} className="btn btn-link"/>
+                                            <input type="hidden" name="_csrf" value={app.csrf}/>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>)
+            </nav>
+        )
     }
 }
 
