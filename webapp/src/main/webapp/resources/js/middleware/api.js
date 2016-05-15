@@ -126,7 +126,7 @@ export function denormalize(state, entityPath, schema) {
         return null;
     }
 
-    return _denormalize(entity, state.entities, schema);
+    return _denormalize(entity, state, schema);
 }
 
 // Action key that carries API call info interpreted by this Redux middleware.

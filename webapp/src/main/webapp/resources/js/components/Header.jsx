@@ -7,11 +7,11 @@ import hasRole from '../functions/hasRole'
 class Header extends Component {
 
     render() {
-        let principalName = this.props.principal ? this.props.principal.fullName : "";
         let adminMenu = null;
-        let principal = this.props.principal;
+        let user = this.props.user;
+        let userName = user ? user.fullName : "";
 
-        if (principal && hasRole(principal, 'ADMIN')) {
+        if (user && hasRole(user, 'ADMIN')) {
             adminMenu = (
                 <ul className="nav navbar-nav navbar-left">
                     <li className="dropdown">
@@ -37,7 +37,7 @@ class Header extends Component {
                         <span className="icon-bar"></span>
                     </button>
                     <a className="navbar-brand" href="#">
-                        <img alt="Brand" src="/images/logo.jpg"/>
+                        <i className="fa fa-code"></i>
                     </a>
                 </div>
 
@@ -46,7 +46,7 @@ class Header extends Component {
                     <ul className="nav navbar-nav navbar-right">
                         <li className="dropdown">
                             <a href="#" className="dropdown-toggle" data-toggle="dropdown"
-                               role="button" aria-expanded="false"><span>{principalName}</span>&nbsp;
+                               role="button" aria-expanded="false"><span>{userName}</span>&nbsp;
                                 <span className="caret"></span></a>
                             <ul className="dropdown-menu" role="menu">
                                 <li><Link to="/profile">{$.i18n.prop('profile')}</Link></li>
@@ -68,7 +68,7 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-    principal: PropTypes.object
+    user: PropTypes.object
 };
 
 export default Header;

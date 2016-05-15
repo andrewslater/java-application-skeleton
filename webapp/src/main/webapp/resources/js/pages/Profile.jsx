@@ -27,30 +27,30 @@ module.exports = React.createClass({
     },
 
     onFullNameSubmit: function(fullName) {
-        if (fullName != this.state.principal.fullName) {
+        if (fullName != this.state.user.fullName) {
             this.patchUser({fullName: fullName});
         }
     },
 
     onEmailSubmit: function(email) {
-        if (email != this.state.principal.email) {
+        if (email != this.state.user.email) {
             this.patchUser({email: email});
         }
     },
 
     patchUser: function(properties) {
-        this.getFlux().actions.users.patchUser(this.state.principal.userId, properties);
+        this.getFlux().actions.users.patchUser(this.state.user.userId, properties);
     },
 
     uploadAvatar: function(dataURI) {
-        this.getFlux().actions.users.uploadAvatar(this.state.principal.userId, dataURI);
+        this.getFlux().actions.users.uploadAvatar(this.state.user.userId, dataURI);
     },
 
     render: function() {
 
-        var principal = this.state.principal;
+        var principal = this.state.user;
 
-        if (!this.state.principal) {
+        if (!this.state.user) {
             return <Spinner />;
         }
 
