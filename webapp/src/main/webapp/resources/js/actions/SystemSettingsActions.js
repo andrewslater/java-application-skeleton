@@ -1,34 +1,28 @@
-import constants from '../constants'
+import { Schemas } from '../middleware/api'
+import { generateApiAction } from "./factories/RestActionFactory"
 
-module.exports = {
+export const LOAD_SYSTEM_SETTINGS = "LOAD_SYSTEM_SETTINGS";
+export const LOAD_SYSTEM_SETTINGS_SUCCESS = "LOAD_SYSTEM_SETTINGS_SUCCESS";
+export const LOAD_SYSTEM_SETTINGS_FAIL = "LOAD_SYSTEM_SETTINGS_FAIL";
 
-    loadSettings: function() {
-        this.dispatch(constants.ADMIN_LOAD_SETTINGS);
+export function loadSettings() {
+    return generateApiAction({
+        action: LOAD_SYSTEM_SETTINGS,
+        endpoint: "admin/settings",
+        schema: Schemas.SYSTEM_SETTINGS
+    });
+}
 
-        app.client.get("admin/settings", {
-            success: function(data, status) {
-                this.dispatch(constants.ADMIN_LOAD_SETTINGS_SUCCESS, {settings: data});
-            }.bind(this),
+export const PATCH_SYSTEM_SETTINGS = "PATCH_SYSTEM_SETTINGS";
+export const PATCH_SYSTEM_SETTINGS_SUCCESS = "PATCH_SYSTEM_SETTINGS_SUCCESS";
+export const PATCH_SYSTEM_SETTINGS_FAIL = "PATCH_SYSTEM_SETTINGS_FAIL";
 
-            error: function(error) {
-                this.dispatch(constants.ADMIN_LOAD_SETTINGS_FAIL, {error: error.responseJSON});
-            }.bind(this)
-        });
-    },
-
-    saveSettings: function(settings) {
-        this.dispatch(constants.ADMIN_SAVE_SETTINGS, {settings: settings});
-
-        app.client.patch("admin/settings", {
-            data: JSON.stringify(settings),
-
-            success: function(data, status) {
-                this.dispatch(constants.ADMIN_SAVE_SETTINGS_SUCCESS, {settings: data});
-            }.bind(this),
-
-            error: function(error) {
-                this.dispatch(constants.ADMIN_SAVE_SETTINGS_FAIL, {error: error.responseJSON});
-            }.bind(this)
-        })
-    }
-};
+export function patchSettings(settings) {
+    return generateApiAction({
+        action: PATCH_SYSTEM_SETTINGS,
+        endpoint: "admin/settings",
+        method: "PATCH",
+        data: JSON.stringify(settings),
+        schema: Schemas.SYSTEM_SETTINGS
+    });
+}

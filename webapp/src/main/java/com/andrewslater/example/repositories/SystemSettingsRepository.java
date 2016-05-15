@@ -18,11 +18,11 @@ public class SystemSettingsRepository {
     private EntityManager entityManager;
 
     public SystemSettings getSystemSettings() {
-        return entityManager.find(SystemSettings.class, 1l);
+        return entityManager.find(SystemSettings.class, 1);
     }
 
     @Transactional
-    public SystemSettings updateSystemSettings(SystemSettings systemSettings) {
+    public SystemSettings saveSystemSettings(SystemSettings systemSettings) {
         entityManager.merge(systemSettings);
         entityManager.flush();
         return systemSettings;

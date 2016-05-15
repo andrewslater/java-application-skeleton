@@ -1,6 +1,11 @@
 package com.andrewslater.example.models;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.andrewslater.example.annotations.Patchable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,34 +18,54 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "system_settings")
-public class SystemSettings {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class SystemSettings implements Serializable {
+
     private static final Logger LOG = LoggerFactory.getLogger(SystemSettings.class);
 
     @Id
-    private Long id = 1l;
+    private Integer id = 1;
 
     @Column(name = "allow_registration", nullable = false)
+    @Patchable
     private boolean allowRegistration;
 
     @Column(name = "require_email_confirmation", nullable = false)
+    @Patchable
     private boolean requireEmailConfirmation;
 
     @Column(name = "restrict_registration_domains", nullable = false)
+    @Patchable
     private boolean restrictRegistrationDomains;
 
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "system_settings_allowed_domains", joinColumns = @JoinColumn(name = "settings_id"))
     @Column(name = "domain", nullable = false)
-    private Set<String> allowedDomains;
+    @Patchable
+    private Set<String> allowedDomains = new HashSet<>();
 
     @OneToOne
     @JoinColumn(name = "active_volume_id")
-    @JsonIgnore
+    @Patchable
     private Volume activeVolume;
+
+    @Column(name = "aws_access_key")
+    @Patchable
+    private String awsAccessKey;
+
+    @Column(name = "aws_secret_access_key")
+    @Patchable
+    private String awsSecretAccessKey;
+
+    public Integer getId() {
+        return id;
+    }
 
     public boolean isAllowRegistration() {
         return allowRegistration;
@@ -81,4 +106,66 @@ public class SystemSettings {
     public void setActiveVolume(Volume activeVolume) {
         this.activeVolume = activeVolume;
     }
+
+    public String getAwsAccessKey() {
+        return awsAccessKey;
+    }
+
+    public void setAwsAccessKey(String awsAccessKey) {
+        this.awsAccessKey = awsAccessKey;
+    }
+
+    public String getAwsSecretAccessKey() {
+        return awsSecretAccessKey;
+    }
+
+    public void setAwsSecretAccessKey(String awsSecretAccessKey) {
+        this.awsSecretAccessKey = awsSecretAccessKey;
+    }
+
+    public AWSCredentials getAWSCredentials() {
+        return new AWSCredentials() {
+            @Override public String getAWSAccessKeyId() {
+                return awsAccessKey;
+            }
+
+            @Override public String getAWSSecretKey() {
+                return awsSecretAccessKey;
+            }
+        };
+    }
+
+    public boolean equals(Object obj) {
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        SystemSettings rhs = (SystemSettings) obj;
+        return new EqualsBuilder()
+            .appendSuper(super.equals(obj))
+            .append(id, rhs.id)
+            .append(allowRegistration, rhs.allowRegistration)
+            .append(requireEmailConfirmation, rhs.requireEmailConfirmation)
+            .append(restrictRegistrationDomains, rhs.restrictRegistrationDomains)
+            .append(allowedDomains, rhs.allowedDomains)
+            .append(activeVolume, rhs.activeVolume)
+            .append(awsAccessKey, rhs.awsAccessKey)
+            .append(awsSecretAccessKey, rhs.awsSecretAccessKey)
+            .isEquals();
+    }
+
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(id)
+            .append(allowRegistration)
+            .append(requireEmailConfirmation)
+            .append(restrictRegistrationDomains)
+            .append(allowedDomains)
+            .append(activeVolume)
+            .append(awsAccessKey)
+            .append(awsSecretAccessKey)
+            .toHashCode();
+    }
+
+
 }

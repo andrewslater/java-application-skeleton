@@ -1,5 +1,6 @@
 package com.andrewslater.example.services;
 
+import com.andrewslater.example.exceptions.VolumeException;
 import com.andrewslater.example.models.SystemSettings;
 import com.andrewslater.example.models.User;
 import com.andrewslater.example.models.UserFile;
@@ -11,12 +12,13 @@ import org.apache.tika.mime.MimeTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDateTime;
 
 @Service
@@ -27,37 +29,40 @@ public class UserFilesService {
     private UserFilesRepository repository;
 
     @Autowired
-    private SystemSettings systemSettings;
+    private SystemSettingsService systemSettingsService;
+
+    @Autowired
+    private VolumeService volumeService;
+
+    @Value("${user-files.random-directory-depth}")
+    private Integer randomDirectoryDepth;
+
+    public UserFile createPublicUserFile(User user, String filename, BufferedImage image) {
+        return createUserFile(user, filename, image, true);
+    }
 
     public UserFile createUserFile(User user, String filename, BufferedImage image) {
-        UserFile userFile = createUserFile(user, filename);
+        return createUserFile(user, filename, image, false);
+    }
 
-        userFile.setMimeType("image/png");
-        File file = getFile(userFile);
+    public UserFile createUserFile(User user, String filename, BufferedImage image, boolean isPublic) {
+        UserFile userFile = createUserFile(user, filename, isPublic);
+        String mimeType = "image/png";
 
         try {
-            ensureDirectoriesExist(file);
-
-            if (!ImageIO.write(image, getImageFormat(userFile.getMimeType()), file)) {
-                repository.delete(userFile);
-                throw new RuntimeException("Failed to write image to disk: " + file.getAbsolutePath());
-            }
-        } catch (IOException ex) {
+            Long bytesWritten = volumeService.saveImageToVolume(userFile.getVolume(), image, userFile.getStoragePath());
+            userFile.setMimeType(mimeType);
+            userFile.setSizeInBytes(bytesWritten);
+            userFile.setStatus(UserFile.Status.AVAILABLE);
+        } catch (VolumeException ex) {
             repository.delete(userFile);
-            throw new RuntimeException("Failed to write UserFile to disk: " + ex.getMessage(), ex);
         }
-
-        userFile.setSizeInBytes(file.length());
-        userFile.setStatus(UserFile.Status.AVAILABLE);
 
         return repository.save(userFile);
     }
 
-    private String getImageFormat(String mimeType) {
-        return mimeType.replace("image/", "");
-    }
-
     public File getFile(UserFile userFile) {
+
         if (!userFile.getVolume().getType().equals(VolumeType.LOCAL_FILESYSTEM)) {
             throw new RuntimeException("UserFile is not stored on a volume of type LOCAL_FILESYSTEM");
         }
@@ -75,21 +80,17 @@ public class UserFilesService {
         return new File(destDir, filename);
     }
 
-    private void ensureDirectoriesExist(File file) throws IOException {
-        File parent = file.getParentFile();
-        if (!parent.mkdirs()) {
-            throw new IOException("Unable to create directory: " + parent.getAbsolutePath());
-        }
-    }
+    private UserFile createUserFile(User user, String filename, boolean isPublic) {
+        SystemSettings systemSettings = systemSettingsService.getSystemSettings();
 
-    private UserFile createUserFile(User user, String filename) {
+        if (systemSettings.getActiveVolume() == null) {
+            throw new VolumeException("No active volume available");
+        }
+
         UserFile userFile = new UserFile();
         LocalDateTime creationDate = LocalDateTime.now();
 
-        userFile.setPath(String.format("%s/%s/%s",
-            RandomStringUtils.randomAlphanumeric(2).toLowerCase(),
-            RandomStringUtils.randomAlphanumeric(2).toLowerCase(),
-            RandomStringUtils.randomAlphanumeric(2).toLowerCase()));
+        userFile.setPath(generateRandomPath());
         userFile.setName(filename);
         userFile.setCreatedAt(creationDate);
         userFile.setUpdatedAt(creationDate);
@@ -97,6 +98,22 @@ public class UserFilesService {
         userFile.setStatus(UserFile.Status.SAVING);
         userFile.setSizeInBytes(0l);
         userFile.setUser(user);
+        userFile.setIsPublic(isPublic);
+
         return repository.save(userFile);
+    }
+
+    public URL getURL(UserFile userFile) {
+        return volumeService.getURL(userFile.getVolume(), userFile.getStoragePath());
+    }
+
+    private String generateRandomPath() {
+        String subdir = "";
+
+        for (int i = 0; i < randomDirectoryDepth; i++) {
+            subdir += RandomStringUtils.randomAlphanumeric(2).toLowerCase() + "/";
+        }
+        subdir = StringUtils.trimTrailingCharacter(subdir, '/');
+        return subdir;
     }
 }

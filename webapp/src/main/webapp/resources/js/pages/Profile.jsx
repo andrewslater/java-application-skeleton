@@ -1,81 +1,83 @@
-import util from 'util'
 import _ from 'lodash'
 import React, { Component, PropTypes } from 'react'
-import Fluxxor from 'fluxxor'
+import { connect } from 'react-redux'
 import Formsy from 'formsy-react'
 
 import app from '../app'
+import { Schemas, denormalize } from '../middleware/api'
+import { patchUser, uploadAvatar } from '../actions/UserActions'
+
 import APIClient from '../APIClient'
 import Avatar from '../components/Avatar'
 import AvatarEditor from '../components/AvatarEditor'
-import Spinner from '../components/Spinner'
 import InlineTextInput from '../components/form/InlineTextInput'
+import Spinner from '../components/Spinner'
 
-var FluxMixin = Fluxxor.FluxMixin(React),
-    StoreWatchMixin = Fluxxor.StoreWatchMixin;
+class Profile extends Component {
 
-module.exports = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin("UsersStore", "PrincipalAvatarStore")],
-
-    getStateFromFlux: function() {
-        var usersStore = this.getFlux().store("UsersStore");
-        var avatarStore = this.getFlux().store("PrincipalAvatarStore");
-        return {
-            principal: usersStore.getPrincipalUser(),
-            avatarUploadProgress: avatarStore.uploadProgress
-        }
-    },
-
-    onFullNameSubmit: function(fullName) {
-        if (fullName != this.state.user.fullName) {
+    onFullNameSubmit(fullName) {
+        if (fullName != this.props.user.fullName) {
             this.patchUser({fullName: fullName});
         }
-    },
+    }
 
-    onEmailSubmit: function(email) {
-        if (email != this.state.user.email) {
+    onEmailSubmit(email) {
+        if (email != this.props.user.email) {
             this.patchUser({email: email});
         }
-    },
+    }
 
-    patchUser: function(properties) {
-        this.getFlux().actions.users.patchUser(this.state.user.userId, properties);
-    },
+    patchUser(properties) {
+        this.props.patchUser(Object.assign({}, properties, { userId: this.props.user.userId }));
+    }
 
-    uploadAvatar: function(dataURI) {
-        this.getFlux().actions.users.uploadAvatar(this.state.user.userId, dataURI);
-    },
+    uploadAvatar(dataURI) {
+        this.props.uploadAvatar(this.props.user.userId, dataURI);
+    }
 
-    render: function() {
+    render() {
+        const user = this.props.user;
 
-        var principal = this.state.user;
-
-        if (!this.state.user) {
+        if (!user) {
             return <Spinner />;
         }
 
         return (
             <div className="row">
                 <div className="col-md-3">
-                    <AvatarEditor user={principal}
-                                  uploadAction={this.uploadAvatar}
-                                  uploadProgress={this.state.avatarUploadProgress} />
+                    <AvatarEditor user={user}
+                                  onSubmit={this.uploadAvatar.bind(this)} />
                 </div>
-                <Formsy.Form onSubmit={this.submitForm} onChange={this.onFormChange} mapping={this.mapInputs}>
                 <div className="col-md-9">
                     <h1>
-                        <InlineTextInput value={principal.fullName}
-                                         onSubmit={this.onFullNameSubmit}
+                        <InlineTextInput value={user.fullName}
+                                         onSubmit={this.onFullNameSubmit.bind(this)}
                                          name="fullName" />
                     </h1>
                     <h3>
-                        <InlineTextInput value={principal.email}
-                                         onSubmit={this.onEmailSubmit}
+                        <InlineTextInput value={user.email}
+                                         onSubmit={this.onEmailSubmit.bind(this)}
                                          name="email" />
                     </h3>
                 </div>
-                </Formsy.Form>
             </div>
         );
     }
-});
+}
+
+Profile.propTypes = {
+    user: PropTypes.object,
+    patchUser: PropTypes.func.isRequired,
+    uploadAvatar: PropTypes.func.isRequired
+};
+
+const mapStateToProps = (state) => {
+    return {
+        user: denormalize(state, `entities.users.${state.principalUserId}`, Schemas.USER)
+    }
+};
+
+export default connect(mapStateToProps, {
+    patchUser,
+    uploadAvatar
+})(Profile)

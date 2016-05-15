@@ -1,78 +1,69 @@
-import constants from '../constants'
-    app = require('../app');
+import { CALL_API, Schemas } from '../middleware/api'
+import { generateApiAction } from "./factories/RestActionFactory"
 
-module.exports = {
+export const LOAD_USER = "LOAD_USER";
+export const LOAD_USER_SUCCESS = "LOAD_USER_SUCCESS";
+export const LOAD_USER_FAIL = "LOAD_USER_FAIL";
 
-    patchUser: function(userId, properties) {
-        this.dispatch(constants.PATCH_USER, {userId: userId});
+export function loadUser(userId) {
+    return generateApiAction({
+        action: LOAD_USER,
+        endpoint: `user/${userId}`,
+        schema: Schemas.USER
+    });
+}
 
-        app.client.patch("user/" + userId, {
-            data: JSON.stringify(properties),
+export const PATCH_USER = "PATCH_USER";
+export const PATCH_USER_SUCCESS = "PATCH_USER_SUCCESS";
+export const PATCH_USER_FAIL = "PATCH_USER_FAIL";
 
-            success: function(data, status) {
-                this.dispatch(constants.PATCH_USER_SUCCESS, {user: data});
-            }.bind(this),
+export function patchUser(user) {
+    return generateApiAction({
+        action: PATCH_USER,
+        endpoint: `user/${user.userId}`,
+        method: "PATCH",
+        data: JSON.stringify(user),
+        schema: Schemas.USER
+    });
+}
 
-            error: function(error) {
-                this.dispatch(constants.PATCH_USER_FAIL, {error: error.responseJSON});
-            }.bind(this)
-        });
-    },
+export const RESEND_CONFIRMATION_EMAIL = "RESEND_CONFIRMATION_EMAIL";
+export const RESEND_CONFIRMATION_EMAIL_SUCCESS = "RESEND_CONFIRMATION_EMAIL_SUCCESS";
+export const RESEND_CONFIRMATION_EMAIL_FAIL = "RESEND_CONFIRMATION_EMAIL_FAIL";
 
-    loadUser: function(userId) {
-        this.dispatch(constants.LOAD_USER, {userId: userId});
+export function resendConfirmationEmail(userId) {
+    return generateApiAction({
+        action: RESEND_CONFIRMATION_EMAIL,
+        method: "POST",
+        endpoint: `user/${userId}/confirmation-email`,
+        schema: Schemas.USER
+    })
+}
 
-        app.client.get("user/" + userId, {
-            success: function(data, status) {
-                this.dispatch(constants.LOAD_USER_SUCCESS, {user: data});
-            }.bind(this),
+export const CANCEL_CONFIRMATION_EMAIL = "CANCEL_CONFIRMATION_EMAIL";
+export const CANCEL_CONFIRMATION_EMAIL_SUCCESS = "CANCEL_CONFIRMATION_EMAIL_SUCCESS";
+export const CANCEL_CONFIRMATION_EMAIL_FAIL = "RESEND_CONFIRMATION_EMAIL_FAIL";
 
-            error: function(error) {
-                this.dispatch(constants.LOAD_USER_FAIL, {userId: userId, error: error.responseJSON});
-            }.bind(this)
-        });
-    },
+export function cancelConfirmationEmail(userId) {
+    return generateApiAction({
+        action: CANCEL_CONFIRMATION_EMAIL,
+        method: "DELETE",
+        endpoint: `user/${userId}/confirmation-email`,
+        schema: Schemas.USER
+    });
+}
 
-    loadPrincipalUser: function() {
-        this.dispatch(constants.LOAD_PRINCIPAL_USER);
-        app.client.get("user", {
-            success: function(data, status) {
-                this.dispatch(constants.LOAD_PRINCIPAL_USER_SUCCESS, {user: data});
-                this.dispatch(constants.LOAD_USER_SUCCESS, {user: data});
-            }.bind(this),
+export const UPLOAD_AVATAR = "UPLOAD_AVATAR";
+export const UPLOAD_AVATAR_SUCCESS = "UPLOAD_AVATAR_SUCCESS";
+export const UPLOAD_AVATAR_FAIL = "UPLOAD_AVATAR_FAIL";
 
-            error: function(error) {
-                this.dispatch(constants.LOAD_PRINCIPAL_USER_FAIL, {error: error.responseJSON});
-            }.bind(this)
-        });
-    },
-
-    uploadAvatar: function(userId, imageData) {
-        this.dispatch(constants.UPLOAD_AVATAR);
-        app.client.post("user/" + userId + "/avatar", {
-
-            data: imageData,
-            contentType: "image/png",
-
-            success: function (data, status) {
-                this.dispatch(constants.UPLOAD_AVATAR_SUCCESS, {user: data});
-                this.dispatch(constants.LOAD_USER_SUCCESS, {user: data});
-            }.bind(this),
-
-            error: function (error) {
-                this.dispatch(constants.UPLOAD_AVATAR_FAIL, {error: error.responseJSON});
-            }.bind(this),
-
-            xhr: function () {
-                var xhr = new window.XMLHttpRequest();
-                xhr.addEventListener("progress", function (event) {
-                    if (event.lengthComputable) {
-                        var progressPercentage = Math.round((event.loaded * 100) / event.total);
-                        this.dispatch(constants.UPLOAD_AVATAR_PROGRESS, {progress: progressPercentage});
-                    }
-                }.bind(this), false);
-                return xhr;
-            }
-        });
-    }
-};
+export function uploadAvatar(userId, imageData) {
+    return generateApiAction({
+        action: UPLOAD_AVATAR,
+        method: "POST",
+        data: imageData,
+        contentType: "image/png",
+        endpoint: `user/${userId}/avatar`,
+        schema: Schemas.USER
+    });
+}

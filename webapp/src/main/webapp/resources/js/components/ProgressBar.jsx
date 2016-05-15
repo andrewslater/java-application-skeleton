@@ -1,9 +1,10 @@
+import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 class ProgressBar extends Component {
 
     render() {
-        if (!this.props.percentComplete) {
+        if (this.props.percentComplete == null) {
             return null;
         }
 
@@ -11,9 +12,13 @@ class ProgressBar extends Component {
             width: this.props.percentComplete + '%'
         };
 
+        var classes = classNames("progress",
+            "progress-" + this.props.size,
+            {"active": this.props.percentComplete == 100});
+
         return (
-            <div className="progress">
-                <div className="progress-bar"
+            <div className={classes} {...this.props}>
+                <div className="progress-bar progress-bar-striped"
                      role="progressbar"
                      aria-valuenow={this.props.percentComplete}
                      aria-valuemin="0"
@@ -23,11 +28,16 @@ class ProgressBar extends Component {
             </div>
         );
     }
-
 }
 
 ProgressBar.propTypes = {
-    percentComplete: PropTypes.string
+    percentComplete: PropTypes.number,
+    size: PropTypes.string
+};
+
+ProgressBar.defaultProps = {
+    percentComplete: null,
+    size: "medium"
 };
 
 export default ProgressBar

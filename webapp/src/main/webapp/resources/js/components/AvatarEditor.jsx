@@ -31,7 +31,7 @@ class AvatarEditor extends Component {
             croppedImg: dataURI
         });
 
-        this.props.uploadAvatar(this.props.user.userId, dataURI);
+        this.props.onSubmit(dataURI, this.props.user.userId);
     }
 
     componentDidMount() {
@@ -91,7 +91,7 @@ class AvatarEditor extends Component {
 
     render() {
         var user = this.props.user;
-        var uploadProgress = user.uploadAvatarProgress;
+        var uploadProgress = null;
         var errorAlert = null;
 
         var uploadError = user.uploadAvatarError;
@@ -147,7 +147,7 @@ class AvatarEditor extends Component {
 
 AvatarEditor.propTypes = {
     user: PropTypes.object.isRequired,
-    uploadAvatar: PropTypes.func.isRequired
+    onSubmit: PropTypes.func.isRequired
 };
 
 export default AvatarEditor

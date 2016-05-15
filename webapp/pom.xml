@@ -144,6 +144,12 @@
             <artifactId>imgscalr-lib</artifactId>
         </dependency>
 
+        <!-- Amazon -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
