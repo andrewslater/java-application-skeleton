@@ -32,7 +32,7 @@ public class AdminSettingsAPIController {
     @RequestMapping(value = Mappings.ADMIN_API_SETTINGS, method = RequestMethod.PATCH)
     @JsonView(APIView.Internal.class)
     public HttpEntity<SystemSettings> saveSettings(@RequestBody SystemSettings settings) {
-        SystemSettings savedSettings = repository.updateSystemSettings(settings);
+        SystemSettings savedSettings = repository.saveSystemSettings(settings);
         return new ResponseEntity<>(savedSettings, HttpStatus.OK);
     }
 }
