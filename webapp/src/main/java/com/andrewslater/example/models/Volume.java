@@ -2,6 +2,7 @@ package com.andrewslater.example.models;
 
 import com.andrewslater.example.api.APIView;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
@@ -15,11 +16,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "volumes")
-public class Volume {
+public class Volume implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(Volume.class);
+
+    private static final long serialVersionUID = -886084576240856549L;
 
     @Id
     @Column(name = "id")
@@ -43,6 +48,13 @@ public class Volume {
     @JsonView(APIView.Internal.class)
     @Enumerated(EnumType.STRING)
     private VolumeStatus status;
+
+    @Column(name = "usage_in_bytes")
+    @JsonView(APIView.Internal.class)
+    private Long usageInBytes;
+
+    @Transient
+    private Long bytesAvailable;
 
     public Integer getVolumeId() {
         return volumeId;
@@ -84,6 +96,26 @@ public class Volume {
         this.status = status;
     }
 
+    public String getFullPath(String path) {
+        return String.format("%s/%s", StringUtils.stripStart(getPath(), "/"), path);
+    }
+
+    public Long getUsageInBytes() {
+        return usageInBytes;
+    }
+
+    public void setUsageInBytes(Long usageInBytes) {
+        this.usageInBytes = usageInBytes;
+    }
+
+    public Long getBytesAvailable() {
+        return bytesAvailable;
+    }
+
+    public void setBytesAvailable(Long bytesAvailable) {
+        this.bytesAvailable = bytesAvailable;
+    }
+
     public boolean equals(Object obj) {
         if (obj == null) { return false; }
         if (obj == this) { return true; }
@@ -98,16 +130,18 @@ public class Volume {
             .append(name, rhs.name)
             .append(path, rhs.path)
             .append(status, rhs.status)
+            .append(usageInBytes, rhs.usageInBytes)
             .isEquals();
     }
 
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
+        return new HashCodeBuilder(109, 151)
             .append(volumeId)
             .append(type)
             .append(name)
             .append(path)
             .append(status)
+            .append(usageInBytes)
             .toHashCode();
     }
 }

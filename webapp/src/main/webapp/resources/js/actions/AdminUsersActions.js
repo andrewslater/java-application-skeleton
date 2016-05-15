@@ -1,6 +1,6 @@
 var util = require('util');
-var _ = require("lodash");
-var constants = require("../constants");
+import _ from 'lodash'
+import constants from '../constants'
 var app = require('../app');
 
 module.exports = {

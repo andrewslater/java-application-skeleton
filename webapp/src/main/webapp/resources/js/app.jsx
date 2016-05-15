@@ -1,18 +1,19 @@
-var $ = require("jquery"),
-    _ = require("lodash"),
-    React = require("react"),
-    ReactDOM = require("react-dom"),
-    ReactRouter = require("react-router"),
-    APIClient = require("./APIClient"),
-    Spinner = require("./components/Spinner");
+import $ from 'jquery'
+import _ from 'lodash'
+import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { Router, Route, browserHistory } from 'react-router'
+import { push, replace, syncHistoryWithStore } from 'react-router-redux'
 
 require("./stylesheets");
 require("i18n");
 require("bootstrap");
 
-
-var Router = ReactRouter.Router,
-    Route = ReactRouter.Route;
+import configureStore from './store/configureStore';
+import { loadPrincipalUser } from './actions/PrincipalActions'
+import APIClient from './APIClient'
+import Spinner from './components/Spinner'
 
 /**
  * This is the main entry point for the client-side browser application.
@@ -29,16 +30,19 @@ module.exports = {
     run: function(csrf) {
         ReactDOM.render(<Spinner />, document.getElementById("app"));
 
+        this.store = configureStore();
+        this.history = syncHistoryWithStore(browserHistory, this.store);
+
         this.csrf = csrf;
         this.configureI18n();
         this.disableFileDropping();
 
         if (!localStorage.getItem("apiToken")) {
 
-            $.get("/ajax/token", function(data, status) {
+            $.get("/ajax/token", (data) => {
                     localStorage.setItem("apiToken", data.access_token);
                     this.renderRoutes();
-                }.bind(this)
+                }
             );
 
         } else {
@@ -52,25 +56,37 @@ module.exports = {
      * page as the user navigates between pages.
      */
     renderRoutes: function() {
-        var routes = require("./routes");
-        var flux = require("./flux");
-        var history = require('history/lib/createBrowserHistory')();
+        const routes = require('./routes');
 
         this.apiToken = localStorage.getItem("apiToken");
-        this.client = new APIClient("/api/", this.apiToken, csrf);
-        this.flux = flux;
+        this.client = new APIClient("/api/", this.apiToken);
 
         this.configureAutoTokenRefresh();
-        flux.actions.users.loadPrincipalUser();
+        this.store.dispatch(loadPrincipalUser());
 
         var createElement = function(Component, props) {
-            return <Component {...props} flux={flux} />
+            return <Component {...props} />
         };
 
         ReactDOM.render(
-            <Router createElement={createElement} history={history} routes={routes} />,
+            <Provider store={this.store}>
+                <Router createElement={createElement} history={this.history} routes={routes} />
+            </Provider>,
             document.getElementById("app")
         );
+    },
+
+    pushHistory: function(location, params) {
+        setTimeout(() => {
+            this.store.dispatch(push({pathname: location, query: params}));
+        }, 1);
+
+    },
+
+    replaceHistory: function(location, params) {
+        setTimeout(() => {
+            this.store.dispatch(replace({pathname: location, query: params}));
+        }, 1);
     },
 
     /**

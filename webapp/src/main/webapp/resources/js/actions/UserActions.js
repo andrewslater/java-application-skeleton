@@ -1,4 +1,4 @@
-var constants = require("../constants"),
+import constants from '../constants'
     app = require('../app');
 
 module.exports = {

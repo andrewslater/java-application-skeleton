@@ -1,7 +1,7 @@
-var util = require("util");
-var React = require("react");
-var Fluxxor = require("fluxxor");
-var AdminUsersList = require("../../components/AdminUsersList");
+import util from 'util'
+import React, { Component, PropTypes } from 'react'
+import Fluxxor from 'fluxxor'
+import AdminUsersList from '../../components/AdminUsersList'
 
 var FluxMixin = Fluxxor.FluxMixin(React);
 

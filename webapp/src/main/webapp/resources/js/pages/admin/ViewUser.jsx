@@ -1,8 +1,8 @@
-var React = require("react"),
-    Fluxxor = require("fluxxor");
+import React, { Component, PropTypes } from 'react'
+import Fluxxor from 'fluxxor'
 
-var Avatar = require("../../components/Avatar"),
-    Spinner = require("../../components/Spinner");
+import Avatar from '../../components/Avatar'
+import Spinner from '../../components/Spinner'
 
 var FluxMixin = Fluxxor.FluxMixin(React),
 StoreWatchMixin = Fluxxor.StoreWatchMixin;

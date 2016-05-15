@@ -1,13 +1,13 @@
-var $ = require("jquery"),
-    React = require("react"),
-    Fluxxor = require("fluxxor"),
-    Formsy = require("formsy-react"),
-    FormData = require("form-data-to-object"),
-    classnames = require("classnames");
+import $ from 'jquery'
+import React, { Component, PropTypes } from 'react'
+import Fluxxor from 'fluxxor'
+import Formsy from 'formsy-react'
+import FormData from 'form-data-to-object'
+import classnames from 'classnames'
 
-var Spinner = require("../../components/Spinner"),
-    Checkbox = require("../../components/form/Checkbox"),
-    TextInput = require("../../components/form/TextInput");
+import Spinner from '../../components/Spinner'
+import Checkbox from '../../components/form/Checkbox'
+import TextInput from '../../components/form/TextInput'
 
 
 var FluxMixin = Fluxxor.FluxMixin(React),

@@ -1,15 +1,15 @@
-var util = require("util"),
-    _ = require("lodash"),
-    React = require("react"),
-    Fluxxor = require("fluxxor"),
-    Formsy = require("formsy-react");
+import util from 'util'
+import _ from 'lodash'
+import React, { Component, PropTypes } from 'react'
+import Fluxxor from 'fluxxor'
+import Formsy from 'formsy-react'
 
-var app = require("../app"),
-    APIClient = require("../APIClient"),
-    Avatar = require("../components/Avatar"),
-    AvatarEditor = require("../components/AvatarEditor"),
-    Spinner = require("../components/Spinner"),
-    InlineTextInput = require("../components/form/InlineTextInput");
+import app from '../app'
+import APIClient from '../APIClient'
+import Avatar from '../components/Avatar'
+import AvatarEditor from '../components/AvatarEditor'
+import Spinner from '../components/Spinner'
+import InlineTextInput from '../components/form/InlineTextInput'
 
 var FluxMixin = Fluxxor.FluxMixin(React),
     StoreWatchMixin = Fluxxor.StoreWatchMixin;

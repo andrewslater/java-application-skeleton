@@ -1,9 +1,9 @@
-var util = require("util"),
-    _ = require("lodash"),
-    React = require("react"),
-    ReactRouter = require("react-router");
+import util from 'util'
+import _ from 'lodash'
+import React, { Component, PropTypes } from 'react'
+import ReactRouter from 'react-router'
 
-var Spinner = require("./Spinner");
+import Spinner from './Spinner'
 
 module.exports = React.createClass({
 

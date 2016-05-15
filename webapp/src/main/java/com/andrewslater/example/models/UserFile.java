@@ -1,7 +1,11 @@
 package com.andrewslater.example.models;
 
+import com.andrewslater.example.api.APIView;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
@@ -17,11 +21,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_files")
-public class UserFile {
+public class UserFile implements Serializable {
+
     private static final Logger LOG = LoggerFactory.getLogger(UserFile.class);
 
     public enum Status {UPLOADING, SAVING, AVAILABLE, SOFT_DELETED, HARD_DELETED;}
@@ -65,6 +71,10 @@ public class UserFile {
     @JsonFormat(pattern="yyyy-MM-dd")
     @Column(name = "updated_at", nullable = false, insertable = false, updatable = true)
     private LocalDateTime updatedAt;
+
+    @Column(name = "is_public", nullable = false)
+    @JsonView(APIView.Internal.class)
+    private Boolean isPublic;
 
     public Long getFileId() {
         return fileId;
@@ -147,7 +157,26 @@ public class UserFile {
     }
 
     public String getUrl() {
-        return "/user-file/" + getFileId() + ".png";
+        return "/user-file/" + getFileId();
+    }
+
+    public Boolean getIsPublic() {
+        return isPublic;
+    }
+
+    public void setIsPublic(Boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+
+    public String getStoragePath() {
+        String extension = FilenameUtils.getExtension(getName());
+        String fullPath = String.format("%s/%d", getPath(), getFileId());
+
+        if (!StringUtils.isEmpty(extension)) {
+            fullPath += "." + extension;
+        }
+
+        return fullPath;
     }
 
     public boolean equals(Object obj) {
@@ -160,7 +189,8 @@ public class UserFile {
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(fileId, rhs.fileId)
-            .append(user, rhs.user)
+            //                TODO: Uncomment when upgrading to commons-lang:3.5 (https://issues.apache.org/jira/browse/LANG-456)
+            //            .append(user, rhs.user)
             .append(volume, rhs.volume)
             .append(path, rhs.path)
             .append(name, rhs.name)
@@ -169,13 +199,15 @@ public class UserFile {
             .append(status, rhs.status)
             .append(createdAt, rhs.createdAt)
             .append(updatedAt, rhs.updatedAt)
+            .append(isPublic, rhs.isPublic)
             .isEquals();
     }
 
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
+        return new HashCodeBuilder(577, 127)
             .append(fileId)
-            .append(user)
+            //                TODO: Uncomment when upgrading to commons-lang:3.5 (https://issues.apache.org/jira/browse/LANG-456)
+            //            .append(user)
             .append(volume)
             .append(path)
             .append(name)
@@ -184,6 +216,7 @@ public class UserFile {
             .append(status)
             .append(createdAt)
             .append(updatedAt)
+            .append(isPublic)
             .toHashCode();
     }
 }

@@ -1,14 +1,12 @@
-var React = require("react");
-var ReactRouter = require("react-router");
-var ListUsers = require("./pages/admin/ListUsers");
-var ViewUser = require("./pages/admin/ViewUser");
-var AdminDashboard = require("./pages/admin/AdminDashboard");
-var SystemSettings = require("./pages/admin/SystemSettings");
-var Preferences = require("./pages/Preferences");
-var Profile = require("./pages/Profile");
-var Home = require("./pages/Home");
-
-var Route = ReactRouter.Route;
+import React, { Component, PropTypes } from 'react'
+import { Route } from 'react-router'
+import ListUsers from './pages/admin/ListUsers'
+import ViewUser from './pages/admin/ViewUser'
+import AdminDashboard from './pages/admin/AdminDashboard'
+import SystemSettings from './pages/admin/SystemSettings'
+import Preferences from './pages/Preferences'
+import Profile from './pages/Profile'
+import Home from './pages/Home'
 
 var routes = (
     <Route component={Home} path="/">

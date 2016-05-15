@@ -1,5 +1,5 @@
-var React = require("react");
-var Bootstrap = require("react-bootstrap");
+import React, { Component, PropTypes } from 'react'
+import Bootstrap from 'react-bootstrap'
 
 module.exports = React.createClass({
 

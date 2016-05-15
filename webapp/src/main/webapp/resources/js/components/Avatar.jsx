@@ -1,17 +1,21 @@
-var React = require("react");
+import React, { Component, PropTypes } from 'react'
 
-var APIClient = require("../APIClient");
+import APIClient from '../APIClient'
 
-module.exports = React.createClass({
-    getDefaultProps: function() {
-        return {
-            size: 'small'
-        }
-    },
+class Avatar extends Component {
 
-    render: function() {
+    render() {
         var src = APIClient.getLink(this.props.user, "resource-avatar-" + this.props.size);
-        return (<img className="img-rounded"
-                     src={src} />);
+        return (
+            <img className="img-rounded"
+                 src={src} />
+        );
     }
-});
+
+}
+
+Avatar.defaultProps = {
+    size: 'small'
+};
+
+export default Avatar;

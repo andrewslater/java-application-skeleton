@@ -1,28 +1,18 @@
 "use strict";
 
-var $ = require("jquery"),
-    React = require("react"),
-    ReactDOM = require("react-dom"),
-    ReactBootstrap = require("react-bootstrap"),
-    isDataURL = require("../functions/isDataURL");
+import $ from 'jquery'
+import classNames from 'classnames'
+import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom'
+import { Button, Modal } from 'react-bootstrap'
 
-var Button = ReactBootstrap.Button,
-    Modal = ReactBootstrap.Modal;
+import isDataURL from '../functions/isDataURL'
 
-module.exports = React.createClass({
+class ImageCropper extends Component {
 
-    getDefaultProps: function() {
-        return {
-            width: 250,
-            height: 250,
-            zoom: 1,
-            closeMessage: $.i18n.prop('close'),
-            cropMessage: $.i18n.prop('crop-and-save')
-        }
-    },
-
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+        this.state = {
             dragging: false,
             image: {},
             mouse: {
@@ -32,9 +22,9 @@ module.exports = React.createClass({
             preview: null,
             zoom: 1
         }
-    },
+    }
 
-    fitImageToCanvas: function(width, height) {
+    fitImageToCanvas(width, height) {
         var scaledHeight, scaledWidth;
 
         var canvasAspectRatio = this.props.height / this.props.width;
@@ -51,9 +41,9 @@ module.exports = React.createClass({
         }
 
         return { width: scaledWidth, height: scaledHeight };
-    },
+    }
 
-    prepareImage: function(imageUri) {
+    prepareImage(imageUri) {
         var img = new Image();
         if (!isDataURL(imageUri)) img.crossOrigin = 'anonymous';
         img.onload = function() {
@@ -64,9 +54,9 @@ module.exports = React.createClass({
             this.setState({dragging: false, image: scaledImage, preview: this.toDataURL()});
         }.bind(this);
         img.src = imageUri;
-    },
+    }
 
-    mouseDownListener: function(e) {
+    mouseDownListener(e) {
         this.setState({
             image: this.state.image,
             dragging: true,
@@ -75,20 +65,20 @@ module.exports = React.createClass({
                 y: null
             }
         });
-    },
+    }
 
-    preventSelection: function(e) {
+    preventSelection(e) {
         if (this.state.dragging) {
             e.preventDefault();
             return false;
         }
-    },
+    }
 
-    mouseUpListener: function(e) {
+    mouseUpListener(e) {
         this.setState({ dragging: false, preview: this.toDataURL() });
-    },
+    }
 
-    mouseMoveListener: function(e) {
+    mouseMoveListener(e) {
         if (!this.state.dragging) return;
 
         var mouseX = e.clientX;
@@ -115,9 +105,9 @@ module.exports = React.createClass({
                 y: mouseY
             }
         });
-    },
+    }
 
-    boundedCoords: function(x, y, dx, dy) {
+    boundedCoords(x, y, dx, dy) {
         var newX = x - dx;
         var newY = y - dy;
 
@@ -149,40 +139,40 @@ module.exports = React.createClass({
         }
 
         return { x: x, y: y };
-    },
+    }
 
-    componentDidMount: function() {
-        var canvas = ReactDOM.findDOMNode(this.refs.canvas);
+    componentDidMount() {
+        var canvas = ReactDOM.findDOMNode(this.canvas);
         var context = canvas.getContext("2d");
         this.prepareImage(this.props.image);
 
         this.listeners = {
-            mousemove: this.mouseMoveListener,
-            mouseup: this.mouseUpListener,
-            mousedown: this.mouseDownListener
+            mousemove: this.mouseMoveListener.bind(this),
+            mouseup: this.mouseUpListener.bind(this),
+            mousedown: this.mouseDownListener.bind(this)
         };
 
         window.addEventListener("mousemove", this.listeners.mousemove, false);
         window.addEventListener("mouseup", this.listeners.mouseup, false);
         canvas.addEventListener("mousedown", this.listeners.mousedown, false);
-        document.onselectstart = this.preventSelection
-    },
+        document.onselectstart = this.preventSelection.bind(this)
+    }
 
     // make sure we clean up listeners when unmounted.
-    componentWillUnmount: function() {
-        var canvas = ReactDOM.findDOMNode(this.refs.canvas);
+    componentWillUnmount() {
+        var canvas = ReactDOM.findDOMNode(this.canvas);
         window.removeEventListener("mousemove", this.listeners.mousemove);
         window.removeEventListener("mouseup", this.listeners.mouseup);
         canvas.removeEventListener("mousedown", this.listeners.mousedown);
-    },
+    }
 
-    componentDidUpdate: function() {
-        var context = ReactDOM.findDOMNode(this.refs.canvas).getContext("2d");
+    componentDidUpdate() {
+        var context = ReactDOM.findDOMNode(this.canvas).getContext("2d");
         context.clearRect(0, 0, this.props.width, this.props.height);
         this.addImageToCanvas(context, this.state.image);
-    },
+    }
 
-    addImageToCanvas: function(context, image) {
+    addImageToCanvas(context, image) {
         if (!image.resource) return;
         context.save();
         context.globalCompositeOperation = "destination-over";
@@ -200,9 +190,9 @@ module.exports = React.createClass({
 
         context.drawImage( image.resource, x, y, image.width * this.state.zoom, image.height * this.state.zoom);
         context.restore();
-    },
+    }
 
-    toDataURL: function() {
+    toDataURL() {
         var canvas = document.createElement("canvas");
         var context = canvas.getContext("2d");
 
@@ -218,33 +208,38 @@ module.exports = React.createClass({
         });
 
         return canvas.toDataURL();
-    },
+    }
 
-    handleCrop: function() {
+    handleCrop() {
         var data = this.toDataURL();
         this.props.onCrop(data);
-    },
+    }
 
-    handleZoomUpdate: function() {
+    handleZoomUpdate() {
         var newstate = this.state;
-        newstate.zoom = ReactDOM.findDOMNode(this.refs.zoom).value;
+        newstate.zoom = ReactDOM.findDOMNode(this.zoom).value;
         this.setState(newstate);
-    },
+    }
 
-    render: function() {
+    render() {
+        var title = this.props.title || $.i18n.prop('crop-your-avatar');
+        var canvasClassNames = classNames({
+            "img-circle": this.props.maskMode == "circle",
+            "img-rounded": this.props.maskMode == "rounded"
+        });
         return (
-            <Modal show={this.props.show} onHide={this.props.onRequestHide} backdrop={false}>
+            <Modal show={this.props.show} onHide={this.props.onRequestHide.bind(this)} backdrop={false}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{$.i18n.prop('crop-your-avatar')}</Modal.Title>
+                    <Modal.Title>{title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="AvatarCropper-base">
                         <div className="AvatarCropper-canvas">
                             <div className="row">
-                                <canvas
-                                    ref="canvas"
-                                    width={this.props.width}
-                                    height={this.props.height}>
+                                <canvas className={canvasClassNames}
+                                        ref={(c) => this.canvas = c}
+                                        width={this.props.width}
+                                        height={this.props.height}>
                                 </canvas>
                             </div>
 
@@ -252,8 +247,8 @@ module.exports = React.createClass({
                                 <input
                                     type="range"
                                     name="zoom"
-                                    ref="zoom"
-                                    onChange={this.handleZoomUpdate}
+                                    ref={(c) => this.zoom = c}
+                                    onChange={this.handleZoomUpdate.bind(this)}
                                     style={{width: this.props.width}}
                                     min="1"
                                     max="3"
@@ -264,10 +259,10 @@ module.exports = React.createClass({
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.props.onRequestHide}>
+                    <Button onClick={this.props.onRequestHide.bind(this)}>
                         {this.props.closeMessage}
                     </Button>
-                    <Button bsStyle='primary' onClick={this.handleCrop}>
+                    <Button bsStyle='primary' onClick={this.handleCrop.bind(this)}>
                         {this.props.cropMessage}
                     </Button>
                 </Modal.Footer>
@@ -276,4 +271,14 @@ module.exports = React.createClass({
 
         );
     }
-});
+}
+
+ImageCropper.defaultProps = {
+    width: 250,
+    height: 250,
+    zoom: 1,
+    closeMessage: $.i18n.prop('close'),
+    cropMessage: $.i18n.prop('crop-and-save')
+};
+
+export default ImageCropper

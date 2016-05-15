@@ -1,86 +1,59 @@
-var _ = require("lodash"),
-    $ = require("jquery"),
-    util = require("util"),
-    React = require("react"),
-    ReactRouter = require("react-router"),
-    Fluxxor = require("fluxxor");
+import _ from 'lodash'
+import React, { Component, PropTypes } from 'react'
+import { Link } from 'react-router'
 
-var ActiveTable = require("./ActiveTable"),
-    APIClient = require("../APIClient"),
-    Avatar = require("./Avatar"),
-    TextInput = require("./form/TextInput");
+import ActiveTable from './ActiveTable'
+import APIClient from '../APIClient'
+import Avatar from './Avatar'
+import TextInput from './form/TextInput'
 
-var FluxMixin = Fluxxor.FluxMixin(React);
-var StoreWatchMixin = Fluxxor.StoreWatchMixin;
-var Link = ReactRouter.Link;
-var History = ReactRouter.History;
-var State = ReactRouter.State;
+class AdminUsersList extends Component {
 
-module.exports = React.createClass({
-    mixins: [FluxMixin, State, History, StoreWatchMixin("AdminUsersStore")],
-
-    getStateFromFlux: function() {
-        var store = this.getFlux().store("AdminUsersStore");
-        return {
-            loading: store.loading,
-            error: store.error,
-            page: store.page
-        };
-    },
-
-    loadPage: function(pageNum, sortQuery, filter) {
+    loadPage(pageNum, sortQuery, filter) {
         this.getFlux().actions.admin.users.loadUsers(pageNum, sortQuery, filter);
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.loadPage(this.props.page, this.props.sort, this.props.filter);
-    },
+    }
 
-    componentWillReceiveProps: function(nextProps) {
+    componentWillReceiveProps(nextProps) {
         this.loadPage(nextProps.page, nextProps.sort, nextProps.filter);
-    },
+    }
 
-    getDefaultProps: function() {
-        return {
-            page: 1,
-            sort: null,
-            filter: null
-        }
-    },
-
-    pageChangeCallback: function(pageNum) {
+    pageChangeCallback(pageNum) {
         this.pushHistoryState({
             page: pageNum,
             sort: this.props.sort,
             filter: this.props.filter
         });
-    },
+    }
 
-    sortChangeCallback: function(sort) {
+    sortChangeCallback(sort) {
         this.pushHistoryState({
             sort: sort,
             filter: this.props.filter
         });
-    },
+    }
 
-    filterChangeCallback: function(event) {
+    filterChangeCallback(event) {
         this.replaceHistoryState({
             filter: event.target.value,
             sort: this.props.sort
         })
-    },
+    }
 
-    pushHistoryState: function(query) {
+    pushHistoryState(query) {
         this.history.pushState(null, "/admin/users", APIClient.collapseQuery(query));
-    },
+    }
 
-    replaceHistoryState: function(query) {
+    replaceHistoryState(query) {
         this.history.replaceState(null, "/admin/users", APIClient.collapseQuery(query));
-    },
+    }
 
-    render: function() {
+    render() {
         var NameColumn = React.createClass({
-            render: function() {
+            render() {
                 var user = this.props.rowData;
                 return (
                     <div>
@@ -91,26 +64,26 @@ module.exports = React.createClass({
         });
 
         var EmailColumn = React.createClass({
-            render: function() {
+            render() {
                 var user = this.props.rowData;
                 return (<Link to={"/admin/users/" + user.userId}>{user.email}</Link>)
             }
         });
 
         var CreatedAtColumn = React.createClass({
-            render: function() {
+            render() {
                 return (<span>{this.props.rowData.createdAt}</span>)
             }
         });
 
         var LastLoginColumn = React.createClass({
-            render: function() {
+            render() {
                 return (<span>{this.props.rowData.lastLogin}</span>)
             }
         });
 
         var ActionsColumn = React.createClass({
-            render: function() {
+            render() {
                 return (<span><a>Edit</a></span>)
             }
         });
@@ -142,4 +115,12 @@ module.exports = React.createClass({
                              columns={columns} />
             </div>);
     }
-});
+}
+
+AdminUsersList.defaultProps = {
+    page: 1,
+    sort: null,
+    filter: null
+};
+
+export default AdminUsersList

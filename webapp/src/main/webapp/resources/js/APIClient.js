@@ -1,6 +1,6 @@
-var $ = require("jquery"),
-    _ = require("lodash"),
-    uuid = require("uuid-v4");
+import $ from 'jquery'
+import _ from 'lodash'
+import uuid from 'uuid-v4'
 
 function APIClient(baseUrl, apiToken) {
     this.baseUrl = baseUrl;

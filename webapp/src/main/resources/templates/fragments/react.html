@@ -36,9 +36,7 @@
 <script th:inline="javascript">
     //<![CDATA[
 
-    var csrf = /*[[${_csrf.token}]]*/ "";
-    var webpackMode = /*[[${webpackMode}]]*/ "";
-
+    const csrf = /*[[${_csrf.token}]]*/ "";
     app.run(csrf);
 
     //]]>

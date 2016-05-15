@@ -1,18 +1,18 @@
-var $ = require("jquery"),
-    Fluxxor = require("fluxxor");
+import $ from 'jquery'
+import Fluxxor from 'fluxxor'
 
-var app = require("./app"),
-    constants = require("./constants");
+import app from './app'
+import constants from './constants'
 
-var AdminUsersStore = require("./stores/AdminUsersStore"),
-    AdminUserStore = require("./stores/AdminUserStore"),
-    SystemSettingsStore = require("./stores/SystemSettingsStore"),
-    PrincipalAvatarStore = require("./stores/PrincipalAvatarStore"),
-    UsersStore = require("./stores/UsersStore");
+import AdminUsersStore from './stores/AdminUsersStore'
+import AdminUserStore from './stores/AdminUserStore'
+import SystemSettingsStore from './stores/SystemSettingsStore'
+import PrincipalAvatarStore from './stores/PrincipalAvatarStore'
+import UsersStore from './stores/UsersStore'
 
-var AdminUsersActions = require("./actions/AdminUsersActions"),
-    SystemSettingsActions = require("./actions/SystemSettingsActions"),
-    UserActions = require("./actions/UserActions");
+import AdminUsersActions from './actions/AdminUsersActions'
+import SystemSettingsActions from './actions/SystemSettingsActions'
+import UserActions from './actions/UserActions'
 
 var stores = {
     AdminUsersStore: new AdminUsersStore(),

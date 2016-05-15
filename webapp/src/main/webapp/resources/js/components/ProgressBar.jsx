@@ -1,13 +1,8 @@
-var React = require("react");
+import React, { Component, PropTypes } from 'react'
 
-module.exports = React.createClass({
-    getDefaultProps: function() {
-        return {
-            percentComplete: null
-        }
-    },
+class ProgressBar extends Component {
 
-    render: function() {
+    render() {
         if (!this.props.percentComplete) {
             return null;
         }
@@ -29,4 +24,10 @@ module.exports = React.createClass({
         );
     }
 
-});
+}
+
+ProgressBar.propTypes = {
+    percentComplete: PropTypes.string
+};
+
+export default ProgressBar

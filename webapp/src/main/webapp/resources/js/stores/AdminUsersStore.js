@@ -1,6 +1,6 @@
-var $ = require("jquery");
-var Fluxxor = require("fluxxor");
-var constants = require("../constants");
+import $ from 'jquery'
+import Fluxxor from 'fluxxor'
+import constants from '../constants'
 
 module.exports = Fluxxor.createStore({
     initialize: function() {

@@ -1,7 +1,7 @@
-var React = require("react");
-var ReactRouter = require("react-router");
-var Fluxxor = require("fluxxor");
-var Header = require("../components/Header");
+import React, { Component, PropTypes } from 'react'
+import ReactRouter from 'react-router'
+import Fluxxor from 'fluxxor'
+import Header from '../components/Header'
 
 var FluxMixin = Fluxxor.FluxMixin(React);
 
