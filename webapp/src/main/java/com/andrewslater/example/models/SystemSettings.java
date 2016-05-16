@@ -83,7 +83,7 @@ public class SystemSettings implements Serializable {
         this.allowedDomains = allowedDomains;
     }
 
-    public Boolean isRestrictRegistrationDomains() {
+    public Boolean getRestrictRegistrationDomains() {
         return restrictRegistrationDomains;
     }
 
@@ -91,7 +91,7 @@ public class SystemSettings implements Serializable {
         this.restrictRegistrationDomains = restrictRegistrationDomains;
     }
 
-    public Boolean isRequireEmailConfirmation() {
+    public Boolean getRequireEmailConfirmation() {
         return requireEmailConfirmation;
     }
 

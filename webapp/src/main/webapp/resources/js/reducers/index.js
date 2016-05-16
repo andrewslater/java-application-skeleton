@@ -4,7 +4,7 @@ import { routerReducer as routing } from 'react-router-redux'
 import { combineReducers } from 'redux'
 import merge from 'deeply'
 
-//import pagination from './pagination'
+import pagination from './pagination'
 import principalUserId from './principalUserId'
 
 // Updates an entity cache in response to any action with response.entities.
@@ -33,6 +33,7 @@ function errorMessage(state = null, action) {
 const rootReducer = combineReducers({
     entities,
     errorMessage,
+    pagination,
     principalUserId,
     routing
 });
