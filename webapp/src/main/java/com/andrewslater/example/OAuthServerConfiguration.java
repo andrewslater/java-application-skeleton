@@ -69,10 +69,10 @@ public class OAuthServerConfiguration {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .sessionFixation().none()
                     .and()
-                .requiresChannel()
-                    .anyRequest()
-                    .requiresSecure()
-                    .and()
+//                .requiresChannel()
+//                    .anyRequest()
+//                    .requiresSecure()
+//                    .and()
                 .addFilterAfter(new UserConfirmationAPIFilter(), SecurityContextHolderAwareRequestFilter.class);
         }
     }

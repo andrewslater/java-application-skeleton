@@ -73,6 +73,10 @@ creates a new database migration:
     
 # API Examples
 
+### Create OAuth2 Client
+
+    INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types, authorities) VALUES ('webapp', 'restservice', 'webapp-secret', 'read,write', 'password,refresh_token', 'USER');
+    
 ### Retrieve OAuth2 token
 
     curl -X POST -vu <client>:<secret> http://localhost:8080/skeleton/oauth/token -H "Accept: application/json" -d "password=<password>&username=<email>&grant_type=password&scope=read%20write"

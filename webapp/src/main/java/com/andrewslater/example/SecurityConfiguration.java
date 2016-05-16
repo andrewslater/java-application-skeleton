@@ -1,10 +1,10 @@
 package com.andrewslater.example;
 
 import com.andrewslater.example.models.SystemSettings;
-import com.andrewslater.example.repositories.SystemSettingsRepository;
-import com.andrewslater.example.security.ExampleAuthenticationSuccessHandler;
 import com.andrewslater.example.security.ApplicationUserDetailsService;
+import com.andrewslater.example.security.AuthenticationSuccessHandler;
 import com.andrewslater.example.security.UserConfirmationFilter;
+import com.andrewslater.example.services.SystemSettingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,7 +26,7 @@ import org.springframework.security.web.servletapi.SecurityContextHolderAwareReq
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled=true, jsr250Enabled=true)
 @EnableWebSecurity
-@Order(1)
+@Order(2)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(SecurityConfiguration.class);
@@ -34,15 +35,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private ApplicationUserDetailsService userDetailsService;
 
     @Autowired
-    private SystemSettingsRepository systemSettingsRepository;
+    private SystemSettingsService systemSettingsService;
 
     @Autowired
-    private ExampleAuthenticationSuccessHandler authenticationSuccessHandler;
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http
+            .requestMatchers()
+            .   regexMatchers("^(?!/api).*$")
+                .and()
             .authorizeRequests()
                 .antMatchers("/resources/**").permitAll()
                 .antMatchers("/js/**").permitAll()
@@ -54,7 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/register").anonymous()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user-file/**").hasRole("USER")
-                .antMatchers("/**").hasRole("USER")
+                .antMatchers("/**/**").hasRole("USER")
                 .anyRequest().fullyAuthenticated()
                 .and()
             .formLogin()
@@ -68,10 +72,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .logoutSuccessUrl("/")
                 .and()
-            .csrf().ignoringAntMatchers("/api/**")
+            .csrf()
+                .ignoringAntMatchers("/api/**")
                 .and()
             .rememberMe()
                 .and()
+//            .requiresChannel()
+//                .anyRequest()
+//                .requiresSecure()
+//                .and()
             .addFilterAfter(new UserConfirmationFilter(), SecurityContextHolderAwareRequestFilter.class);
     }
 
@@ -85,7 +94,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public SystemSettings systemSettings() {
-        return systemSettingsRepository.getSystemSettings();
+        return systemSettingsService.getSystemSettings();
     }
 
     @Override
