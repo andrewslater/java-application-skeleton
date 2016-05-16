@@ -53,7 +53,7 @@ public class SessionController {
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String register(Model model) {
-        if (!systemSettings.isAllowRegistration()) {
+        if (!systemSettings.getAllowRegistration()) {
             return "registration_disallowed";
         }
 
@@ -66,7 +66,7 @@ public class SessionController {
                                      BindingResult bindingResult,
                                      Model model) {
 
-        if (!systemSettings.isAllowRegistration()) {
+        if (!systemSettings.getAllowRegistration()) {
             return "registration_disallowed";
         }
 

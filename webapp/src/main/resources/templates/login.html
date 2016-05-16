@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <button class="btn btn-primary" id="login" type="submit" th:text="#{form.login.button.login}" />
-                <a th:if="${systemSettings.isAllowRegistration()}" th:href="@{/register}" th:text="#{link.register}">Sign Up</a>
+                <a th:if="${systemSettings.getAllowRegistration()}" th:href="@{/register}" th:text="#{link.register}">Sign Up</a>
             </div>
         </form>
 

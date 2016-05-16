@@ -34,21 +34,21 @@ public class SystemSettings implements Serializable {
 
     @Column(name = "allow_registration", nullable = false)
     @Patchable
-    private boolean allowRegistration;
+    private Boolean allowRegistration;
 
     @Column(name = "require_email_confirmation", nullable = false)
     @Patchable
-    private boolean requireEmailConfirmation;
+    private Boolean requireEmailConfirmation;
 
     @Column(name = "restrict_registration_domains", nullable = false)
     @Patchable
-    private boolean restrictRegistrationDomains;
+    private Boolean restrictRegistrationDomains;
 
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "system_settings_allowed_domains", joinColumns = @JoinColumn(name = "settings_id"))
     @Column(name = "domain", nullable = false)
     @Patchable
-    private Set<String> allowedDomains = new HashSet<>();
+    private Set<String> allowedDomains;
 
     @OneToOne
     @JoinColumn(name = "active_volume_id")
@@ -67,11 +67,11 @@ public class SystemSettings implements Serializable {
         return id;
     }
 
-    public boolean isAllowRegistration() {
+    public Boolean getAllowRegistration() {
         return allowRegistration;
     }
 
-    public void setAllowRegistration(boolean allowRegistration) {
+    public void setAllowRegistration(Boolean allowRegistration) {
         this.allowRegistration = allowRegistration;
     }
 
@@ -83,19 +83,19 @@ public class SystemSettings implements Serializable {
         this.allowedDomains = allowedDomains;
     }
 
-    public boolean isRestrictRegistrationDomains() {
+    public Boolean isRestrictRegistrationDomains() {
         return restrictRegistrationDomains;
     }
 
-    public void setRestrictRegistrationDomains(boolean restrictRegistrationDomains) {
+    public void setRestrictRegistrationDomains(Boolean restrictRegistrationDomains) {
         this.restrictRegistrationDomains = restrictRegistrationDomains;
     }
 
-    public boolean isRequireEmailConfirmation() {
+    public Boolean isRequireEmailConfirmation() {
         return requireEmailConfirmation;
     }
 
-    public void setRequireEmailConfirmation(boolean requireEmailConfirmation) {
+    public void setRequireEmailConfirmation(Boolean requireEmailConfirmation) {
         this.requireEmailConfirmation = requireEmailConfirmation;
     }
 
@@ -166,6 +166,4 @@ public class SystemSettings implements Serializable {
             .append(awsSecretAccessKey)
             .toHashCode();
     }
-
-
 }

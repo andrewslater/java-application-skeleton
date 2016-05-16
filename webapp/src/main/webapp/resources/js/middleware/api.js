@@ -112,8 +112,11 @@ const userSchema = new Schema('users', {
     idAttribute: 'userId'
 });
 
+const systemSettingsSchema = new Schema('systemSettings');
+
 // Schemas for Github API responses.
 export const Schemas = {
+    SYSTEM_SETTINGS: systemSettingsSchema,
     USER: userSchema,
     USER_ARRAY: arrayOf(userSchema)
 };

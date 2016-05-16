@@ -3,7 +3,7 @@ package com.andrewslater.example.api.controllers;
 import com.andrewslater.example.Mappings;
 import com.andrewslater.example.api.APIView;
 import com.andrewslater.example.models.SystemSettings;
-import com.andrewslater.example.repositories.SystemSettingsRepository;
+import com.andrewslater.example.services.SystemSettingsService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,18 +21,22 @@ public class AdminSettingsAPIController {
     private static final Logger LOG = LoggerFactory.getLogger(AdminSettingsAPIController.class);
 
     @Autowired
-    private SystemSettingsRepository repository;
+    private SystemSettingsService service;
 
     @RequestMapping(value = Mappings.ADMIN_API_SETTINGS, method = RequestMethod.GET)
     @JsonView(APIView.Internal.class)
     public HttpEntity<SystemSettings> getSettings() {
-        return new ResponseEntity<>(repository.getSystemSettings(), HttpStatus.OK);
+        return getResponseEntity(service.getSystemSettings());
     }
 
     @RequestMapping(value = Mappings.ADMIN_API_SETTINGS, method = RequestMethod.PATCH)
     @JsonView(APIView.Internal.class)
     public HttpEntity<SystemSettings> saveSettings(@RequestBody SystemSettings settings) {
-        SystemSettings savedSettings = repository.saveSystemSettings(settings);
-        return new ResponseEntity<>(savedSettings, HttpStatus.OK);
+        SystemSettings savedSettings = service.patchSystemSettings(settings);
+        return getResponseEntity(savedSettings);
+    }
+
+    private HttpEntity<SystemSettings> getResponseEntity(SystemSettings systemSettings) {
+        return new ResponseEntity<>(systemSettings, HttpStatus.OK);
     }
 }
