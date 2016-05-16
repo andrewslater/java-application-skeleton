@@ -123,6 +123,7 @@ public class SystemSettings implements Serializable {
         this.awsSecretAccessKey = awsSecretAccessKey;
     }
 
+    @JsonIgnore
     public AWSCredentials getAWSCredentials() {
         return new AWSCredentials() {
             @Override public String getAWSAccessKeyId() {
