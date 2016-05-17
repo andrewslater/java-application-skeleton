@@ -10,6 +10,7 @@ class Chrome extends Component {
 
     componentDidMount() {
         if (this.props.location.pathname == '/') {
+            // TODO: Redirect using routes.jsx
             app.replaceHistory('/dashboard');
         }
     }
@@ -25,6 +26,10 @@ class Chrome extends Component {
         )
     }
 }
+
+Chrome.propTypes = {
+    principal: PropTypes.object
+};
 
 const mapStateToProps = (state) => {
     return {

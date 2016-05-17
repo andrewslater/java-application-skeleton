@@ -64,13 +64,9 @@ module.exports = {
         this.configureAutoTokenRefresh();
         this.store.dispatch(loadPrincipalUser());
 
-        var createElement = function(Component, props) {
-            return <Component {...props} />
-        };
-
         ReactDOM.render(
             <Provider store={this.store}>
-                <Router createElement={createElement} history={this.history} routes={routes} />
+                <Router history={this.history} routes={routes} />
             </Provider>,
             document.getElementById("app")
         );

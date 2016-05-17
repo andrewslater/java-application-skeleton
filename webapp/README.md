@@ -45,7 +45,7 @@ Create src/main/resources/config/application-development.properties config and o
 
 From the main java-application-skeleton directory run:
 
-    mvn clean package
+    mvn clean install
 
 # Running
 
