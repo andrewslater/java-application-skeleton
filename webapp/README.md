@@ -29,7 +29,6 @@ Start by cloning the repository and setting up a local development configuration
 
 Create src/main/resources/config/application-development.properties config and override the following properties:
 
-    oauth2.clients.webapp.secret=92bd0e2f-9048-489f-a414-f7770ba94647
     spring.datasource.username=your_database_username
     spring.datasource.password=your_database_user_password
     
@@ -37,13 +36,10 @@ Create src/main/resources/config/application-development.properties config and o
     spring.mail.password=your_sendgrid_password
 
 * These properties will be unique to your system. 
-* The webapp client secret should be something hard to guess. 
-* In this case we're using a UUID which was generated for us by https://www.uuidgenerator.net/ 
-  * Use your own UUID! Don't just blindly copy this value into your app 
 * I recommend using https://sendgrid.com/ for sending emails from your application. 
+  * Using Sendgrid allows your application to send emails without requiring you to run your own mail server
   * They offer a free plan which allows you to send 12k emails per month for free. 
   * Simply sign up for an account and set your account username/password in application-development.properties.
-  * Using Sendgrid allows your application to send emails without requiring you to run your own mail server
  
 # Building
 
@@ -61,15 +57,52 @@ From the main java-application-skeleton directory run:
  user@example.com / p4ssw0rd
  admin@example.com / p4ssw0rd
  
- Additionally 10k random users are also created. All users have use the password 'password'.
+ You can generate random test users by using the db plugin as described below.
  
-# Create a new database migration
+# Development
 
-    mvn java-application-skeleton:new-migration -DmigrationName="add-features-table"    
+## Database Migrations
+
+    mvn db:new-migration -DmigrationName="add-features-table"    
 
 creates a new database migration:
 
     src/main/resources/db/migrations/V1434629552__add-features-table.sql
+
+## Frontend Development
+
+When running locally during development it's nice to be able to iterate on javascript and css without having to recompile and redeploy the application after every change. To support this there is an application configuration property named `webpack.mode`. 
+    
+    # When set to PRECOMPILED (the default value) javascript, css, and fonts are served from the packaged JAR 
+    webpack.mode = PRECOMPILED
+         
+    # When set to DYNAMIC javascript, css, and fonts are served from a local server
+    webpack.mode = DYNAMIC
+    
+Grunt is already configured to help you run this local asset server from the command line. From the `webapp/` directory run the following command:
+    
+    $ grunt watchjs
+    
+    Running "webpack-dev-server:start" (webpack-dev-server) task
+    webpack-dev-server on port 9090
+    Version: webpack 1.12.9
+                                     Asset     Size  Chunks             Chunk Names
+    db812d8a70a4e88e888744c1c9a27e89.woff2  66.6 kB          [emitted]
+      f4769f9bdb7466be65088239c12046d1.eot  20.1 kB          [emitted]
+     fa2772327f55d8198301fdb8bcfc8158.woff  23.4 kB          [emitted]
+      e18bbf611f2a2e43afc071aa2f4e1512.ttf  45.4 kB          [emitted]
+      89889688147bd7575d6327160d64e760.svg   109 kB          [emitted]
+      32400f4e08932a94d8bfd2422702c446.eot  70.8 kB          [emitted]
+    448c34a56d699c29117adc64c43affeb.woff2    18 kB          [emitted]
+     a35720c2fed2c7f043bc7e4ffb45e073.woff  83.6 kB          [emitted]
+      a3de2170e4e9df77161ea5d3f31b2668.ttf   142 kB          [emitted]
+      f775f9cca88e21d45bebe185b27c0e5b.svg   366 kB          [emitted]
+                                    app.js  3.84 MB       0  [emitted]  app
+                                  basic.js   1.1 MB       1  [emitted]  basic
+    webpack: bundle is now VALID.
+
+Now there is a server running on localhost:9090 which is serving assets (as defined in `webpack-config.js`). The grunt process watches the filesystem for changes to files and automatically recompiles on the fly. This means you can make changes to javascript or css and the results are immediately refelected when you refresh the page in your browser.
+        
     
 # API Examples
 
@@ -79,7 +112,7 @@ creates a new database migration:
     
 ### Retrieve OAuth2 token
 
-    curl -X POST -vu <client>:<secret> http://localhost:8080/skeleton/oauth/token -H "Accept: application/json" -d "password=<password>&username=<email>&grant_type=password&scope=read%20write"
+    curl -X POST -vu <client>:<secret> http://localhost:8080/oauth/token -H "Accept: application/json" -d "password=<password>&username=<email>&grant_type=password&scope=read%20write"
 
         {
           "access_token": "ff16372e-38a7-4e29-88c2-1fb92897f558",
@@ -91,16 +124,14 @@ creates a new database migration:
 
 ### List Users
 
-    curl http://localhost:8080/skeleton/api/users -H "Authorization: Bearer ff16372e-38a7-4e29-88c2-1fb92897f558" -H "Accept: application/json"
+    curl http://localhost:8080/api/users -H "Authorization: Bearer ff16372e-38a7-4e29-88c2-1fb92897f558" -H "Accept: application/json"
 
 # Seed Data
 
-It is useful in a development environment to have some representative data. There is rudimentary support for generating fake users in the java-application-skeleton plugin. First we run a command to create the file /tmp/users.sql and fill it with SQL which will insert 1000 random users. All users share the same password: p4ssw0rd
+It is useful in a development environment to have some representative data. There is rudimentary support for generating fake users in the db plugin. Here we pipe the output of the maven task to Postgres. 
 
-    mvn java-application-skeleton:seed-users -DnumUsers=1000 -Doutput=/tmp/users.sql
+    mvn db:seed-users -DnumUsers=1000 -q | psql java-application-skeleton
     
-Next we run the psql shell and pass the /tmp/users.sql file to it in order to insert them into the 'java-app-skeleton' database. You may need to pass additional arguments to the psql command depending on your configuration.
- 
-    psql --file=/tmp/users.sql java-app-skeleton 
+All users share the same password: p4ssw0rd
 
 TODO: Have the plugin connect automatically to the database
