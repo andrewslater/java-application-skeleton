@@ -30,12 +30,9 @@ module.exports = {
     run: function(csrf) {
         ReactDOM.render(<Spinner />, document.getElementById("app"));
 
-        this.store = configureStore();
-        this.history = syncHistoryWithStore(browserHistory, this.store);
-
-        this.csrf = csrf;
         this.configureI18n();
         this.disableFileDropping();
+        this.csrf = csrf;
 
         if (!localStorage.getItem("apiToken")) {
 
@@ -58,10 +55,11 @@ module.exports = {
     renderRoutes: function() {
         const routes = require('./routes');
 
+        this.store = configureStore();
+
         this.apiToken = localStorage.getItem("apiToken");
         this.client = new APIClient("/api/", this.apiToken);
-
-        this.configureAutoTokenRefresh();
+        this.history = syncHistoryWithStore(browserHistory, this.store);
         this.store.dispatch(loadPrincipalUser());
 
         ReactDOM.render(
