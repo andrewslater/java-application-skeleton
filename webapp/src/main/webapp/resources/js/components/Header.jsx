@@ -26,6 +26,7 @@ class Header extends Component {
                 </ul>
             );
         }
+
         return (
             <nav className="navbar navbar-default">
                 <div className="container-fluid">

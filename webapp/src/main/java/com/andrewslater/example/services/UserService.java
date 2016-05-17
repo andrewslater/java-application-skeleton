@@ -61,7 +61,7 @@ public class UserService {
         user.getRoles().clear();
         user.getRoles().add(Role.USER);
         user.setEnabled(true);
-        user.setRequiresConfirmation(systemSettings.isRequireEmailConfirmation());
+        user.setRequiresConfirmation(systemSettings.getRequireEmailConfirmation());
 
         if (user.requiresAccountConfirmation()) {
             user.setEmailPendingConfirmation(user.getEmail());

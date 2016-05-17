@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping(value = {"/", "/profile", "/preferences", "/admin/**", "/dashboard"})
+@RequestMapping(value = {"/", "/dashboard", "/profile", "/preferences", "/admin/**", "/dashboard"})
 public class AppController {
 
     @RequestMapping(method = RequestMethod.GET)

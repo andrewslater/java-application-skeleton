@@ -260,7 +260,7 @@ class ActiveTable extends Component {
         // TODO: Figure out a more clear way of performing these pagination calculations
         var pagination = this.props.pagination;
         var firstPageNum = Math.max(pagination.number - Math.floor(this.props.maxPaginationLinks / 2), 1);
-        var lastPageNum = Math.min(firstPageNum + this.props.maxPaginationLinks - 1, pagination.totalPages - 1);
+        var lastPageNum = Math.min(firstPageNum + this.props.maxPaginationLinks - 1, pagination.totalPages);
         var numLinks = lastPageNum - firstPageNum + 1;
         var pageLinks = [];
 

@@ -30,8 +30,8 @@ public class SeedUsersMojo extends AbstractMojo
         List<String> firstNames = Names.FIRSTNAMES;
         List<String> surnames = Names.SURNAMES;
         List<String> domains = Arrays
-            .asList("yopmail.com", "mailinator.com", "spambooger.com", "blinkmail.com",
-                "veryrealemail.com", "zippymail.info");
+            .asList("yopmail.com", "mailinator.com", "safetymail.info", "blinkmail.com",
+                "veryrealemail.com", "tradermail.info");
         List<String> emails = new ArrayList<>();
 
         Random random = new Random();

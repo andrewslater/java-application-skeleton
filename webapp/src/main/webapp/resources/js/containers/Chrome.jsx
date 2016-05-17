@@ -1,11 +1,18 @@
 import { connect } from 'react-redux'
 import React, { Component, PropTypes } from 'react'
 
+import app from '../app'
 import { Schemas, denormalize } from '../middleware/api'
 import { loadPrincipalUser } from '../actions/PrincipalActions'
 import Header from '../components/Header'
 
-class Home extends Component {
+class Chrome extends Component {
+
+    componentDidMount() {
+        if (this.props.location.pathname == '/') {
+            app.replaceHistory('/dashboard');
+        }
+    }
 
     render() {
         return (
@@ -27,6 +34,6 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
 
-})(Home);
+})(Chrome);
 
 
