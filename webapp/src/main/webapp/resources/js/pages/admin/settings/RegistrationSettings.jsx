@@ -59,8 +59,8 @@ class RegistrationSettings extends Component {
             var domainCounter = 0;
             domainNameInputs = this.props.settings.allowedDomains.map(function(domain) {
                 return (
-                    <div className="form-row" key={'domainName-' + domainCounter}>
-                        <TextInput name={'allowedDomains[' + (domainCounter++) + ']'} value={domain} />
+                    <div className="form-row" key={'domainName-' + domainCounter++}>
+
                     </div>
                 );
             });

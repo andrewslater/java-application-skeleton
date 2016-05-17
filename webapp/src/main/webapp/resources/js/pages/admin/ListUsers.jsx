@@ -13,7 +13,6 @@ class ListUsers extends Component {
     }
 
     render() {
-        //return <div>adsf</div>;
         return (<AdminUsersList loadUsers={this.props.loadUsers}
                                 pagination={this.props.pagination}
                                 syncToHistoryUrl={this.props.location.pathname} />);

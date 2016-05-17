@@ -59,6 +59,13 @@ class AdminUsersList extends Component {
     }
 }
 
+AdminUsersList.propTypes = {
+    columns: React.PropTypes.array.isRequired,
+    loadUsers: React.PropTypes.func.isRequired,
+    pagination: PropTypes.object,
+    syncToHistoryUrl: PropTypes.string
+};
+
 AdminUsersList.defaultProps = {
     columns: [
         {name: translate('name'), component: NameColumn, sortProperty: 'fullName'},
@@ -67,13 +74,6 @@ AdminUsersList.defaultProps = {
         {name: translate('last-login'), component: LastLoginColumn, sortProperty: 'lastLogin'},
         {name: translate('actions'), component: ActionsColumn}
     ]
-};
-
-AdminUsersList.propTypes = {
-    columns: React.PropTypes.array.isRequired,
-    loadUsers: React.PropTypes.func.isRequired,
-    pagination: PropTypes.object,
-    syncToHistoryUrl: PropTypes.string
 };
 
 export default AdminUsersList
