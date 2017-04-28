@@ -8,7 +8,7 @@ import APIClient from '../APIClient'
 import Avatar from './Avatar'
 import Timestamp from './Timestamp'
 
-class NameColumn extends Component {
+export class NameColumn extends Component {
     render() {
         var user = this.props.rowData;
         return (
@@ -19,26 +19,26 @@ class NameColumn extends Component {
     }
 }
 
-class EmailColumn extends Component {
+export class EmailColumn extends Component {
     render() {
         var user = this.props.rowData;
         return (<Link to={"/admin/users/" + user.userId}>{user.email}</Link>)
     }
 }
 
-class CreatedAtColumn extends Component {
+export class CreatedAtColumn extends Component {
     render() {
         return (<Timestamp value={this.props.rowData.createdAt} />);
     }
 }
 
-class LastLoginColumn extends Component {
+export class LastLoginColumn extends Component {
     render() {
         return (<Timestamp value={this.props.rowData.lastLogin} nullDisplayValue={translate('never')} />);
     }
 }
 
-class ActionsColumn extends Component {
+export class ActionsColumn extends Component {
     render() {
         return (<span><a>Edit</a></span>)
     }
